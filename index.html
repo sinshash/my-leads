@@ -10,7 +10,6 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;-webkit-font-smoothing:antialiased}
 
-/* AUTH */
 #authScreen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
 .auth-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:420px;width:100%;text-align:center}
 .auth-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--accent);margin-bottom:8px}
@@ -18,7 +17,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .auth-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#1f2937;border:none;font-family:'DM Mono',monospace;font-size:14px;font-weight:500;padding:13px 24px;border-radius:10px;cursor:pointer;width:100%;justify-content:center}
 .auth-note{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.5}
 
-/* TOPBAR */
 .topbar{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:10px}
 .topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--accent);flex-shrink:0}
 #topbarCount{font-size:11px;color:var(--muted);flex-shrink:0}
@@ -30,28 +28,27 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .btn-add{background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:8px 14px;border-radius:8px;cursor:pointer}
 .btn-scan{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:18px;width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-/* STATUS */
 #syncStatus{padding:6px 16px;font-size:11px;text-align:center;display:none}
 #syncStatus.loading{display:block;background:#1a1f2e;color:#5c9eff}
 #syncStatus.error{display:block;background:#2a1010;color:#ff5c5c}
 #syncStatus.ok{display:block;background:#0d1f16;color:#34d399}
 
-/* FILTERS */
-.filters{padding:8px 16px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none}
-.filters::-webkit-scrollbar{display:none}
-.pill{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:5px 11px;border-radius:20px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
+/* FILTERS — two rows */
+.filter-section{border-bottom:1px solid var(--border);background:var(--bg)}
+.filter-row{padding:6px 16px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:6px 16px 2px;display:block}
+.pill{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
 .pill.active{background:var(--accent);border-color:var(--accent);color:#0d0f14;font-weight:700}
 .pill.overdue-pill{border-color:var(--overdue);color:var(--overdue)}
-.pill.overdue-pill.active{background:var(--overdue);color:#fff}
+.pill.overdue-pill.active{background:var(--overdue);color:#fff;border-color:var(--overdue)}
 
-/* STATS */
 .stats{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
 .stats::-webkit-scrollbar{display:none}
 .stat{flex:1;min-width:70px;padding:8px 10px;border-right:1px solid var(--border);text-align:center;cursor:pointer}
 .stat-num{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;line-height:1}
 .stat-label{font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
 
-/* TOOLBAR */
 .toolbar{padding:7px 16px;display:flex;gap:6px;border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap}
 .btn-tool{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s}
 .btn-tool:hover{border-color:var(--accent);color:var(--text)}
@@ -70,12 +67,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .lead-card.no-rating::before{background:var(--border)}
 .lead-card.overdue{border-color:rgba(255,92,92,.4)}
 .lead-card:active{background:var(--surface2)}
-.lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px}
+.lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
 .lead-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;line-height:1.2}
 .lead-company{font-size:12px;color:var(--muted);margin-top:1px}
 .lead-last-note{font-size:11px;color:#4b5563;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;font-style:italic}
-.lead-overdue-tag{font-size:10px;color:var(--overdue);margin-top:3px}
-.badge-wrap{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.lead-overdue-tag{font-size:10px;margin-top:2px}
+.badge-wrap{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:160px}
 .badge{font-size:9px;padding:3px 6px;border-radius:4px;font-weight:500;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
 .badge-rating.hot{background:rgba(255,92,92,.15);color:var(--hot)}
 .badge-rating.warm{background:rgba(255,159,64,.15);color:var(--warm)}
@@ -91,15 +88,18 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .badge-status.dnc{background:rgba(251,146,60,.12);color:var(--dnc)}
 .badge-status.future{background:rgba(167,139,250,.12);color:var(--not-yet)}
 .badge-status.not-qual{background:rgba(107,114,128,.12);color:var(--muted)}
-.lead-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-.meta-item{font-size:11px;color:var(--muted)}
+.badge-stage{background:rgba(232,255,71,.1);color:var(--accent)}
+.card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;border-top:1px solid var(--border);padding-top:6px}
+.card-meta-item{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:3px}
+.card-meta-item.highlight{color:var(--text)}
+.next-action-bar{margin-top:5px;font-size:11px;color:var(--warm);background:rgba(255,159,64,.08);border-radius:5px;padding:4px 8px}
 
 /* OVERLAY & MODAL */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;backdrop-filter:blur(4px)}
 .overlay.open{display:flex;align-items:flex-end}
 @media(min-width:600px){.overlay.open{align-items:center;justify-content:center}}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px 16px 0 0;width:100%;max-height:92vh;overflow-y:auto;padding:20px;position:relative;animation:slideUp .2s ease}
-@media(min-width:600px){.modal{border-radius:16px;max-width:500px;max-height:86vh}}
+@media(min-width:600px){.modal{border-radius:16px;max-width:520px;max-height:88vh}}
 @keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
 .modal-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 14px}
 .modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:14px;color:var(--accent)}
@@ -109,20 +109,24 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
 .form-group textarea{resize:vertical;min-height:70px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.form-section{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);margin:14px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .btn-save{width:100%;background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;padding:13px;border-radius:10px;cursor:pointer;margin-top:6px}
 .btn-save:disabled{opacity:.5;cursor:not-allowed}
 .btn-delete{width:100%;background:transparent;color:var(--hot);border:1px solid rgba(255,92,92,.3);font-family:'DM Mono',monospace;font-size:12px;padding:9px;border-radius:8px;cursor:pointer;margin-top:7px}
 .btn-close{position:absolute;top:14px;right:14px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+
+/* DETAIL */
 .detail-field{padding:9px 0;border-bottom:1px solid var(--border)}
 .detail-field:last-child{border-bottom:none}
 .detail-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:2px}
 .detail-value{font-size:13px;color:var(--text);word-break:break-all}
 .detail-value a{color:var(--accent);text-decoration:none}
-.btn-edit{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:11px;border-radius:10px;cursor:pointer;margin-top:10px}
 .detail-actions{display:flex;gap:8px;margin-top:10px}
 .detail-actions button{flex:1;padding:11px;border-radius:10px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;border:1px solid var(--border)}
 .btn-email-draft{background:var(--surface2);color:var(--text)}
 .btn-edit-lead{background:var(--accent);color:#0d0f14;border-color:var(--accent)}
+.detail-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.tag-chip{background:rgba(232,255,71,.1);border:1px solid rgba(232,255,71,.2);color:var(--accent);font-size:10px;padding:3px 8px;border-radius:12px}
 
 /* ACTIVITY LOG */
 .log-wrap{margin-top:4px}
@@ -137,22 +141,18 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .btn-log{background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:9px 14px;border-radius:8px;cursor:pointer;flex-shrink:0;height:70px;line-height:1.3}
 .btn-log:disabled{opacity:.5;cursor:not-allowed}
 
-/* QUICK STATUS POPUP */
-#quickPopup{position:fixed;z-index:500;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;min-width:240px;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:popIn .15s ease}
+/* QUICK STATUS */
+#quickPopup{position:fixed;z-index:500;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;min-width:250px;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:popIn .15s ease}
 @keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
 .qp-title{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:var(--accent);margin-bottom:10px}
-.qp-section{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px}
-.qp-options{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.qp-section{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;margin-top:10px}
+.qp-options{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px}
 .qp-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .1s}
 .qp-btn.selected{background:var(--accent);border-color:var(--accent);color:#0d0f14;font-weight:700}
-.qp-save{width:100%;background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;padding:10px;border-radius:8px;cursor:pointer;margin-top:4px}
+.qp-save{width:100%;background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;padding:10px;border-radius:8px;cursor:pointer;margin-top:10px}
 .qp-cancel{width:100%;background:transparent;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:6px;cursor:pointer;margin-top:4px}
 
-/* SCAN MODAL */
 .scan-area{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;margin-bottom:12px}
-.scan-area textarea{width:100%;background:transparent;border:none;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;resize:none;outline:none;min-height:100px}
-
-/* MISC */
 .empty-state{text-align:center;padding:50px 20px;color:var(--muted)}
 .empty-state .big{font-size:40px;margin-bottom:10px}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.2);border-top-color:#0d0f14;border-radius:50%;animation:spin .6s linear infinite;margin-right:6px;vertical-align:middle}
@@ -162,7 +162,6 @@ input[type="date"]{color-scheme:dark}
 </head>
 <body>
 
-<!-- AUTH -->
 <div id="authScreen">
   <div class="auth-box">
     <div class="auth-logo">⚡ MY LEADS</div>
@@ -171,18 +170,17 @@ input[type="date"]{color-scheme:dark}
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
       Sign in with Google
     </button>
-    <div class="auth-note">First time? It'll ask for Google Sheets access. That's needed to read and save your leads.</div>
+    <div class="auth-note">First time? It'll ask for Google Sheets access.</div>
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="mainApp" style="display:none">
   <div class="topbar">
     <div class="topbar-logo">⚡ LEADS</div>
     <div id="topbarCount"></div>
     <div class="search-wrap">
       <span class="si">⌕</span>
-      <input type="text" id="searchInput" placeholder="Search…" oninput="renderAll()">
+      <input type="text" id="searchInput" placeholder="Search name, company, tags…" oninput="renderAll()">
     </div>
     <div class="topbar-btns">
       <button class="btn-scan" onclick="openScan()" title="Scan business card">📷</button>
@@ -192,16 +190,43 @@ input[type="date"]{color-scheme:dark}
 
   <div id="syncStatus"></div>
 
-  <div class="filters">
-    <div class="pill active" onclick="setFilter('all',this)">All</div>
-    <div class="pill overdue-pill" onclick="setFilter('overdue',this)">🔴 Overdue</div>
-    <div class="pill" onclick="setFilter('Hot',this)">🔥 Hot</div>
-    <div class="pill" onclick="setFilter('Warm',this)">☀️ Warm</div>
-    <div class="pill" onclick="setFilter('Cold',this)">❄️ Cold</div>
-    <div class="pill" onclick="setFilter('status:Contacted',this)">Contacted</div>
-    <div class="pill" onclick="setFilter('status:Not Contacted',this)">Not Contacted</div>
-    <div class="pill" onclick="setFilter('source:Trade Show',this)">Trade Show</div>
-    <div class="pill" onclick="setFilter('status:Pre-Qualified',this)">Pre-Qualified</div>
+  <div class="filter-section">
+    <span class="filter-label">Rating & Special</span>
+    <div class="filter-row" id="filterRow1">
+      <div class="pill active" onclick="setFilter('all',this)">All</div>
+      <div class="pill overdue-pill" onclick="setFilter('overdue',this)">🔴 Overdue</div>
+      <div class="pill" onclick="setFilter('rating:Hot',this)">🔥 Hot</div>
+      <div class="pill" onclick="setFilter('rating:Warm',this)">☀️ Warm</div>
+      <div class="pill" onclick="setFilter('rating:Cold',this)">❄️ Cold</div>
+    </div>
+    <span class="filter-label">Status</span>
+    <div class="filter-row" id="filterRow2">
+      <div class="pill" onclick="setFilter('status:Not Contacted',this)">Not Contacted</div>
+      <div class="pill" onclick="setFilter('status:Attempted to Contact',this)">Attempted</div>
+      <div class="pill" onclick="setFilter('status:Contacted',this)">Contacted</div>
+      <div class="pill" onclick="setFilter('status:Pre-Qualified',this)">Pre-Qualified</div>
+      <div class="pill" onclick="setFilter('status:Contact in Future',this)">Future</div>
+      <div class="pill" onclick="setFilter('status:Not Qualified',this)">Not Qualified</div>
+      <div class="pill" onclick="setFilter('status:Lost Lead',this)">Lost</div>
+      <div class="pill" onclick="setFilter('status:Junk Lead',this)">Junk</div>
+      <div class="pill" onclick="setFilter('status:Do Not Contact - Check Notes',this)">DNC</div>
+    </div>
+    <span class="filter-label">Pipeline Stage</span>
+    <div class="filter-row" id="filterRow3">
+      <div class="pill" onclick="setFilter('stage:Prospecting',this)">Prospecting</div>
+      <div class="pill" onclick="setFilter('stage:Qualifying',this)">Qualifying</div>
+      <div class="pill" onclick="setFilter('stage:Proposal Sent',this)">Proposal Sent</div>
+      <div class="pill" onclick="setFilter('stage:Negotiation',this)">Negotiation</div>
+      <div class="pill" onclick="setFilter('stage:Closed Won',this)">✅ Closed Won</div>
+      <div class="pill" onclick="setFilter('stage:Closed Lost',this)">❌ Closed Lost</div>
+    </div>
+    <span class="filter-label">Source</span>
+    <div class="filter-row" id="filterRow4">
+      <div class="pill" onclick="setFilter('source:Trade Show',this)">Trade Show</div>
+      <div class="pill" onclick="setFilter('source:Cold Call',this)">Cold Call</div>
+      <div class="pill" onclick="setFilter('source:External Referral',this)">Referral</div>
+      <div class="pill" onclick="setFilter('source:Partner',this)">Partner</div>
+    </div>
   </div>
 
   <div class="stats" id="statsBar"></div>
@@ -218,7 +243,8 @@ input[type="date"]{color-scheme:dark}
         <option value="company">Company</option>
         <option value="rating">Rating</option>
         <option value="status">Status</option>
-        <option value="recent">Recent</option>
+        <option value="stage">Pipeline Stage</option>
+        <option value="recent">Recent Activity</option>
       </select>
     </div>
   </div>
@@ -233,6 +259,8 @@ input[type="date"]{color-scheme:dark}
     <button class="btn-close" onclick="closeOverlay('formOverlay')">✕</button>
     <div class="modal-title" id="formTitle">New Lead</div>
     <input type="hidden" id="editRowIndex">
+
+    <div class="form-section">Contact Info</div>
     <div class="form-row">
       <div class="form-group"><label>Full Name *</label><input type="text" id="f_name" placeholder="Jane Smith"></div>
       <div class="form-group"><label>Company *</label><input type="text" id="f_company" placeholder="Acme Corp"></div>
@@ -240,8 +268,14 @@ input[type="date"]{color-scheme:dark}
     <div class="form-group"><label>Title</label><input type="text" id="f_title" placeholder="VP of IT"></div>
     <div class="form-row">
       <div class="form-group"><label>Email</label><input type="email" id="f_email"></div>
-      <div class="form-group"><label>Phone</label><input type="tel" id="f_phone"></div>
+      <div class="form-group"><label>Phone (Office)</label><input type="tel" id="f_phone"></div>
     </div>
+    <div class="form-row">
+      <div class="form-group"><label>Mobile</label><input type="tel" id="f_mobile"></div>
+      <div class="form-group"><label>LinkedIn</label><input type="url" id="f_linkedin" placeholder="https://linkedin.com/in/…"></div>
+    </div>
+
+    <div class="form-section">Lead Details</div>
     <div class="form-row">
       <div class="form-group"><label>Lead Source</label>
         <select id="f_source"><option value="">— Select —</option><option>Trade Show</option><option>Cold Call</option><option>Seamless.AI</option><option>Web Research</option><option>Employee Referral</option><option>External Referral</option><option>Partner</option><option>Chat</option><option>Sales Email Alias</option><option>Other</option></select>
@@ -257,11 +291,28 @@ input[type="date"]{color-scheme:dark}
       </div>
     </div>
     <div class="form-row">
+      <div class="form-group"><label>Pipeline Stage</label>
+        <select id="f_stage"><option value="">— Select —</option><option>Prospecting</option><option>Qualifying</option><option>Proposal Sent</option><option>Negotiation</option><option>Closed Won</option><option>Closed Lost</option></select>
+      </div>
       <div class="form-group"><label>Industry</label><input type="text" id="f_industry"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Competitor</label><input type="text" id="f_competitor" placeholder="Who they use now"></div>
+      <div class="form-group"><label>Tags</label><input type="text" id="f_tags" placeholder="InfoComm, Decision Maker…"></div>
+    </div>
+
+    <div class="form-section">Follow-up</div>
+    <div class="form-row">
+      <div class="form-group"><label>Next Action</label><input type="text" id="f_nextaction" placeholder="Send proposal, Schedule demo…"></div>
       <div class="form-group"><label>Follow-up Date</label><input type="date" id="f_followup"></div>
     </div>
-    <div class="form-group"><label>LinkedIn</label><input type="url" id="f_linkedin" placeholder="https://linkedin.com/in/…"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Last Contacted</label><input type="date" id="f_lastcontacted"></div>
+    </div>
+
+    <div class="form-section">Notes</div>
     <div class="form-group"><label>Initial Notes</label><textarea id="f_notes" placeholder="Quick note when adding lead…" style="height:60px"></textarea></div>
+
     <button class="btn-save" id="btnSave" onclick="saveLead()">Save Lead</button>
     <button class="btn-delete" id="btnDelete" style="display:none" onclick="deleteLead()">Delete Lead</button>
   </div>
@@ -279,6 +330,8 @@ input[type="date"]{color-scheme:dark}
   <div class="qp-options" id="qpStatusOpts"></div>
   <div class="qp-section">Rating</div>
   <div class="qp-options" id="qpRatingOpts"></div>
+  <div class="qp-section">Pipeline Stage</div>
+  <div class="qp-options" id="qpStageOpts"></div>
   <button class="qp-save" onclick="saveQuickStatus()">Save</button>
   <button class="qp-cancel" onclick="closeQuickPopup()">Cancel</button>
 </div>
@@ -289,334 +342,317 @@ input[type="date"]{color-scheme:dark}
     <div class="modal-handle"></div>
     <button class="btn-close" onclick="closeOverlay('scanOverlay')">✕</button>
     <div class="modal-title">📷 Business Card Scan</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Take a photo of the business card, then paste the extracted text below. Claude AI will parse the contact details automatically.</p>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Tap inside the box → tap the scan text icon in the iPhone keyboard → point at the card → tap Parse.</p>
     <div class="form-group">
-      <label>Paste card text / photo OCR result</label>
-      <textarea id="scanText" style="height:120px" placeholder="John Smith&#10;VP of Sales&#10;Acme Corporation&#10;john.smith@acme.com&#10;+1 416 555 0100&#10;www.acme.com"></textarea>
+      <label>Card Text</label>
+      <textarea id="scanText" style="height:120px" placeholder="John Smith&#10;VP of Sales&#10;Acme Corp&#10;john@acme.com&#10;+1 416 555 0100"></textarea>
     </div>
     <button class="btn-save" onclick="parseScanText()">Parse & Fill Form</button>
   </div>
 </div>
 
 <script src="https://accounts.google.com/gsi/client" async></script>
-
 <script>
-// ── CONFIG ──────────────────────────────────────────────────
 const SHEET_ID   = '1XwCrEZaOp2AdepnBboZYfEvUx94tN6NkEbu45iOmLGM';
 const API_KEY    = 'AIzaSyBfxWQzsg0KRO5zLDWAsMsGaJTRGufCgtk';
 const CLIENT_ID  = '446280373045-ahe4dv7lmi1ii5rvk072defbg3jlnt5l.apps.googleusercontent.com';
 const SCOPES     = 'https://www.googleapis.com/auth/spreadsheets';
 const SHEET_NAME = 'My Leads - TDOT';
-const RANGE_READ = `${SHEET_NAME}!A2:P`; // now 16 cols (added followup)
+const RANGE_READ = `${SHEET_NAME}!A2:V`;
 
-// ── STATE ────────────────────────────────────────────────────
-let LEADS = [], accessToken = null, currentFilter = 'all', currentSort = 'followup';
-let qpRow = null, qpStatus = '', qpRating = '';
+// A=0 B=1 C=2 D=3 E=4 F=5 G=6 H=7 I=8 J=9 K=10 L=11 M=12 N=13 O=14 P=15 Q=16 R=17 S=18 T=19 U=20 V=21
+const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15,mobile:16,nextAction:17,competitor:18,lastContacted:19,stage:20,tags:21};
 
-// col index map — P is followup date (col 16, index 15)
-const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15};
+let LEADS=[], accessToken=null, tokenExpiry=0, tokenClient=null;
+let currentFilter='all', currentSort='followup';
+let qpRow=null, qpStatus='', qpRating='', qpStage='';
 
 // ── AUTH ─────────────────────────────────────────────────────
-function signIn() {
-  const client = google.accounts.oauth2.initTokenClient({
+function initTokenClient() {
+  tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID, scope: SCOPES,
     callback: async (resp) => {
-      if (resp.error) { alert('Sign-in failed: ' + resp.error); return; }
+      if (resp.error) {
+        document.getElementById('authScreen').style.display='flex';
+        document.getElementById('mainApp').style.display='none';
+        return;
+      }
       accessToken = resp.access_token;
-      localStorage.setItem('tdot_token', accessToken);
+      tokenExpiry = Date.now() + (resp.expires_in - 60) * 1000;
+      localStorage.setItem('tdot_user','signed_in');
       showApp(); await loadLeads();
     }
   });
-  client.requestAccessToken();
 }
+async function ensureToken() {
+  if (accessToken && Date.now() < tokenExpiry) return;
+  return new Promise(resolve => {
+    const orig = tokenClient.callback;
+    tokenClient.callback = async (resp) => { await orig(resp); resolve(); };
+    tokenClient.requestAccessToken({prompt:''});
+  });
+}
+function signIn() { tokenClient.requestAccessToken({prompt:'consent'}); }
 function signOut() {
   if (accessToken) google.accounts.oauth2.revoke(accessToken);
-  accessToken = null; localStorage.removeItem('tdot_token');
-  document.getElementById('authScreen').style.display = 'flex';
-  document.getElementById('mainApp').style.display = 'none';
+  accessToken=null; tokenExpiry=0; localStorage.removeItem('tdot_user');
+  document.getElementById('authScreen').style.display='flex';
+  document.getElementById('mainApp').style.display='none';
 }
 function showApp() {
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
 }
+setInterval(()=>{
+  if(localStorage.getItem('tdot_user') && document.getElementById('mainApp').style.display!=='none')
+    tokenClient.requestAccessToken({prompt:''});
+}, 45*60*1000);
 
-// ── SHEETS API ───────────────────────────────────────────────
+// ── SHEETS API ────────────────────────────────────────────────
 async function sheetsGet(range) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
-  const res = await fetch(url, { headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {} });
-  if (!res.ok) throw new Error((await res.json()).error?.message || 'Read error');
+  await ensureToken();
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+  const res=await fetch(url,{headers:{Authorization:`Bearer ${accessToken}`}});
+  if(!res.ok) throw new Error((await res.json()).error?.message||'Read error');
   return res.json();
 }
 async function sheetsAppend(values) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME+'!A1')}:append?valueInputOption=USER_ENTERED`;
-  const res = await fetch(url, { method:'POST', headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'}, body:JSON.stringify({values}) });
-  if (!res.ok) throw new Error((await res.json()).error?.message || 'Append error');
+  await ensureToken();
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME+'!A1')}:append?valueInputOption=USER_ENTERED`;
+  const res=await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify({values})});
+  if(!res.ok) throw new Error((await res.json()).error?.message||'Append error');
   return res.json();
 }
-async function sheetsUpdate(range, values) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?valueInputOption=USER_ENTERED`;
-  const res = await fetch(url, { method:'PUT', headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'}, body:JSON.stringify({values}) });
-  if (!res.ok) throw new Error((await res.json()).error?.message || 'Update error');
+async function sheetsUpdate(range,values) {
+  await ensureToken();
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?valueInputOption=USER_ENTERED`;
+  const res=await fetch(url,{method:'PUT',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify({values})});
+  if(!res.ok) throw new Error((await res.json()).error?.message||'Update error');
   return res.json();
 }
 async function sheetsClearRow(rowIndex) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME+'!A'+rowIndex+':P'+rowIndex)}:clear`;
-  const res = await fetch(url, { method:'POST', headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'} });
-  if (!res.ok) throw new Error((await res.json()).error?.message || 'Delete error');
+  await ensureToken();
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME+'!A'+rowIndex+':V'+rowIndex)}:clear`;
+  const res=await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'}});
+  if(!res.ok) throw new Error((await res.json()).error?.message||'Delete error');
   return res.json();
 }
 
-// ── LOAD ─────────────────────────────────────────────────────
+// ── LOAD ──────────────────────────────────────────────────────
 async function loadLeads() {
   setStatus('loading','⟳ Loading from Google Sheets…');
   try {
-    const data = await sheetsGet(RANGE_READ);
-    const rows = data.values || [];
-    LEADS = rows.map((row,i) => {
-      const l = {};
-      Object.entries(FM).forEach(([k,idx]) => l[k] = (row[idx]||'').toString().trim());
-      l._row = i + 2;
-      return l;
-    }).filter(l => l.name);
+    const data=await sheetsGet(RANGE_READ);
+    LEADS=(data.values||[]).map((row,i)=>{
+      const l={};
+      Object.entries(FM).forEach(([k,idx])=>l[k]=(row[idx]||'').toString().trim());
+      l._row=i+2; return l;
+    }).filter(l=>l.name);
     setStatus('ok',`✓ ${LEADS.length} leads loaded`);
     setTimeout(()=>setStatus('',''),2500);
     renderAll();
-  } catch(err) { setStatus('error','✗ '+err.message); }
+  } catch(err){setStatus('error','✗ '+err.message);}
 }
 
-// ── LEAD ROW ─────────────────────────────────────────────────
-function leadToRow(l, now) {
+// ── ROW ───────────────────────────────────────────────────────
+function leadToRow(l,now){
   return [
     l.id||('local_'+Date.now()), l.name, l.title, l.company, l.email, l.phone,
     l.source, l.tradeShow, l.status, l.rating, l.industry, l.linkedin, l.notes,
-    l.created||now, now, l.followup||''
+    l.created||now, now, l.followup||'', l.mobile||'', l.nextAction||'',
+    l.competitor||'', l.lastContacted||'', l.stage||'', l.tags||''
   ];
 }
 
-// ── NOTES / ACTIVITY LOG ─────────────────────────────────────
-const NOTE_SEP = '|||';
-function parseNotes(raw) {
-  if (!raw||!raw.trim()) return [];
-  return raw.split(NOTE_SEP).map(s=>s.trim()).filter(Boolean).map(entry => {
-    const idx = entry.indexOf(': ');
-    return idx===-1 ? {ts:'',text:entry} : {ts:entry.slice(0,idx),text:entry.slice(idx+2)};
+// ── NOTES ─────────────────────────────────────────────────────
+const NOTE_SEP='|||';
+function parseNotes(raw){
+  if(!raw||!raw.trim()) return [];
+  return raw.split(NOTE_SEP).map(s=>s.trim()).filter(Boolean).map(entry=>{
+    const idx=entry.indexOf(': ');
+    return idx===-1?{ts:'',text:entry}:{ts:entry.slice(0,idx),text:entry.slice(idx+2)};
   });
 }
-function formatTs() {
-  const now = new Date();
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function formatTs(){
+  const now=new Date(), months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   let hr=now.getHours(), min=now.getMinutes();
   const ampm=hr>=12?'PM':'AM'; hr=hr%12||12;
   return `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()} ${hr}:${min.toString().padStart(2,'0')}${ampm}`;
 }
-function lastNote(lead) {
-  const entries = parseNotes(lead.notes);
-  return entries.length ? entries[entries.length-1].text : '';
-}
+function lastNote(l){const e=parseNotes(l.notes); return e.length?e[e.length-1].text:'';}
 
-// ── OVERDUE CHECK ─────────────────────────────────────────────
-function isOverdue(lead) {
-  if (!lead.followup) return false;
-  const today = new Date(); today.setHours(0,0,0,0);
-  const fu = new Date(lead.followup);
-  return fu < today;
-}
-function isDueToday(lead) {
-  if (!lead.followup) return false;
-  const today = new Date(); today.setHours(0,0,0,0);
-  const fu = new Date(lead.followup); fu.setHours(0,0,0,0);
-  return fu.getTime() === today.getTime();
-}
-function formatFollowup(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return `${months[d.getMonth()]} ${d.getDate()}`;
-}
+// ── DATES ─────────────────────────────────────────────────────
+function isOverdue(l){if(!l.followup) return false; const t=new Date(); t.setHours(0,0,0,0); return new Date(l.followup)<t;}
+function isDueToday(l){if(!l.followup) return false; const t=new Date(); t.setHours(0,0,0,0); const f=new Date(l.followup); f.setHours(0,0,0,0); return f.getTime()===t.getTime();}
+function formatDate(s){if(!s) return ''; const d=new Date(s), m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return `${m[d.getMonth()]} ${d.getDate()}`;}
 
 // ── SAVE / DELETE ─────────────────────────────────────────────
-async function saveLead() {
-  const name = document.getElementById('f_name').value.trim();
-  const company = document.getElementById('f_company').value.trim();
-  if (!name||!company) { alert('Name and Company are required.'); return; }
-  const rowIndex = document.getElementById('editRowIndex').value;
-  const existing = rowIndex ? LEADS.find(l=>l._row==rowIndex) : null;
-  const now = new Date().toISOString().replace('T',' ').slice(0,19);
-  const lead = {
-    id: existing?.id||'', name, company,
-    title:     document.getElementById('f_title').value.trim(),
-    email:     document.getElementById('f_email').value.trim(),
-    phone:     document.getElementById('f_phone').value.trim(),
-    source:    document.getElementById('f_source').value,
-    tradeShow: document.getElementById('f_tradeShow').value.trim(),
-    status:    document.getElementById('f_status').value,
-    rating:    document.getElementById('f_rating').value,
-    industry:  document.getElementById('f_industry').value.trim(),
-    linkedin:  document.getElementById('f_linkedin').value.trim(),
-    notes:     existing?.notes || document.getElementById('f_notes').value.trim(),
-    created:   existing?.created||now,
-    followup:  document.getElementById('f_followup').value,
+async function saveLead(){
+  const name=document.getElementById('f_name').value.trim();
+  const company=document.getElementById('f_company').value.trim();
+  if(!name||!company){alert('Name and Company are required.');return;}
+  const rowIndex=document.getElementById('editRowIndex').value;
+  const existing=rowIndex?LEADS.find(l=>l._row==rowIndex):null;
+  const now=new Date().toISOString().replace('T',' ').slice(0,19);
+  const lead={
+    id:existing?.id||'', name, company,
+    title:    document.getElementById('f_title').value.trim(),
+    email:    document.getElementById('f_email').value.trim(),
+    phone:    document.getElementById('f_phone').value.trim(),
+    mobile:   document.getElementById('f_mobile').value.trim(),
+    source:   document.getElementById('f_source').value,
+    tradeShow:document.getElementById('f_tradeShow').value.trim(),
+    status:   document.getElementById('f_status').value,
+    rating:   document.getElementById('f_rating').value,
+    stage:    document.getElementById('f_stage').value,
+    industry: document.getElementById('f_industry').value.trim(),
+    competitor:document.getElementById('f_competitor').value.trim(),
+    tags:     document.getElementById('f_tags').value.trim(),
+    nextAction:document.getElementById('f_nextaction').value.trim(),
+    followup: document.getElementById('f_followup').value,
+    lastContacted:document.getElementById('f_lastcontacted').value,
+    linkedin: document.getElementById('f_linkedin').value.trim(),
+    notes:    existing?.notes||document.getElementById('f_notes').value.trim(),
+    created:  existing?.created||now,
   };
-  const btn = document.getElementById('btnSave');
+  const btn=document.getElementById('btnSave');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Saving…';
-  setStatus('loading','⟳ Saving to Google Sheets…');
+  setStatus('loading','⟳ Saving…');
   try {
-    if (rowIndex) { await sheetsUpdate(`${SHEET_NAME}!A${rowIndex}:P${rowIndex}`,[leadToRow(lead,now)]); }
-    else { await sheetsAppend([leadToRow(lead,now)]); }
+    if(rowIndex){await sheetsUpdate(`${SHEET_NAME}!A${rowIndex}:V${rowIndex}`,[leadToRow(lead,now)]);}
+    else{await sheetsAppend([leadToRow(lead,now)]);}
     closeOverlay('formOverlay');
     setStatus('ok','✓ Saved'); setTimeout(()=>setStatus('',''),2000);
     await loadLeads();
-  } catch(err) { setStatus('error','✗ '+err.message); }
-  finally { btn.disabled=false; btn.textContent=rowIndex?'Update Lead':'Save Lead'; }
+  } catch(err){setStatus('error','✗ '+err.message);}
+  finally{btn.disabled=false; btn.textContent=rowIndex?'Update Lead':'Save Lead';}
 }
-
-async function deleteLead() {
-  if (!confirm('Delete this lead? Cannot be undone.')) return;
-  const rowIndex = parseInt(document.getElementById('editRowIndex').value);
+async function deleteLead(){
+  if(!confirm('Delete this lead? Cannot be undone.')) return;
+  const rowIndex=parseInt(document.getElementById('editRowIndex').value);
   setStatus('loading','⟳ Deleting…');
-  try {
+  try{
     await sheetsClearRow(rowIndex);
     closeOverlay('formOverlay');
     setStatus('ok','✓ Deleted'); setTimeout(()=>setStatus('',''),2000);
     await loadLeads();
-  } catch(err) { setStatus('error','✗ '+err.message); }
+  }catch(err){setStatus('error','✗ '+err.message);}
 }
 
 // ── ADD NOTE ──────────────────────────────────────────────────
-async function addNote(row) {
-  const textarea = document.getElementById('newNoteText');
-  const text = textarea.value.trim(); if (!text) return;
-  const l = LEADS.find(x=>x._row===row); if (!l) return;
-  const entry = `${formatTs()}: ${text}`;
-  const updated = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
-  const btn = document.getElementById('btnAddNote');
+async function addNote(row){
+  const textarea=document.getElementById('newNoteText');
+  const text=textarea.value.trim(); if(!text) return;
+  const l=LEADS.find(x=>x._row===row); if(!l) return;
+  const entry=`${formatTs()}: ${text}`;
+  const updated=l.notes?`${l.notes.trim()}${NOTE_SEP}${entry}`:entry;
+  const btn=document.getElementById('btnAddNote');
   btn.disabled=true; btn.textContent='…';
   setStatus('loading','⟳ Saving note…');
-  try {
-    const now = new Date().toISOString().replace('T',' ').slice(0,19);
-    await sheetsUpdate(`${SHEET_NAME}!A${row}:P${row}`,[leadToRow({...l,notes:updated},now)]);
+  try{
+    const now=new Date().toISOString().replace('T',' ').slice(0,19);
+    // Also set last contacted to today
+    const today=new Date().toISOString().slice(0,10);
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updated,lastContacted:today},now)]);
     textarea.value='';
     setStatus('ok','✓ Note saved'); setTimeout(()=>setStatus('',''),2000);
     await loadLeads(); openDetail(row);
-  } catch(err) { setStatus('error','✗ '+err.message); }
-  finally { btn.disabled=false; btn.textContent='+ Add'; }
+  }catch(err){setStatus('error','✗ '+err.message);}
+  finally{btn.disabled=false; btn.textContent='+ Add';}
 }
 
 // ── QUICK STATUS ──────────────────────────────────────────────
-let qpLongPressTimer = null;
-
-function setupLongPress(el, row) {
-  el.addEventListener('touchstart', e => {
-    qpLongPressTimer = setTimeout(() => { e.preventDefault(); openQuickPopup(row, e.touches[0]); }, 500);
-  }, {passive:false});
-  el.addEventListener('touchend', () => clearTimeout(qpLongPressTimer));
-  el.addEventListener('touchmove', () => clearTimeout(qpLongPressTimer));
-  // Desktop right-click
-  el.addEventListener('contextmenu', e => { e.preventDefault(); openQuickPopup(row, e); });
+let qpLongPressTimer=null;
+function setupLongPress(el,row){
+  el.addEventListener('touchstart',e=>{qpLongPressTimer=setTimeout(()=>{e.preventDefault();openQuickPopup(row,e.touches[0]);},500);},{passive:false});
+  el.addEventListener('touchend',()=>clearTimeout(qpLongPressTimer));
+  el.addEventListener('touchmove',()=>clearTimeout(qpLongPressTimer));
+  el.addEventListener('contextmenu',e=>{e.preventDefault();openQuickPopup(row,e);});
 }
-
-function openQuickPopup(row, e) {
-  const l = LEADS.find(x=>x._row===row); if (!l) return;
-  qpRow=row; qpStatus=l.status; qpRating=l.rating;
-  document.getElementById('qpLeadName').textContent = l.name;
-
-  const statuses = ['Not Contacted','Attempted to Contact','Contacted','Pre-Qualified','Contact in Future','Not Qualified','Lost Lead','Junk Lead'];
-  const ratings  = ['Hot','Warm','Cold','Not Yet Determined'];
-
-  document.getElementById('qpStatusOpts').innerHTML = statuses.map(s=>
-    `<button class="qp-btn ${s===qpStatus?'selected':''}" onclick="qpSelect('status','${s}',this)">${s}</button>`
-  ).join('');
-  document.getElementById('qpRatingOpts').innerHTML = ratings.map(r=>
-    `<button class="qp-btn ${r===qpRating?'selected':''}" onclick="qpSelect('rating','${r}',this)">${r}</button>`
-  ).join('');
-
-  const popup = document.getElementById('quickPopup');
+function openQuickPopup(row,e){
+  const l=LEADS.find(x=>x._row===row); if(!l) return;
+  qpRow=row; qpStatus=l.status; qpRating=l.rating; qpStage=l.stage;
+  document.getElementById('qpLeadName').textContent=l.name;
+  const statuses=['Not Contacted','Attempted to Contact','Contacted','Pre-Qualified','Contact in Future','Not Qualified','Lost Lead','Junk Lead'];
+  const ratings=['Hot','Warm','Cold','Not Yet Determined'];
+  const stages=['Prospecting','Qualifying','Proposal Sent','Negotiation','Closed Won','Closed Lost'];
+  document.getElementById('qpStatusOpts').innerHTML=statuses.map(s=>`<button class="qp-btn ${s===qpStatus?'selected':''}" onclick="qpSelect('status','${s}',this)">${s}</button>`).join('');
+  document.getElementById('qpRatingOpts').innerHTML=ratings.map(r=>`<button class="qp-btn ${r===qpRating?'selected':''}" onclick="qpSelect('rating','${r}',this)">${r}</button>`).join('');
+  document.getElementById('qpStageOpts').innerHTML=stages.map(s=>`<button class="qp-btn ${s===qpStage?'selected':''}" onclick="qpSelect('stage','${s}',this)">${s}</button>`).join('');
+  const popup=document.getElementById('quickPopup');
   popup.style.display='block';
-  // Position near tap
-  const x = Math.min(e.clientX||e.pageX||100, window.innerWidth-260);
-  const y = Math.min(e.clientY||e.pageY||100, window.innerHeight-350);
-  popup.style.left = x+'px'; popup.style.top = y+'px';
+  const x=Math.min(e.clientX||e.pageX||100,window.innerWidth-270);
+  const y=Math.min(e.clientY||e.pageY||100,window.innerHeight-400);
+  popup.style.left=x+'px'; popup.style.top=y+'px';
 }
-
-function qpSelect(type, val, el) {
-  if (type==='status') { qpStatus=val; document.querySelectorAll('#qpStatusOpts .qp-btn').forEach(b=>b.classList.remove('selected')); }
-  else { qpRating=val; document.querySelectorAll('#qpRatingOpts .qp-btn').forEach(b=>b.classList.remove('selected')); }
+function qpSelect(type,val,el){
+  if(type==='status'){qpStatus=val;document.querySelectorAll('#qpStatusOpts .qp-btn').forEach(b=>b.classList.remove('selected'));}
+  else if(type==='rating'){qpRating=val;document.querySelectorAll('#qpRatingOpts .qp-btn').forEach(b=>b.classList.remove('selected'));}
+  else{qpStage=val;document.querySelectorAll('#qpStageOpts .qp-btn').forEach(b=>b.classList.remove('selected'));}
   el.classList.add('selected');
 }
-
-async function saveQuickStatus() {
-  const l = LEADS.find(x=>x._row===qpRow); if (!l) return;
+async function saveQuickStatus(){
+  const l=LEADS.find(x=>x._row===qpRow); if(!l) return;
   closeQuickPopup();
   setStatus('loading','⟳ Updating…');
-  try {
-    const now = new Date().toISOString().replace('T',' ').slice(0,19);
-    await sheetsUpdate(`${SHEET_NAME}!A${qpRow}:P${qpRow}`,[leadToRow({...l,status:qpStatus,rating:qpRating},now)]);
+  try{
+    const now=new Date().toISOString().replace('T',' ').slice(0,19);
+    await sheetsUpdate(`${SHEET_NAME}!A${qpRow}:V${qpRow}`,[leadToRow({...l,status:qpStatus,rating:qpRating,stage:qpStage},now)]);
     setStatus('ok','✓ Updated'); setTimeout(()=>setStatus('',''),2000);
     await loadLeads();
-  } catch(err) { setStatus('error','✗ '+err.message); }
+  }catch(err){setStatus('error','✗ '+err.message);}
 }
-function closeQuickPopup() { document.getElementById('quickPopup').style.display='none'; }
-document.addEventListener('click', e => { if (!e.target.closest('#quickPopup')) closeQuickPopup(); });
+function closeQuickPopup(){document.getElementById('quickPopup').style.display='none';}
+document.addEventListener('click',e=>{if(!e.target.closest('#quickPopup'))closeQuickPopup();});
 
 // ── EMAIL DRAFT ───────────────────────────────────────────────
-function draftEmail(row) {
-  const l = LEADS.find(x=>x._row===row); if (!l) return;
-  const templates = {
-    'Not Contacted': `Hi ${l.name.split(' ')[0]},\n\nI hope this finds you well. I'm reaching out from TDOT IT Solutions — we specialize in field services, break/fix, structured cabling, and IT deployment across Canada.\n\nI'd love to connect for a brief intro call to explore if there's a fit.\n\nAre you available this week?\n\nBest,\nShashank Singh\nTDOT IT Solutions`,
-    'Attempted to Contact': `Hi ${l.name.split(' ')[0]},\n\nI wanted to follow up on my previous message. I'd love to connect and share how TDOT IT Solutions supports companies like ${l.company} with field services and IT deployment.\n\nDo you have 15 minutes this week?\n\nBest,\nShashank Singh`,
-    'Contacted': `Hi ${l.name.split(' ')[0]},\n\nGreat speaking with you recently! As promised, I wanted to follow up with some additional information about TDOT IT Solutions and how we can support ${l.company}.\n\nLooking forward to next steps.\n\nBest,\nShashank Singh`,
-    'Pre-Qualified': `Hi ${l.name.split(' ')[0]},\n\nThank you for our conversation — I'm excited about the opportunity to work with ${l.company}. I'd like to schedule a deeper discovery call to walk through how TDOT can support your needs.\n\nWhat does your calendar look like this week?\n\nBest,\nShashank Singh\nTDOT IT Solutions`,
+function draftEmail(row){
+  const l=LEADS.find(x=>x._row===row); if(!l) return;
+  const templates={
+    'Not Contacted':`Hi ${l.name.split(' ')[0]},\n\nI hope this finds you well. I'm reaching out from TDOT IT Solutions — we specialize in field services, break/fix, structured cabling, and IT deployment across Canada.\n\nI'd love to connect for a brief intro call to explore if there's a fit.\n\nAre you available this week?\n\nBest,\nShashank Singh\nTDOT IT Solutions`,
+    'Attempted to Contact':`Hi ${l.name.split(' ')[0]},\n\nFollowing up on my previous message. I'd love to connect and share how TDOT IT Solutions supports companies like ${l.company}.\n\nDo you have 15 minutes this week?\n\nBest,\nShashank Singh`,
+    'Contacted':`Hi ${l.name.split(' ')[0]},\n\nGreat speaking with you! As promised, following up with more information about TDOT IT Solutions and how we can support ${l.company}.\n\nLooking forward to next steps.\n\nBest,\nShashank Singh`,
+    'Pre-Qualified':`Hi ${l.name.split(' ')[0]},\n\nThank you for our conversation — excited about the opportunity to work with ${l.company}. I'd like to schedule a deeper discovery call.\n\nWhat does your calendar look like this week?\n\nBest,\nShashank Singh\nTDOT IT Solutions`,
   };
-  const body = templates[l.status] || `Hi ${l.name.split(' ')[0]},\n\nFollowing up from TDOT IT Solutions.\n\nBest,\nShashank Singh`;
-  const subject = encodeURIComponent(`TDOT IT Solutions — ${l.company}`);
-  const bodyEnc = encodeURIComponent(body);
-  const to = l.email || '';
-  window.location.href = `mailto:${to}?subject=${subject}&body=${bodyEnc}`;
+  const body=templates[l.status]||`Hi ${l.name.split(' ')[0]},\n\nFollowing up from TDOT IT Solutions.\n\nBest,\nShashank Singh`;
+  window.location.href=`mailto:${l.email||''}?subject=${encodeURIComponent('TDOT IT Solutions — '+l.company)}&body=${encodeURIComponent(body)}`;
 }
 
-// ── BUSINESS CARD SCAN ────────────────────────────────────────
-function openScan() { document.getElementById('scanOverlay').classList.add('open'); }
-
-function parseScanText() {
-  const text = document.getElementById('scanText').value.trim();
-  if (!text) return;
-  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
-
-  // Simple regex parsers
-  const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}/);
-  const phoneMatch = text.match(/[\+\d][\d\s\-().]{7,}/);
-  const linkedinMatch = text.match(/linkedin\.com\/in\/[\w-]+/i);
-
-  // Guess name = first line that's not email/phone/url/title keyword
-  const skipWords = /^(www\.|http|linkedin|@|Ph:|Tel:|Email:|mobile|cell)/i;
-  const titleWords = /\b(manager|director|vp|president|ceo|cfo|coo|founder|executive|officer|head|lead|senior|junior|account|sales|business|channel|partner|technical|engineer|consultant|specialist|coordinator|analyst)\b/i;
-
-  let name = '', title = '', company = '';
-  const remaining = [];
-  for (const line of lines) {
-    if (emailMatch && line.includes(emailMatch[0])) continue;
-    if (phoneMatch && line.includes(phoneMatch[0].trim())) continue;
-    if (linkedinMatch && line.includes(linkedinMatch[0])) continue;
-    if (skipWords.test(line)) continue;
-    remaining.push(line);
+// ── SCAN ──────────────────────────────────────────────────────
+function openScan(){document.getElementById('scanOverlay').classList.add('open');}
+function parseScanText(){
+  const text=document.getElementById('scanText').value.trim(); if(!text) return;
+  const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+  const emailMatch=text.match(/[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}/);
+  const phoneMatch=text.match(/[\+\d][\d\s\-().]{7,}/);
+  const linkedinMatch=text.match(/linkedin\.com\/in\/[\w-]+/i);
+  const mobileMatch=text.match(/[Mm]obile[:\s]+([+\d][\d\s\-().]{7,})/);
+  const skipWords=/^(www\.|http|linkedin|@|Ph:|Tel:|Email:|[Ff]ax:|[Mm]obile:|[Oo]ffice:)/;
+  const titleWords=/\b(manager|director|vp|president|ceo|cfo|coo|founder|executive|officer|head|lead|senior|junior|account|sales|business|channel|partner|technical|engineer|consultant|specialist|coordinator|analyst|gc|owner)\b/i;
+  let name='',title='',company='';
+  const remaining=lines.filter(line=>{
+    if(emailMatch&&line.includes(emailMatch[0])) return false;
+    if(phoneMatch&&line.includes(phoneMatch[0].trim())) return false;
+    if(linkedinMatch&&line.includes(linkedinMatch[0])) return false;
+    if(skipWords.test(line)) return false;
+    return true;
+  });
+  if(remaining[0]) name=remaining[0];
+  for(let i=1;i<remaining.length;i++){
+    if(titleWords.test(remaining[i])&&!title) title=remaining[i];
+    else if(!company&&!titleWords.test(remaining[i])) company=remaining[i];
   }
-
-  if (remaining[0]) name = remaining[0];
-  for (let i=1;i<remaining.length;i++) {
-    if (titleWords.test(remaining[i]) && !title) title = remaining[i];
-    else if (!company && !titleWords.test(remaining[i])) company = remaining[i];
-  }
-
   closeOverlay('scanOverlay');
   openAdd();
-  if (name) document.getElementById('f_name').value = name;
-  if (title) document.getElementById('f_title').value = title;
-  if (company) document.getElementById('f_company').value = company;
-  if (emailMatch) document.getElementById('f_email').value = emailMatch[0];
-  if (phoneMatch) document.getElementById('f_phone').value = phoneMatch[0].trim();
-  if (linkedinMatch) document.getElementById('f_linkedin').value = 'https://'+linkedinMatch[0];
-  document.getElementById('f_source').value = 'Trade Show';
-  document.getElementById('scanText').value = '';
+  if(name) document.getElementById('f_name').value=name;
+  if(title) document.getElementById('f_title').value=title;
+  if(company) document.getElementById('f_company').value=company;
+  if(emailMatch) document.getElementById('f_email').value=emailMatch[0];
+  if(mobileMatch) document.getElementById('f_mobile').value=mobileMatch[1].trim();
+  else if(phoneMatch) document.getElementById('f_phone').value=phoneMatch[0].trim();
+  if(linkedinMatch) document.getElementById('f_linkedin').value='https://'+linkedinMatch[0];
+  document.getElementById('f_source').value='Trade Show';
+  document.getElementById('scanText').value='';
 }
 
 // ── RENDER ────────────────────────────────────────────────────
@@ -624,83 +660,90 @@ function ratingClass(r){return {Hot:'hot',Warm:'warm',Cold:'cold','Not Yet Deter
 function statusClass(s){return {Contacted:'contacted','Not Contacted':'not-contacted','Attempted to Contact':'attempted','Pre-Qualified':'pre-qual','Junk Lead':'junk','Lost Lead':'lost','Do Not Contact - Check Notes':'dnc','Contact in Future':'future','Not Qualified':'not-qual'}[s]||'';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-function applyFilter(leads) {
-  if (currentFilter==='all') return leads;
-  if (currentFilter==='overdue') return leads.filter(l=>isOverdue(l));
-  if (currentFilter.startsWith('status:')) return leads.filter(l=>l.status===currentFilter.slice(7));
-  if (currentFilter.startsWith('source:')) return leads.filter(l=>l.source===currentFilter.slice(7));
-  return leads.filter(l=>l.rating===currentFilter);
+function applyFilter(leads){
+  if(currentFilter==='all') return leads;
+  if(currentFilter==='overdue') return leads.filter(l=>isOverdue(l));
+  if(currentFilter.startsWith('status:')) return leads.filter(l=>l.status===currentFilter.slice(7));
+  if(currentFilter.startsWith('rating:')) return leads.filter(l=>l.rating===currentFilter.slice(7));
+  if(currentFilter.startsWith('stage:')) return leads.filter(l=>l.stage===currentFilter.slice(6));
+  if(currentFilter.startsWith('source:')) return leads.filter(l=>l.source===currentFilter.slice(7));
+  if(currentFilter.startsWith('tag:')) return leads.filter(l=>l.tags.toLowerCase().includes(currentFilter.slice(4).toLowerCase()));
+  return leads;
 }
-function applySearch(leads) {
+function applySearch(leads){
   const q=(document.getElementById('searchInput')?.value||'').toLowerCase().trim();
   if(!q) return leads;
-  return leads.filter(l=>['name','company','email','title','industry','notes'].some(k=>l[k].toLowerCase().includes(q)));
+  return leads.filter(l=>['name','company','email','title','industry','notes','tags','nextAction','competitor'].some(k=>l[k].toLowerCase().includes(q)));
 }
-function applySort(leads) {
+function applySort(leads){
   const copy=[...leads];
   const ro=['Hot','Warm','Cold','Not Yet Determined','','Not Interested/ Junk'];
+  const so=['Prospecting','Qualifying','Proposal Sent','Negotiation','Closed Won','Closed Lost'];
   if(currentSort==='name') copy.sort((a,b)=>a.name.localeCompare(b.name));
   else if(currentSort==='company') copy.sort((a,b)=>a.company.localeCompare(b.company));
   else if(currentSort==='rating') copy.sort((a,b)=>ro.indexOf(a.rating)-ro.indexOf(b.rating));
   else if(currentSort==='status') copy.sort((a,b)=>a.status.localeCompare(b.status));
+  else if(currentSort==='stage') copy.sort((a,b)=>so.indexOf(a.stage)-so.indexOf(b.stage));
   else if(currentSort==='recent') copy.sort((a,b)=>new Date(b.lastActivity||b.created)-new Date(a.lastActivity||a.created));
-  else if(currentSort==='followup') {
-    copy.sort((a,b)=>{
-      if(!a.followup && !b.followup) return 0;
-      if(!a.followup) return 1; if(!b.followup) return -1;
-      return new Date(a.followup)-new Date(b.followup);
-    });
-  }
+  else if(currentSort==='followup') copy.sort((a,b)=>{
+    if(!a.followup&&!b.followup) return 0;
+    if(!a.followup) return 1; if(!b.followup) return -1;
+    return new Date(a.followup)-new Date(b.followup);
+  });
   return copy;
 }
 
-function renderStats() {
-  const overdue = LEADS.filter(l=>isOverdue(l)).length;
-  document.getElementById('statsBar').innerHTML = [
+function renderStats(){
+  const overdue=LEADS.filter(l=>isOverdue(l)).length;
+  document.getElementById('statsBar').innerHTML=[
     ['Total',LEADS.length,'var(--accent)'],
-    ['🔴 Overdue',overdue,'var(--overdue)'],
+    ['Overdue',overdue,'var(--overdue)'],
     ['Hot',LEADS.filter(l=>l.rating==='Hot').length,'var(--hot)'],
     ['Warm',LEADS.filter(l=>l.rating==='Warm').length,'var(--warm)'],
     ['Contacted',LEADS.filter(l=>l.status==='Contacted').length,'var(--contacted)'],
     ['Pre-Qual',LEADS.filter(l=>l.status==='Pre-Qualified').length,'var(--pre-qual)'],
-  ].map(([label,num,color])=>`<div class="stat" onclick="if('${label}'.includes('Overdue'))setFilter('overdue',document.querySelector('.overdue-pill'))"><div class="stat-num" style="color:${color}">${num}</div><div class="stat-label">${label}</div></div>`).join('');
+  ].map(([label,num,color])=>`<div class="stat"><div class="stat-num" style="color:${color}">${num}</div><div class="stat-label">${label}</div></div>`).join('');
 }
 
-function renderAll() {
+function renderAll(){
   renderStats();
   let leads=applyFilter(LEADS); leads=applySearch(leads); leads=applySort(leads);
   document.getElementById('topbarCount').textContent=`${leads.length} lead${leads.length!==1?'s':''}`;
   const container=document.getElementById('leadList');
   if(!leads.length){container.innerHTML=`<div class="empty-state"><div class="big">🔍</div><p>No leads match.</p></div>`;return;}
-
-  container.innerHTML = leads.map(l=>{
+  container.innerHTML=leads.map(l=>{
     const rc=ratingClass(l.rating), sc=statusClass(l.status);
     const overdue=isOverdue(l), dueToday=isDueToday(l);
-    const src=l.tradeShow?`📍 ${l.tradeShow}`:l.source?`📌 ${l.source}`:'';
-    const lastN = lastNote(l);
-    const fuStr = l.followup ? (overdue ? `⚠ Follow-up overdue: ${formatFollowup(l.followup)}` : dueToday ? `📅 Follow-up today!` : `📅 Follow-up: ${formatFollowup(l.followup)}`) : '';
+    const lastN=lastNote(l);
+    const phone=l.mobile||l.phone;
+    const tags=l.tags?l.tags.split(',').map(t=>t.trim()).filter(Boolean):[];
+    const fuColor=overdue?'var(--overdue)':dueToday?'var(--warm)':'var(--muted)';
+    const fuText=l.followup?(overdue?`⚠ Overdue: ${formatDate(l.followup)}`:dueToday?`📅 Today!`:`📅 ${formatDate(l.followup)}`): '';
     return `<div class="lead-card ${rc} ${overdue?'overdue':''}" id="card-${l._row}" onclick="openDetail(${l._row})">
       <div class="lead-top">
-        <div style="min-width:0">
+        <div style="min-width:0;flex:1">
           <div class="lead-name">${esc(l.name)}</div>
           <div class="lead-company">${esc(l.company)}</div>
-          ${lastN ? `<div class="lead-last-note">${esc(lastN.slice(0,60))}${lastN.length>60?'…':''}</div>` : ''}
-          ${fuStr ? `<div class="lead-overdue-tag" style="color:${overdue?'var(--overdue)':dueToday?'var(--warm)':'var(--muted)'}">${fuStr}</div>` : ''}
+          ${lastN?`<div class="lead-last-note">${esc(lastN.slice(0,55))}${lastN.length>55?'…':''}</div>`:''}
+          ${fuText?`<div class="lead-overdue-tag" style="color:${fuColor}">${fuText}</div>`:''}
+          ${l.nextAction?`<div class="next-action-bar">→ ${esc(l.nextAction)}</div>`:''}
         </div>
         <div class="badge-wrap">
           ${l.rating?`<span class="badge badge-rating ${rc}">${l.rating}</span>`:''}
           ${l.status?`<span class="badge badge-status ${sc}">${l.status}</span>`:''}
+          ${l.stage?`<span class="badge badge-stage">${l.stage}</span>`:''}
         </div>
       </div>
-      ${src?`<div class="lead-meta"><span class="meta-item">${src}</span></div>`:''}
+      <div class="card-meta">
+        ${l.email?`<span class="card-meta-item">✉ ${esc(l.email)}</span>`:''}
+        ${phone?`<span class="card-meta-item">📞 ${esc(phone)}</span>`:''}
+        ${l.source?`<span class="card-meta-item">📌 ${esc(l.tradeShow||l.source)}</span>`:''}
+        ${l.competitor?`<span class="card-meta-item">⚔ ${esc(l.competitor)}</span>`:''}
+        ${tags.length?tags.map(t=>`<span class="card-meta-item" style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();setFilter('tag:${t}',null)">🏷 ${esc(t)}</span>`).join(''):''}
+      </div>
     </div>`;
   }).join('');
-
-  // Attach long press to each card
-  leads.forEach(l => {
-    const el = document.getElementById(`card-${l._row}`);
-    if (el) setupLongPress(el, l._row);
-  });
+  leads.forEach(l=>{const el=document.getElementById(`card-${l._row}`);if(el)setupLongPress(el,l._row);});
 }
 
 function setFilter(f,el){
@@ -710,37 +753,45 @@ function setFilter(f,el){
   renderAll();
 }
 
-// ── DETAIL VIEW ───────────────────────────────────────────────
-function openDetail(row) {
+// ── DETAIL ────────────────────────────────────────────────────
+function openDetail(row){
   const l=LEADS.find(x=>x._row===row); if(!l) return;
   const overdue=isOverdue(l), dueToday=isDueToday(l);
+  const tags=l.tags?l.tags.split(',').map(t=>t.trim()).filter(Boolean):[];
   const fields=[
     ['Name',l.name],['Title',l.title],['Company',l.company],
     ['Email',l.email?`<a href="mailto:${l.email}">${l.email}</a>`:''],
-    ['Phone',l.phone?`<a href="tel:${l.phone}">${l.phone}</a>`:''],
-    ['Source',l.source],['Trade Show',l.tradeShow],
-    ['Status',l.status],['Rating',l.rating],['Industry',l.industry],
+    ['Phone (Office)',l.phone?`<a href="tel:${l.phone}">${l.phone}</a>`:''],
+    ['Mobile',l.mobile?`<a href="tel:${l.mobile}">${l.mobile}</a>`:''],
+    ['Status',l.status?`<span class="badge badge-status ${statusClass(l.status)}" style="font-size:11px">${l.status}</span>`:''],
+    ['Rating',l.rating?`<span class="badge badge-rating ${ratingClass(l.rating)}" style="font-size:11px">${l.rating}</span>`:''],
+    ['Pipeline Stage',l.stage?`<span class="badge badge-stage" style="font-size:11px">${l.stage}</span>`:''],
+    ['Source',l.source],['Trade Show',l.tradeShow],['Industry',l.industry],
+    ['Competitor',l.competitor],
+    ['Next Action',l.nextAction?`<span style="color:var(--warm)">→ ${esc(l.nextAction)}</span>`:''],
+    ['Follow-up',l.followup?`${formatDate(l.followup)}${overdue?' ⚠ OVERDUE':dueToday?' 📅 TODAY':''}`: ''],
+    ['Last Contacted',l.lastContacted?formatDate(l.lastContacted):''],
     ['LinkedIn',l.linkedin?`<a href="${l.linkedin}" target="_blank">View Profile ↗</a>`:''],
-    ['Follow-up', l.followup ? `${formatFollowup(l.followup)}${overdue?' ⚠ OVERDUE':dueToday?' 📅 TODAY':''}` : ''],
     ['Created',l.created],['Last Activity',l.lastActivity],
   ].filter(([,v])=>v);
 
-  const entries = parseNotes(l.notes);
-  const logHtml = entries.length
-    ? entries.slice().reverse().map(e=>`<div class="log-entry"><div class="log-ts">${esc(e.ts)}</div><div class="log-text">${esc(e.text)}</div></div>`).join('')
-    : '<div class="log-empty">No activity yet. Add your first note below.</div>';
+  const entries=parseNotes(l.notes);
+  const logHtml=entries.length
+    ?entries.slice().reverse().map(e=>`<div class="log-entry"><div class="log-ts">${esc(e.ts)}</div><div class="log-text">${esc(e.text)}</div></div>`).join('')
+    :'<div class="log-empty">No activity yet. Add your first note below.</div>';
 
   document.getElementById('detailContent').innerHTML=`
     <div class="modal-handle"></div>
     <button class="btn-close" onclick="closeOverlay('detailOverlay')">✕</button>
     <div class="modal-title" style="color:var(--text)">${esc(l.name)}</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${esc(l.company)}</div>
+    ${tags.length?`<div class="detail-tags">${tags.map(t=>`<span class="tag-chip">${esc(t)}</span>`).join('')}</div><div style="margin-bottom:10px"></div>`:''}
     ${fields.map(([label,val])=>`<div class="detail-field"><div class="detail-label">${label}</div><div class="detail-value">${val}</div></div>`).join('')}
     <div class="detail-field">
       <div class="detail-label" style="margin-bottom:8px">📋 Activity Log</div>
       <div class="log-wrap" id="activityLog">${logHtml}</div>
       <div class="note-add-wrap">
-        <textarea id="newNoteText" placeholder="Called today, left VM. Spoke about break/fix coverage for western Canada…"></textarea>
+        <textarea id="newNoteText" placeholder="Called today, left VM. Spoke about break/fix for western Canada…"></textarea>
         <button class="btn-log" id="btnAddNote" onclick="addNote(${row})">+ Add<br>Note</button>
       </div>
     </div>
@@ -753,8 +804,8 @@ function openDetail(row) {
 
 // ── FORM ──────────────────────────────────────────────────────
 function clearForm(){
-  ['f_name','f_company','f_title','f_email','f_phone','f_tradeShow','f_industry','f_linkedin','f_notes','f_followup'].forEach(id=>document.getElementById(id).value='');
-  ['f_source','f_status','f_rating'].forEach(id=>document.getElementById(id).value='');
+  ['f_name','f_company','f_title','f_email','f_phone','f_mobile','f_tradeShow','f_industry','f_linkedin','f_notes','f_followup','f_lastcontacted','f_nextaction','f_competitor','f_tags'].forEach(id=>document.getElementById(id).value='');
+  ['f_source','f_status','f_rating','f_stage'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('editRowIndex').value='';
 }
 function openAdd(){
@@ -767,6 +818,7 @@ function openAdd(){
 }
 function openEdit(row){
   const l=LEADS.find(x=>x._row===row); if(!l) return;
+  clearForm();
   document.getElementById('formTitle').textContent='Edit Lead';
   document.getElementById('editRowIndex').value=row;
   document.getElementById('f_name').value=l.name;
@@ -774,14 +826,19 @@ function openEdit(row){
   document.getElementById('f_title').value=l.title;
   document.getElementById('f_email').value=l.email;
   document.getElementById('f_phone').value=l.phone;
+  document.getElementById('f_mobile').value=l.mobile;
   document.getElementById('f_source').value=l.source;
   document.getElementById('f_tradeShow').value=l.tradeShow;
   document.getElementById('f_status').value=l.status;
   document.getElementById('f_rating').value=l.rating;
+  document.getElementById('f_stage').value=l.stage;
   document.getElementById('f_industry').value=l.industry;
-  document.getElementById('f_linkedin').value=l.linkedin;
+  document.getElementById('f_competitor').value=l.competitor;
+  document.getElementById('f_tags').value=l.tags;
+  document.getElementById('f_nextaction').value=l.nextAction;
   document.getElementById('f_followup').value=l.followup;
-  document.getElementById('f_notes').value='';
+  document.getElementById('f_lastcontacted').value=l.lastContacted;
+  document.getElementById('f_linkedin').value=l.linkedin;
   document.getElementById('btnDelete').style.display='block';
   document.getElementById('btnSave').textContent='Update Lead';
   document.getElementById('formOverlay').classList.add('open');
@@ -792,7 +849,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeOverlay('formO
 
 // ── EXPORT ────────────────────────────────────────────────────
 function exportCSV(){
-  const cols=['name','company','title','email','phone','source','tradeShow','status','rating','industry','linkedin','notes','created','lastActivity','followup'];
+  const cols=['name','company','title','email','phone','mobile','source','tradeShow','status','rating','stage','industry','competitor','tags','nextAction','followup','lastContacted','linkedin','notes','created','lastActivity'];
   const csv=[cols.join(','),...LEADS.map(l=>cols.map(c=>`"${(l[c]||'').replace(/"/g,'""')}"`).join(','))].join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download=`leads_${new Date().toISOString().slice(0,10)}.csv`;a.click();
@@ -801,8 +858,17 @@ function setStatus(type,msg){const el=document.getElementById('syncStatus');el.c
 
 // ── INIT ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
-  const saved=localStorage.getItem('tdot_token');
-  if(saved){accessToken=saved;showApp();loadLeads();}
+  const waitForGSI=setInterval(()=>{
+    if(typeof google!=='undefined'&&google.accounts){
+      clearInterval(waitForGSI);
+      initTokenClient();
+      if(localStorage.getItem('tdot_user')){
+        showApp();
+        setStatus('loading','⟳ Reconnecting…');
+        tokenClient.requestAccessToken({prompt:''});
+      }
+    }
+  },100);
 });
 </script>
 </body>
