@@ -207,19 +207,15 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* Laptop — wider layout */
 @media(min-width:768px){
-  #mainApp{max-width:900px;margin:0 auto}
   .lead-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
   .lead-list .empty-state{grid-column:1/-1}
-  .topbar{max-width:900px;margin:0 auto}
-  .tab-bar{max-width:900px;margin:0 auto}
-  .filter-section,.stats,.toolbar{max-width:900px;margin:0 auto}
   .overlay.open{align-items:center;justify-content:center}
   .modal{max-width:560px;border-radius:16px;max-height:88vh}
 }
 
 
 /* TABS */
-.tab-bar{display:flex;border-bottom:2px solid var(--border);background:var(--bg);position:sticky;top:52px;z-index:99}
+.tab-bar{display:flex;border-bottom:2px solid var(--border);background:var(--bg);position:sticky;top:calc(58px + env(safe-area-inset-top, 0px));z-index:99;width:100%}
 .tab-btn{flex:1;padding:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;background:transparent;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 
