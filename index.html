@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>My Leads — TDOT</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -158,6 +158,91 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.2);border-top-color:#0d0f14;border-radius:50%;animation:spin .6s linear infinite;margin-right:6px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 input[type="date"]{color-scheme:dark}
+
+
+/* SETTINGS */
+.dropdown-editor{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.dropdown-editor-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.dropdown-editor-title span{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;font-weight:400}
+.dropdown-items{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.dropdown-item{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px}
+.dropdown-item-del{background:none;border:none;color:var(--hot);cursor:pointer;font-size:14px;padding:0;line-height:1;min-height:auto}
+.dropdown-add-row{display:flex;gap:6px}
+.dropdown-add-row input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:8px 10px;border-radius:6px;outline:none}
+.dropdown-add-row input:focus{border-color:var(--accent)}
+.dropdown-add-btn{background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;min-height:auto}
+.custom-field-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.custom-field-info{flex:1}
+.custom-field-name{font-size:13px;color:var(--text);font-weight:500}
+.custom-field-type{font-size:11px;color:var(--muted);margin-top:2px}
+.custom-field-del{background:none;border:1px solid rgba(255,92,92,.3);color:var(--hot);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:11px;min-height:auto}
+
+/* ── MOBILE OPTIMIZATIONS ─────────────────────────────────── */
+/* Prevent Firefox iOS zoom on input focus */
+input,select,textarea{font-size:16px!important;touch-action:manipulation}
+/* Safe areas for iPhone notch/home bar */
+body{padding-bottom:env(safe-area-inset-bottom)}
+.topbar{padding-top:max(11px,env(safe-area-inset-top))}
+
+/* Touch targets — min 44px */
+.pill{min-height:36px;display:inline-flex;align-items:center;padding:0 12px}
+.btn-add,.btn-scan,.btn-tool,.btn-save,.btn-delete,.btn-log,.btn-edit,.btn-email-draft,.btn-edit-lead,.btn-upload,.tab-btn,.qp-btn,.qp-save,.qp-cancel{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.btn-log{height:auto;min-height:60px}
+.lead-card,.target-card{padding:14px 14px 14px 17px}
+
+/* Better modal on tall phones */
+@media(max-width:430px){
+  .modal{border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom))}
+  .modal-handle{margin-bottom:10px}
+  .form-row{grid-template-columns:1fr}
+  .detail-actions{flex-direction:column}
+  .detail-actions button{width:100%}
+  .tab-bar{padding-bottom:0}
+  .topbar-logo{font-size:15px}
+  .badge{font-size:8px;padding:2px 5px}
+}
+
+/* Scrollable lists feel native */
+.lead-list,.filter-row{-webkit-overflow-scrolling:touch}
+
+/* Laptop — wider layout */
+@media(min-width:768px){
+  #mainApp{max-width:900px;margin:0 auto}
+  .lead-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+  .lead-list .empty-state{grid-column:1/-1}
+  .topbar{max-width:900px;margin:0 auto}
+  .tab-bar{max-width:900px;margin:0 auto}
+  .filter-section,.stats,.toolbar{max-width:900px;margin:0 auto}
+  .overlay.open{align-items:center;justify-content:center}
+  .modal{max-width:560px;border-radius:16px;max-height:88vh}
+}
+
+
+/* TABS */
+.tab-bar{display:flex;border-bottom:2px solid var(--border);background:var(--bg);position:sticky;top:52px;z-index:99}
+.tab-btn{flex:1;padding:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;background:transparent;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* TARGET CARDS */
+.target-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 13px 13px 15px;cursor:pointer;position:relative;overflow:hidden;transition:border-color .15s}
+.target-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:10px 0 0 10px}
+.target-card.high::before{background:var(--hot)}
+.target-card.medium::before{background:var(--warm)}
+.target-card.low::before{background:var(--cold)}
+.target-card:active{background:var(--surface2)}
+.target-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.target-industry{font-size:12px;color:var(--muted);margin-top:2px}
+.target-why{font-size:11px;color:#4b5563;margin-top:4px;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge-priority.high{background:rgba(255,92,92,.15);color:var(--hot)}
+.badge-priority.medium{background:rgba(255,159,64,.15);color:var(--warm)}
+.badge-priority.low{background:rgba(92,158,255,.15);color:var(--cold)}
+.badge-tstatus{background:rgba(167,139,250,.12);color:var(--not-yet)}
+
+/* UPLOAD BUTTON */
+.btn-upload{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:9px 14px;border-radius:8px;cursor:pointer;width:100%;margin-top:8px;text-align:left;transition:border-color .15s}
+.btn-upload:hover{border-color:var(--accent)}
+.card-photo-link{display:block;margin-top:8px;padding:10px;background:rgba(232,255,71,.06);border:1px solid rgba(232,255,71,.2);border-radius:8px;color:var(--accent);font-size:12px;text-decoration:none;text-align:center}
+
 </style>
 </head>
 <body>
@@ -175,6 +260,11 @@ input[type="date"]{color-scheme:dark}
 </div>
 
 <div id="mainApp" style="display:none">
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabLeads" onclick="switchTab('leads')">⚡ Active Leads</button>
+    <button class="tab-btn" id="tabTargets" onclick="switchTab('targets')">🎯 Target Accounts</button>
+    <button class="tab-btn" id="tabSettings" onclick="switchTab('settings')">⚙ Settings</button>
+  </div>
   <div class="topbar">
     <div class="topbar-logo">⚡ LEADS</div>
     <div id="topbarCount"></div>
@@ -250,6 +340,50 @@ input[type="date"]{color-scheme:dark}
   </div>
 
   <div class="lead-list" id="leadList"></div>
+  <div class="lead-list" id="targetList" style="display:none"></div>
+
+  <!-- SETTINGS PANEL -->
+  <div id="settingsPanel" style="display:none;padding:16px">
+
+    <!-- DROPDOWN EDITOR -->
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--accent);margin-bottom:4px">⚙ Settings</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:20px">Changes save automatically to your Google Sheet.</div>
+
+    <div class="form-section" style="margin-top:0">Dropdown Options</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Tap any list to add or remove options.</div>
+
+    <div id="dropdownEditors"></div>
+
+    <!-- CUSTOM FIELDS -->
+    <div class="form-section">Custom Fields</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Add your own fields to every lead. They appear on the add/edit form and detail view.</div>
+    <div id="customFieldList"></div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:10px">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Add Custom Field</div>
+      <div class="form-row">
+        <div class="form-group"><label>Field Name</label><input type="text" id="newFieldName" placeholder="e.g. Contract Value"></div>
+        <div class="form-group"><label>Field Type</label>
+          <select id="newFieldType">
+            <option value="text">Text</option>
+            <option value="number">Number</option>
+            <option value="date">Date</option>
+            <option value="dropdown">Dropdown</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" id="newFieldOptionsWrap" style="display:none">
+        <label>Dropdown Options (comma separated)</label>
+        <input type="text" id="newFieldOptions" placeholder="Option 1, Option 2, Option 3">
+      </div>
+      <button class="btn-save" style="margin-top:0" onclick="addCustomField()">+ Add Field</button>
+    </div>
+
+    <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border)">
+      <button class="btn-tool" style="width:100%;justify-content:center" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+
 </div>
 
 <!-- FORM MODAL -->
@@ -310,6 +444,7 @@ input[type="date"]{color-scheme:dark}
       <div class="form-group"><label>Last Contacted</label><input type="date" id="f_lastcontacted"></div>
     </div>
 
+    <div id="customFieldsFormSection"></div>
     <div class="form-section">Notes</div>
     <div class="form-group"><label>Initial Notes</label><textarea id="f_notes" placeholder="Quick note when adding lead…" style="height:60px"></textarea></div>
 
@@ -351,21 +486,92 @@ input[type="date"]{color-scheme:dark}
   </div>
 </div>
 
+
+<!-- TARGET FORM MODAL -->
+<div class="overlay" id="targetFormOverlay" onclick="if(event.target.id==='targetFormOverlay')closeOverlay('targetFormOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="btn-close" onclick="closeOverlay('targetFormOverlay')">✕</button>
+    <div class="modal-title" id="targetFormTitle">New Target Account</div>
+    <input type="hidden" id="targetEditRow">
+
+    <div class="form-section">Company Info</div>
+    <div class="form-row">
+      <div class="form-group"><label>Company Name *</label><input type="text" id="t_company" placeholder="Acme Digital Signage"></div>
+      <div class="form-group"><label>Industry</label><input type="text" id="t_industry" placeholder="Digital Signage"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Company LinkedIn</label><input type="url" id="t_linkedin" placeholder="https://linkedin.com/company/…"></div>
+      <div class="form-group"><label>Priority</label>
+        <select id="t_priority"><option value="">— Select —</option><option>High</option><option>Medium</option><option>Low</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Status</label>
+        <select id="t_status"><option value="">— Select —</option><option>Watching</option><option>Researching</option><option>Ready to Reach Out</option><option>Passed</option></select>
+      </div>
+      <div class="form-group"><label>Date Added</label><input type="date" id="t_dateadded"></div>
+    </div>
+    <div class="form-group"><label>Why Interested</label><textarea id="t_why" style="height:70px" placeholder="Digital signage company, currently with Cineplex. Heard they're unhappy with support response times…"></textarea></div>
+
+    <div class="form-section">Target Contact</div>
+    <div class="form-row">
+      <div class="form-group"><label>Contact Name</label><input type="text" id="t_contactname" placeholder="Jane Smith"></div>
+      <div class="form-group"><label>Contact Phone</label><input type="tel" id="t_contactphone"></div>
+    </div>
+    <div class="form-group"><label>Contact LinkedIn</label><input type="url" id="t_contactlinkedin" placeholder="https://linkedin.com/in/…"></div>
+
+    <div class="form-section">Notes</div>
+    <div class="form-group"><label>Notes</label><textarea id="t_notes" style="height:60px" placeholder="Found on LinkedIn. Posted about expanding to 3 new locations…"></textarea></div>
+
+    <button class="btn-save" id="btnTargetSave" onclick="saveTarget()">Save Target</button>
+    <button class="btn-delete" id="btnTargetDelete" style="display:none" onclick="deleteTarget()">Remove Target</button>
+  </div>
+</div>
+
+<!-- TARGET DETAIL MODAL -->
+<div class="overlay" id="targetDetailOverlay" onclick="if(event.target.id==='targetDetailOverlay')closeOverlay('targetDetailOverlay')">
+  <div class="modal" id="targetDetailContent"></div>
+</div>
+
+<!-- CARD PHOTO UPLOAD INPUT -->
+<input type="file" id="cardPhotoInput" accept="image/*" style="display:none" onchange="uploadCardPhoto(event)">
+
 <script src="https://accounts.google.com/gsi/client" async></script>
 <script>
 const SHEET_ID   = '1XwCrEZaOp2AdepnBboZYfEvUx94tN6NkEbu45iOmLGM';
 const API_KEY    = 'AIzaSyBfxWQzsg0KRO5zLDWAsMsGaJTRGufCgtk';
 const CLIENT_ID  = '446280373045-ahe4dv7lmi1ii5rvk072defbg3jlnt5l.apps.googleusercontent.com';
-const SCOPES     = 'https://www.googleapis.com/auth/spreadsheets';
+const SCOPES     = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
 const SHEET_NAME = 'My Leads - TDOT';
-const RANGE_READ = `${SHEET_NAME}!A2:V`;
+const RANGE_READ = `${SHEET_NAME}!A2:AZ`; // extend to AZ to capture custom fields
+const TARGET_SHEET = 'Target Accounts';
+const TARGET_RANGE = `${TARGET_SHEET}!A2:K`;
+const SETTINGS_SHEET = 'App Settings';
+const FIXED_COLS = 22; // A-V are fixed; custom fields start at W
 
 // A=0 B=1 C=2 D=3 E=4 F=5 G=6 H=7 I=8 J=9 K=10 L=11 M=12 N=13 O=14 P=15 Q=16 R=17 S=18 T=19 U=20 V=21
 const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15,mobile:16,nextAction:17,competitor:18,lastContacted:19,stage:20,tags:21};
 
-let LEADS=[], accessToken=null, tokenExpiry=0, tokenClient=null;
+let LEADS=[], TARGETS=[], accessToken=null, tokenExpiry=0, tokenClient=null;
 let currentFilter='all', currentSort='followup';
+let currentTab='leads';
 let qpRow=null, qpStatus='', qpRating='', qpStage='';
+
+// Settings state
+let SETTINGS = {
+  dropdowns: {
+    'Status':       ['Not Contacted','Attempted to Contact','Contacted','Pre-Qualified','Contact in Future','Not Qualified','Lost Lead','Junk Lead','Do Not Contact - Check Notes'],
+    'Rating':       ['Hot','Warm','Cold','Not Yet Determined','Not Interested/ Junk'],
+    'Pipeline Stage':['Prospecting','Qualifying','Proposal Sent','Negotiation','Closed Won','Closed Lost'],
+    'Lead Source':  ['Trade Show','Cold Call','Seamless.AI','Web Research','Employee Referral','External Referral','Partner','Chat','Sales Email Alias','Other'],
+    'Industry':     ['Technology','Retail','Telecommunications & ISP','Field Service Provider','MSP (Management Service Provider)','Digital Signage','Construction','Telematics','Healthcare','Finance','Other'],
+    'Target Priority':['High','Medium','Low'],
+    'Target Status':['Watching','Researching','Ready to Reach Out','Passed'],
+  },
+  customFields: []
+  // Each customField: {id, name, type, options (if dropdown)}
+};
 
 // ── AUTH ─────────────────────────────────────────────────────
 function initTokenClient() {
@@ -446,22 +652,28 @@ async function loadLeads() {
     LEADS=(data.values||[]).map((row,i)=>{
       const l={};
       Object.entries(FM).forEach(([k,idx])=>l[k]=(row[idx]||'').toString().trim());
+      // Map custom fields (W=22, X=23, ...)
+      SETTINGS.customFields.forEach((f,fi)=>{ l[f.id]=(row[FIXED_COLS+fi]||'').toString().trim(); });
       l._row=i+2; return l;
     }).filter(l=>l.name);
     setStatus('ok',`✓ ${LEADS.length} leads loaded`);
     setTimeout(()=>setStatus('',''),2500);
+    await loadTargets();
     renderAll();
   } catch(err){setStatus('error','✗ '+err.message);}
 }
 
 // ── ROW ───────────────────────────────────────────────────────
 function leadToRow(l,now){
-  return [
+  const base = [
     l.id||('local_'+Date.now()), l.name, l.title, l.company, l.email, l.phone,
     l.source, l.tradeShow, l.status, l.rating, l.industry, l.linkedin, l.notes,
     l.created||now, now, l.followup||'', l.mobile||'', l.nextAction||'',
     l.competitor||'', l.lastContacted||'', l.stage||'', l.tags||''
   ];
+  // Append custom field values in order
+  SETTINGS.customFields.forEach(f => base.push(l[f.id]||''));
+  return base;
 }
 
 // ── NOTES ─────────────────────────────────────────────────────
@@ -514,6 +726,7 @@ async function saveLead(){
     linkedin: document.getElementById('f_linkedin').value.trim(),
     notes:    existing?.notes||document.getElementById('f_notes').value.trim(),
     created:  existing?.created||now,
+    ...getCustomFieldValues(),
   };
   const btn=document.getElementById('btnSave');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Saving…';
@@ -798,7 +1011,9 @@ function openDetail(row){
     <div class="detail-actions">
       ${l.email?`<button class="detail-actions btn-email-draft" onclick="draftEmail(${row})">✉ Draft Email</button>`:''}
       <button class="btn-edit-lead" onclick="closeOverlay('detailOverlay');openEdit(${row})">✏ Edit</button>
-    </div>`;
+    </div>
+    ${renderCustomFieldsInDetail(l)}
+    <button class="btn-upload" onclick="triggerCardUpload(${row})">📎 Upload Business Card Photo</button>`;
   document.getElementById('detailOverlay').classList.add('open');
 }
 
@@ -813,6 +1028,8 @@ function openAdd(){
   document.getElementById('formTitle').textContent='New Lead';
   document.getElementById('btnDelete').style.display='none';
   document.getElementById('btnSave').textContent='Save Lead';
+  refreshFormDropdowns();
+  renderCustomFieldsInForm({});
   document.getElementById('formOverlay').classList.add('open');
   setTimeout(()=>document.getElementById('f_name').focus(),100);
 }
@@ -841,6 +1058,8 @@ function openEdit(row){
   document.getElementById('f_linkedin').value=l.linkedin;
   document.getElementById('btnDelete').style.display='block';
   document.getElementById('btnSave').textContent='Update Lead';
+  refreshFormDropdowns();
+  renderCustomFieldsInForm(l);
   document.getElementById('formOverlay').classList.add('open');
 }
 
@@ -854,6 +1073,489 @@ function exportCSV(){
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download=`leads_${new Date().toISOString().slice(0,10)}.csv`;a.click();
 }
+
+// ── TAB SWITCHING ─────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  ['leads','targets','settings'].forEach(t => {
+    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active', t===tab);
+  });
+  document.getElementById('leadList').style.display      = tab==='leads'    ? 'flex'  : 'none';
+  document.getElementById('targetList').style.display    = tab==='targets'  ? 'flex'  : 'none';
+  document.getElementById('settingsPanel').style.display = tab==='settings' ? 'block' : 'none';
+  const leadsOnly = tab==='leads';
+  document.querySelector('.filter-section').style.display = leadsOnly ? 'block' : 'none';
+  document.querySelector('.stats').style.display          = leadsOnly ? 'flex'  : 'none';
+  document.querySelector('.toolbar').style.display        = leadsOnly ? 'flex'  : 'none';
+  document.getElementById('topbarCount').style.display    = leadsOnly ? 'block' : 'none';
+  const addBtn = document.querySelector('.btn-add');
+  if (tab==='leads')    { addBtn.onclick=openAdd;        addBtn.textContent='+ Add';     addBtn.style.display='flex'; }
+  if (tab==='targets')  { addBtn.onclick=openTargetAdd;  addBtn.textContent='+ Target';  addBtn.style.display='flex'; }
+  if (tab==='settings') { addBtn.style.display='none'; renderSettings(); }
+  if (tab==='targets') renderTargets();
+}
+
+// ── TARGET DATA ───────────────────────────────────────────────
+// Cols: A=company B=industry C=linkedin D=priority E=status F=dateadded G=why H=contactname I=contactphone J=contactlinkedin K=notes
+const TFM = {company:0,industry:1,linkedin:2,priority:3,status:4,dateadded:5,why:6,contactName:7,contactPhone:8,contactLinkedin:9,notes:10};
+
+async function loadTargets() {
+  try {
+    const data = await sheetsGet(TARGET_RANGE);
+    TARGETS = (data.values||[]).map((row,i) => {
+      const t = {};
+      Object.entries(TFM).forEach(([k,idx]) => t[k]=(row[idx]||'').toString().trim());
+      t._row = i+2; return t;
+    }).filter(t => t.company);
+  } catch(err) {
+    // Target sheet might not exist yet — that's ok
+    TARGETS = [];
+  }
+}
+
+function targetToRow(t) {
+  return [t.company,t.industry,t.linkedin,t.priority,t.status,t.dateadded,t.why,t.contactName,t.contactPhone,t.contactLinkedin,t.notes];
+}
+
+async function saveTarget() {
+  const company = document.getElementById('t_company').value.trim();
+  if (!company) { alert('Company name is required.'); return; }
+  const rowIndex = document.getElementById('targetEditRow').value;
+  const existing = rowIndex ? TARGETS.find(t=>t._row==rowIndex) : null;
+  const today = new Date().toISOString().slice(0,10);
+  const target = {
+    company,
+    industry:       document.getElementById('t_industry').value.trim(),
+    linkedin:       document.getElementById('t_linkedin').value.trim(),
+    priority:       document.getElementById('t_priority').value,
+    status:         document.getElementById('t_status').value,
+    dateadded:      document.getElementById('t_dateadded').value || today,
+    why:            document.getElementById('t_why').value.trim(),
+    contactName:    document.getElementById('t_contactname').value.trim(),
+    contactPhone:   document.getElementById('t_contactphone').value.trim(),
+    contactLinkedin:document.getElementById('t_contactlinkedin').value.trim(),
+    notes:          document.getElementById('t_notes').value.trim(),
+  };
+  const btn = document.getElementById('btnTargetSave');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Saving…';
+  setStatus('loading','⟳ Saving target…');
+  try {
+    if (rowIndex) {
+      await sheetsUpdate(`${TARGET_SHEET}!A${rowIndex}:K${rowIndex}`,[targetToRow(target)]);
+    } else {
+      await sheetsAppend2(TARGET_SHEET, [targetToRow(target)]);
+    }
+    closeOverlay('targetFormOverlay');
+    setStatus('ok','✓ Target saved'); setTimeout(()=>setStatus('',''),2000);
+    await loadTargets(); renderTargets();
+  } catch(err) { setStatus('error','✗ '+err.message); }
+  finally { btn.disabled=false; btn.textContent=rowIndex?'Update Target':'Save Target'; }
+}
+
+async function deleteTarget() {
+  if (!confirm('Remove this target account?')) return;
+  const rowIndex = parseInt(document.getElementById('targetEditRow').value);
+  setStatus('loading','⟳ Removing…');
+  try {
+    const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(TARGET_SHEET+'!A'+rowIndex+':K'+rowIndex)}:clear`;
+    await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'}});
+    closeOverlay('targetFormOverlay');
+    setStatus('ok','✓ Removed'); setTimeout(()=>setStatus('',''),2000);
+    await loadTargets(); renderTargets();
+  } catch(err) { setStatus('error','✗ '+err.message); }
+}
+
+async function sheetsAppend2(sheetName, values) {
+  await ensureToken();
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(sheetName+'!A1')}:append?valueInputOption=USER_ENTERED`;
+  const res=await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify({values})});
+  if(!res.ok) throw new Error((await res.json()).error?.message||'Append error');
+  return res.json();
+}
+
+// ── PROMOTE TARGET → LEAD ─────────────────────────────────────
+async function promoteToLead(row) {
+  const t = TARGETS.find(x=>x._row===row); if(!t) return;
+  if (!confirm(`Promote "${t.company}" to an Active Lead?`)) return;
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const today = new Date().toISOString().slice(0,10);
+  const lead = {
+    id:'local_'+Date.now(), name:t.contactName||t.company, company:t.company,
+    title:'', email:'', phone:t.contactPhone, mobile:'',
+    source:'', tradeShow:'', status:'Not Contacted', rating:t.priority==='High'?'Hot':t.priority==='Medium'?'Warm':'Cold',
+    stage:'Prospecting', industry:t.industry, competitor:'', tags:'',
+    nextAction:'Initial outreach', followup:today, lastContacted:'',
+    linkedin:t.contactLinkedin, notes:`Promoted from Target Accounts. Why interested: ${t.why}`,
+    created:now,
+  };
+  setStatus('loading','⟳ Promoting to lead…');
+  try {
+    await sheetsAppend([leadToRow(lead,now)]);
+    // Mark target as promoted
+    const updated = {...t, status:'Ready to Reach Out', notes:(t.notes?t.notes+' | ':'')+'Promoted to Active Lead '+today};
+    await sheetsUpdate(`${TARGET_SHEET}!A${row}:K${row}`,[targetToRow(updated)]);
+    closeOverlay('targetDetailOverlay');
+    setStatus('ok','✓ Promoted to Active Lead! Switch to Leads tab to see them.');
+    setTimeout(()=>setStatus('',''),4000);
+    await loadTargets(); renderTargets();
+    await loadLeads();
+  } catch(err) { setStatus('error','✗ '+err.message); }
+}
+
+// ── RENDER TARGETS ────────────────────────────────────────────
+function renderTargets() {
+  const container = document.getElementById('targetList');
+  if (!TARGETS.length) {
+    container.innerHTML=`<div class="empty-state"><div class="big">🎯</div><p>No target accounts yet.<br>Tap + Target to add one.</p></div>`;
+    return;
+  }
+  const sorted = [...TARGETS].sort((a,b)=>{
+    const po=['High','Medium','Low',''];
+    return po.indexOf(a.priority)-po.indexOf(b.priority);
+  });
+  container.innerHTML = sorted.map(t => {
+    const pc = t.priority.toLowerCase()||'low';
+    return `<div class="target-card ${pc}" onclick="openTargetDetail(${t._row})">
+      <div class="lead-top">
+        <div style="min-width:0;flex:1">
+          <div class="target-name">${esc(t.company)}</div>
+          ${t.industry?`<div class="target-industry">🏭 ${esc(t.industry)}</div>`:''}
+          ${t.why?`<div class="target-why">${esc(t.why.slice(0,60))}${t.why.length>60?'…':''}</div>`:''}
+          ${t.contactName?`<div style="font-size:11px;color:var(--muted);margin-top:3px">👤 ${esc(t.contactName)}</div>`:''}
+        </div>
+        <div class="badge-wrap">
+          ${t.priority?`<span class="badge badge-priority ${pc}">${t.priority}</span>`:''}
+          ${t.status?`<span class="badge badge-tstatus">${t.status}</span>`:''}
+        </div>
+      </div>
+      <div class="card-meta" style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px">
+        ${t.contactPhone?`<span class="card-meta-item">📞 ${esc(t.contactPhone)}</span>`:''}
+        ${t.dateadded?`<span class="card-meta-item">📅 Added ${formatDate(t.dateadded)}</span>`:''}
+        ${t.linkedin?`<span class="card-meta-item"><a href="${t.linkedin}" target="_blank" onclick="event.stopPropagation()" style="color:var(--accent)">Company ↗</a></span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── TARGET DETAIL ─────────────────────────────────────────────
+function openTargetDetail(row) {
+  const t = TARGETS.find(x=>x._row===row); if(!t) return;
+  const fields = [
+    ['Company',t.company],['Industry',t.industry],
+    ['Company LinkedIn',t.linkedin?`<a href="${t.linkedin}" target="_blank">View ↗</a>`:''],
+    ['Priority',t.priority],['Status',t.status],['Date Added',t.dateadded?formatDate(t.dateadded):''],
+    ['Why Interested',t.why],
+    ['Contact Name',t.contactName],
+    ['Contact Phone',t.contactPhone?`<a href="tel:${t.contactPhone}">${t.contactPhone}</a>`:''],
+    ['Contact LinkedIn',t.contactLinkedin?`<a href="${t.contactLinkedin}" target="_blank">View ↗</a>`:''],
+    ['Notes',t.notes],
+  ].filter(([,v])=>v);
+  document.getElementById('targetDetailContent').innerHTML=`
+    <div class="modal-handle"></div>
+    <button class="btn-close" onclick="closeOverlay('targetDetailOverlay')">✕</button>
+    <div class="modal-title" style="color:var(--text)">${esc(t.company)}</div>
+    ${fields.map(([label,val])=>`<div class="detail-field"><div class="detail-label">${label}</div><div class="detail-value">${val}</div></div>`).join('')}
+    <button class="btn-save" style="margin-top:12px;background:#34d399;color:#0d0f14" onclick="promoteToLead(${row})">🚀 Promote to Active Lead</button>
+    <div class="detail-actions" style="margin-top:8px">
+      <button class="btn-email-draft detail-actions" onclick="closeOverlay('targetDetailOverlay');openTargetEdit(${row})">✏ Edit</button>
+    </div>`;
+  document.getElementById('targetDetailOverlay').classList.add('open');
+}
+
+// ── TARGET FORM ───────────────────────────────────────────────
+function clearTargetForm() {
+  ['t_company','t_industry','t_linkedin','t_dateadded','t_why','t_contactname','t_contactphone','t_contactlinkedin','t_notes'].forEach(id=>document.getElementById(id).value='');
+  ['t_priority','t_status'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('targetEditRow').value='';
+}
+function openTargetAdd() {
+  clearTargetForm();
+  document.getElementById('targetFormTitle').textContent='New Target Account';
+  document.getElementById('btnTargetDelete').style.display='none';
+  document.getElementById('btnTargetSave').textContent='Save Target';
+  document.getElementById('t_dateadded').value=new Date().toISOString().slice(0,10);
+  document.getElementById('targetFormOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('t_company').focus(),100);
+}
+function openTargetEdit(row) {
+  const t=TARGETS.find(x=>x._row===row); if(!t) return;
+  clearTargetForm();
+  document.getElementById('targetFormTitle').textContent='Edit Target';
+  document.getElementById('targetEditRow').value=row;
+  document.getElementById('t_company').value=t.company;
+  document.getElementById('t_industry').value=t.industry;
+  document.getElementById('t_linkedin').value=t.linkedin;
+  document.getElementById('t_priority').value=t.priority;
+  document.getElementById('t_status').value=t.status;
+  document.getElementById('t_dateadded').value=t.dateadded;
+  document.getElementById('t_why').value=t.why;
+  document.getElementById('t_contactname').value=t.contactName;
+  document.getElementById('t_contactphone').value=t.contactPhone;
+  document.getElementById('t_contactlinkedin').value=t.contactLinkedin;
+  document.getElementById('t_notes').value=t.notes;
+  document.getElementById('btnTargetDelete').style.display='block';
+  document.getElementById('btnTargetSave').textContent='Update Target';
+  document.getElementById('targetFormOverlay').classList.add('open');
+}
+
+
+// ── GOOGLE DRIVE CARD PHOTO UPLOAD ────────────────────────────
+let uploadingForRow = null;
+
+function triggerCardUpload(row) {
+  uploadingForRow = row;
+  document.getElementById('cardPhotoInput').click();
+}
+
+async function uploadCardPhoto(event) {
+  const file = event.target.files[0]; if(!file) return;
+  const row = uploadingForRow; if(!row) return;
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  setStatus('loading','⟳ Uploading card photo to Google Drive…');
+  try {
+    await ensureToken();
+    // Step 1 — find or create TDOT Lead Cards folder
+    const folderRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent("name='TDOT Lead Cards' and mimeType='application/vnd.google-apps.folder' and trashed=false")}&fields=files(id,name)`,
+      {headers:{Authorization:`Bearer ${accessToken}`}});
+    const folderData = await folderRes.json();
+    let folderId;
+    if (folderData.files && folderData.files.length > 0) {
+      folderId = folderData.files[0].id;
+    } else {
+      // Create folder
+      const createRes = await fetch('https://www.googleapis.com/drive/v3/files',{
+        method:'POST',
+        headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
+        body:JSON.stringify({name:'TDOT Lead Cards',mimeType:'application/vnd.google-apps.folder'})
+      });
+      const createData = await createRes.json();
+      folderId = createData.id;
+    }
+    // Step 2 — upload file
+    const metadata = {name:`${l.name} — ${l.company}`,parents:[folderId]};
+    const formData = new FormData();
+    formData.append('metadata',new Blob([JSON.stringify(metadata)],{type:'application/json'}));
+    formData.append('file',file);
+    const uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink',{
+      method:'POST',
+      headers:{Authorization:`Bearer ${accessToken}`},
+      body:formData
+    });
+    const uploadData = await uploadRes.json();
+    const fileLink = uploadData.webViewLink;
+    // Step 3 — make file viewable by link
+    await fetch(`https://www.googleapis.com/drive/v3/files/${uploadData.id}/permissions`,{
+      method:'POST',
+      headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
+      body:JSON.stringify({role:'reader',type:'anyone'})
+    });
+    // Step 4 — save link to lead notes/card field
+    const now = new Date().toISOString().replace('T',' ').slice(0,19);
+    // Store in notes as a special entry
+    const cardEntry = `${formatTs()}: 📎 Business card photo uploaded → ${fileLink}`;
+    const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${cardEntry}` : cardEntry;
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes},now)]);
+    setStatus('ok','✓ Card photo uploaded to Google Drive!');
+    setTimeout(()=>setStatus('',''),3000);
+    await loadLeads();
+    openDetail(row);
+  } catch(err) { setStatus('error','✗ Upload failed: '+err.message); }
+  event.target.value='';
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────
+async function loadSettings() {
+  try {
+    const data = await sheetsGet(`${SETTINGS_SHEET}!A1:Z100`);
+    const rows = data.values || [];
+    if (!rows.length) { await saveSettingsToSheet(); return; }
+    // Parse dropdowns — each row: [key, val1, val2, ...]
+    // Custom fields rows start with '__custom__'
+    const newDropdowns = {};
+    const newCustom = [];
+    for (const row of rows) {
+      if (!row[0]) continue;
+      if (row[0] === '__custom__') {
+        // format: __custom__, id, name, type, options...
+        newCustom.push({id:row[1],name:row[2],type:row[3],options:row.slice(4).filter(Boolean)});
+      } else {
+        newDropdowns[row[0]] = row.slice(1).filter(Boolean);
+      }
+    }
+    if (Object.keys(newDropdowns).length) SETTINGS.dropdowns = {...SETTINGS.dropdowns, ...newDropdowns};
+    if (newCustom.length) SETTINGS.customFields = newCustom;
+  } catch(e) {
+    // Sheet doesn't exist yet — save defaults
+    try { await saveSettingsToSheet(); } catch(e2) {}
+  }
+}
+
+async function saveSettingsToSheet() {
+  const rows = [];
+  for (const [key, vals] of Object.entries(SETTINGS.dropdowns)) {
+    rows.push([key, ...vals]);
+  }
+  for (const cf of SETTINGS.customFields) {
+    rows.push(['__custom__', cf.id, cf.name, cf.type, ...(cf.options||[])]);
+  }
+  // Clear then rewrite
+  try {
+    await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SETTINGS_SHEET+'!A1:Z100')}:clear`,
+      {method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'}});
+  } catch(e) {}
+  if (rows.length) {
+    await sheetsAppend2(SETTINGS_SHEET, rows);
+  }
+}
+
+function getOptions(dropdownName) {
+  return SETTINGS.dropdowns[dropdownName] || [];
+}
+
+function buildSelect(id, dropdownName, currentVal='') {
+  const opts = getOptions(dropdownName);
+  return `<select id="${id}"><option value="">— Select —</option>${opts.map(o=>`<option${o===currentVal?' selected':''}>${o}</option>`).join('')}</select>`;
+}
+
+// Rebuild all dropdowns in forms from settings
+function refreshFormDropdowns() {
+  const maps = [
+    ['f_status','Status'],['f_rating','Rating'],['f_stage','Pipeline Stage'],
+    ['f_source','Lead Source'],['t_priority','Target Priority'],['t_status','Target Status']
+  ];
+  maps.forEach(([id,name])=>{
+    const el = document.getElementById(id); if(!el) return;
+    const cur = el.value;
+    el.innerHTML = `<option value="">— Select —</option>` + getOptions(name).map(o=>`<option${o===cur?' selected':''}>${o}</option>`).join('');
+  });
+}
+
+// ── SETTINGS RENDER ───────────────────────────────────────────
+function renderSettings() {
+  // Dropdowns
+  const de = document.getElementById('dropdownEditors');
+  de.innerHTML = Object.entries(SETTINGS.dropdowns).map(([name, vals]) => `
+    <div class="dropdown-editor">
+      <div class="dropdown-editor-title">${name} <span>${vals.length} options</span></div>
+      <div class="dropdown-items">
+        ${vals.map((v,i) => `<div class="dropdown-item">${v}<button class="dropdown-item-del" onclick="removeDropdownOption('${name}',${i})">✕</button></div>`).join('')}
+      </div>
+      <div class="dropdown-add-row">
+        <input type="text" id="ddnew_${name.replace(/\s/g,'_')}" placeholder="Add option…" onkeydown="if(event.key==='Enter')addDropdownOption('${name}')">
+        <button class="dropdown-add-btn" onclick="addDropdownOption('${name}')">+ Add</button>
+      </div>
+    </div>`).join('');
+
+  // Custom fields
+  const cf = document.getElementById('customFieldList');
+  if (!SETTINGS.customFields.length) {
+    cf.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0;margin-bottom:8px">No custom fields yet.</div>';
+  } else {
+    cf.innerHTML = SETTINGS.customFields.map((f,i) => `
+      <div class="custom-field-item">
+        <div class="custom-field-info">
+          <div class="custom-field-name">${f.name}</div>
+          <div class="custom-field-type">${f.type}${f.type==='dropdown'?' — '+f.options.join(', '):''}</div>
+        </div>
+        <button class="custom-field-del" onclick="removeCustomField(${i})">Remove</button>
+      </div>`).join('');
+  }
+
+  // Show/hide dropdown options field
+  document.getElementById('newFieldType').onchange = function() {
+    document.getElementById('newFieldOptionsWrap').style.display = this.value==='dropdown'?'block':'none';
+  };
+}
+
+async function addDropdownOption(name) {
+  const inputId = 'ddnew_' + name.replace(/\s/g,'_');
+  const input = document.getElementById(inputId);
+  const val = input.value.trim(); if (!val) return;
+  if (SETTINGS.dropdowns[name].includes(val)) { alert('That option already exists.'); return; }
+  SETTINGS.dropdowns[name].push(val);
+  input.value = '';
+  setStatus('loading','⟳ Saving…');
+  try { await saveSettingsToSheet(); setStatus('ok','✓ Saved'); setTimeout(()=>setStatus('',''),1500); }
+  catch(e) { setStatus('error','✗ '+e.message); }
+  refreshFormDropdowns();
+  renderSettings();
+}
+
+async function removeDropdownOption(name, idx) {
+  if (!confirm(`Remove "${SETTINGS.dropdowns[name][idx]}" from ${name}?`)) return;
+  SETTINGS.dropdowns[name].splice(idx,1);
+  setStatus('loading','⟳ Saving…');
+  try { await saveSettingsToSheet(); setStatus('ok','✓ Removed'); setTimeout(()=>setStatus('',''),1500); }
+  catch(e) { setStatus('error','✗ '+e.message); }
+  refreshFormDropdowns();
+  renderSettings();
+}
+
+async function addCustomField() {
+  const name = document.getElementById('newFieldName').value.trim();
+  const type = document.getElementById('newFieldType').value;
+  if (!name) { alert('Field name is required.'); return; }
+  if (SETTINGS.customFields.find(f=>f.name.toLowerCase()===name.toLowerCase())) { alert('A field with that name already exists.'); return; }
+  const options = type==='dropdown' ? document.getElementById('newFieldOptions').value.split(',').map(s=>s.trim()).filter(Boolean) : [];
+  const id = 'cf_' + Date.now();
+  SETTINGS.customFields.push({id, name, type, options});
+  document.getElementById('newFieldName').value = '';
+  document.getElementById('newFieldOptions').value = '';
+  setStatus('loading','⟳ Saving…');
+  try { await saveSettingsToSheet(); setStatus('ok','✓ Custom field added'); setTimeout(()=>setStatus('',''),1500); }
+  catch(e) { setStatus('error','✗ '+e.message); }
+  renderSettings();
+}
+
+async function removeCustomField(idx) {
+  if (!confirm(`Remove custom field "${SETTINGS.customFields[idx].name}"? Your Sheet data is kept.`)) return;
+  SETTINGS.customFields.splice(idx,1);
+  setStatus('loading','⟳ Saving…');
+  try { await saveSettingsToSheet(); setStatus('ok','✓ Removed'); setTimeout(()=>setStatus('',''),1500); }
+  catch(e) { setStatus('error','✗ '+e.message); }
+  renderSettings();
+}
+
+// ── CUSTOM FIELDS IN FORMS ────────────────────────────────────
+function renderCustomFieldsInForm(leadData={}) {
+  const wrap = document.getElementById('customFieldsFormSection');
+  if (!wrap) return;
+  if (!SETTINGS.customFields.length) { wrap.innerHTML=''; return; }
+  wrap.innerHTML = '<div class="form-section">Custom Fields</div>' +
+    SETTINGS.customFields.map(f => {
+      const val = leadData[f.id] || '';
+      let input = '';
+      if (f.type==='dropdown') {
+        input = `<select id="cf_${f.id}"><option value="">— Select —</option>${f.options.map(o=>`<option${o===val?' selected':''}>${o}</option>`).join('')}</select>`;
+      } else if (f.type==='date') {
+        input = `<input type="date" id="cf_${f.id}" value="${val}">`;
+      } else if (f.type==='number') {
+        input = `<input type="number" id="cf_${f.id}" value="${val}" placeholder="0">`;
+      } else {
+        input = `<input type="text" id="cf_${f.id}" value="${val}" placeholder="${f.name}">`;
+      }
+      return `<div class="form-group"><label>${f.name}</label>${input}</div>`;
+    }).join('');
+}
+
+function getCustomFieldValues() {
+  const vals = {};
+  SETTINGS.customFields.forEach(f => {
+    const el = document.getElementById('cf_'+f.id);
+    vals[f.id] = el ? el.value : '';
+  });
+  return vals;
+}
+
+function renderCustomFieldsInDetail(lead) {
+  if (!SETTINGS.customFields.length) return '';
+  const fields = SETTINGS.customFields.filter(f => lead[f.id]);
+  if (!fields.length) return '';
+  return '<div class="form-section" style="margin-top:12px">Custom Fields</div>' +
+    fields.map(f => `<div class="detail-field"><div class="detail-label">${f.name}</div><div class="detail-value">${esc(lead[f.id]||'')}</div></div>`).join('');
+}
+
+
 function setStatus(type,msg){const el=document.getElementById('syncStatus');el.className=type;el.textContent=msg;}
 
 // ── INIT ──────────────────────────────────────────────────────
@@ -865,11 +1567,30 @@ document.addEventListener('DOMContentLoaded',()=>{
       if(localStorage.getItem('tdot_user')){
         showApp();
         setStatus('loading','⟳ Reconnecting…');
+        // Override token callback to load settings first
+        const origCb = tokenClient.callback;
+        tokenClient.callback = async (resp) => {
+          await origCb(resp);
+          await loadSettings();
+          refreshFormDropdowns();
+        };
         tokenClient.requestAccessToken({prompt:''});
       }
     }
   },100);
 });
+
+// Also load settings after fresh sign-in
+const _origInitTokenClient = initTokenClient;
+initTokenClient = function() {
+  _origInitTokenClient();
+  const origCb = tokenClient.callback;
+  tokenClient.callback = async (resp) => {
+    await origCb(resp);
+    await loadSettings();
+    refreshFormDropdowns();
+  };
+};
 </script>
 </body>
 </html>
