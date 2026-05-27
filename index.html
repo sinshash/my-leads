@@ -17,7 +17,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .auth-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#1f2937;border:none;font-family:'DM Mono',monospace;font-size:14px;font-weight:500;padding:13px 24px;border-radius:10px;cursor:pointer;width:100%;justify-content:center}
 .auth-note{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.5}
 
-.topbar{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:10px}
+.topbar{border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:10px}
 .topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--accent);flex-shrink:0}
 #topbarCount{font-size:11px;color:var(--muted);flex-shrink:0}
 .search-wrap{flex:1;position:relative}
@@ -159,6 +159,65 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 @keyframes spin{to{transform:rotate(360deg)}}
 input[type="date"]{color-scheme:dark}
 
+/* DAILY BRIEFING */
+.briefing-card{background:linear-gradient(135deg,rgba(232,255,71,.08),rgba(232,255,71,.02));border:1px solid rgba(232,255,71,.2);border-radius:12px;padding:14px;margin:10px 14px;cursor:pointer}
+.briefing-title{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:var(--accent);margin-bottom:10px}
+.briefing-row{display:flex;gap:8px;flex-wrap:wrap}
+.briefing-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;flex:1;min-width:80px;text-align:center}
+.briefing-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800}
+.briefing-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+
+/* FLOATING ADD BUTTON */
+.fab{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));right:20px;z-index:150;background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:22px;width:56px;height:56px;border-radius:50%;cursor:pointer;box-shadow:0 4px 20px rgba(232,255,71,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.fab:active{transform:scale(.92)}
+
+/* SWIPE ACTIONS */
+.swipe-container{position:relative;overflow:hidden;border-radius:10px}
+.swipe-actions-bg{position:absolute;inset:0;display:flex;border-radius:10px;pointer-events:none}
+.swipe-left-bg{background:rgba(255,92,92,.2);flex:1;display:flex;align-items:center;justify-content:flex-end;padding-right:16px;font-size:11px;color:var(--hot);font-weight:700;opacity:0;transition:opacity .1s}
+.swipe-right-bg{background:rgba(52,211,153,.2);flex:1;display:flex;align-items:center;padding-left:16px;font-size:11px;color:var(--contacted);font-weight:700;opacity:0;transition:opacity .1s}
+.swipeable{transition:transform .15s;border-radius:10px}
+
+/* STALE LEAD */
+.stale-badge{font-size:10px;color:var(--muted);background:rgba(107,114,128,.12);border-radius:4px;padding:2px 6px;display:inline-block;margin-top:3px}
+
+/* LEAD AGE */
+.lead-age{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* COMPANY VIEW */
+.company-view-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;backdrop-filter:blur(4px)}
+.company-view-overlay.open{display:flex;align-items:flex-end}
+@media(min-width:600px){.company-view-overlay.open{align-items:center;justify-content:center}}
+.company-panel{background:var(--surface);border-radius:16px 16px 0 0;width:100%;max-height:80vh;overflow-y:auto;padding:20px}
+@media(min-width:600px){.company-panel{border-radius:16px;max-width:500px;max-height:80vh}}
+.company-panel-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--accent);margin-bottom:4px}
+.company-contact-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;cursor:pointer}
+.company-contact-card:active{opacity:.8}
+
+/* DUPLICATE WARNING */
+.dup-warning{background:rgba(255,159,64,.1);border:1px solid rgba(255,159,64,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--warm);margin-bottom:10px;display:none}
+
+/* CALL LOG MODAL */
+.call-outcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.call-outcome-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:12px;border-radius:8px;cursor:pointer;text-align:center;transition:all .15s;min-height:44px}
+.call-outcome-btn.selected{background:var(--accent);border-color:var(--accent);color:#0d0f14;font-weight:700}
+
+/* NOTE TEMPLATES */
+.template-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.template-chip{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 9px;border-radius:12px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.template-chip:active{background:var(--accent);color:#0d0f14;border-color:var(--accent)}
+
+/* PINNED NOTE */
+.log-entry.pinned{background:rgba(232,255,71,.05);border-left:2px solid var(--accent);padding-left:8px;border-radius:4px}
+.pin-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0 4px;min-height:auto}
+.pin-btn.pinned{color:var(--accent)}
+
+/* SHARE LEAD */
+.share-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:12px;line-height:1.8;white-space:pre-wrap;word-break:break-all;margin:10px 0;color:var(--text)}
+
+/* WEEK SUMMARY */
+.week-summary-content{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;line-height:1.8;white-space:pre-wrap;margin:10px 0;max-height:300px;overflow-y:auto}
+
 
 /* SETTINGS */
 .dropdown-editor{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
@@ -215,7 +274,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 
 /* TABS */
-.tab-bar{display:flex;border-bottom:2px solid var(--border);background:var(--bg);position:sticky;top:calc(58px + env(safe-area-inset-top, 0px));z-index:99;width:100%}
+.sticky-header{position:sticky;top:0;z-index:100;background:rgba(13,15,20,.96);backdrop-filter:blur(12px)}
+.tab-bar{display:flex;border-bottom:2px solid var(--border);background:var(--bg);width:100%}
 .tab-btn{flex:1;padding:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;background:transparent;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 
@@ -256,12 +316,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 </div>
 
 <div id="mainApp" style="display:none">
-  <div class="tab-bar">
-    <button class="tab-btn active" id="tabLeads" onclick="switchTab('leads')">⚡ Active Leads</button>
-    <button class="tab-btn" id="tabTargets" onclick="switchTab('targets')">🎯 Target Accounts</button>
-    <button class="tab-btn" id="tabSettings" onclick="switchTab('settings')">⚙ Settings</button>
-  </div>
-  <div class="topbar">
+  <div class="sticky-header">
+    <div class="topbar">
     <div class="topbar-logo">⚡ LEADS</div>
     <div id="topbarCount"></div>
     <div class="search-wrap">
@@ -271,6 +327,12 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <div class="topbar-btns">
       <button class="btn-scan" onclick="openScan()" title="Scan business card">📷</button>
       <button class="btn-add" onclick="openAdd()">+ Add</button>
+    </div>
+  </div>
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tabLeads" onclick="switchTab('leads')">⚡ Leads</button>
+      <button class="tab-btn" id="tabTargets" onclick="switchTab('targets')">🎯 Targets</button>
+      <button class="tab-btn" id="tabSettings" onclick="switchTab('settings')">⚙ Settings</button>
     </div>
   </div>
 
@@ -320,6 +382,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   <div class="toolbar">
     <button class="btn-tool" onclick="loadLeads()">↻ Refresh</button>
     <button class="btn-tool" onclick="exportCSV()">↓ CSV</button>
+    <button class="btn-tool" onclick="openWeeklySummary()">📊 Week</button>
+    <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
     <button class="btn-tool" onclick="signOut()">Sign Out</button>
     <div class="sort-wrap">
       <label>Sort</label>
@@ -335,8 +399,13 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     </div>
   </div>
 
+  <div class="briefing-card" id="briefingCard" style="display:none">
+    <div class="briefing-title">☀️ Today's Briefing</div>
+    <div class="briefing-row" id="briefingRow"></div>
+  </div>
   <div class="lead-list" id="leadList"></div>
   <div class="lead-list" id="targetList" style="display:none"></div>
+  <button class="fab" id="fabBtn" onclick="openAdd()" title="Add Lead">+</button>
 
   <!-- SETTINGS PANEL -->
   <div id="settingsPanel" style="display:none;padding:16px">
@@ -532,6 +601,90 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 <!-- CARD PHOTO UPLOAD INPUT -->
 <input type="file" id="cardPhotoInput" accept="image/*" style="display:none" onchange="uploadCardPhoto(event)">
+<!-- CALL LOG MODAL -->
+<div class="overlay" id="callLogOverlay" onclick="if(event.target.id==='callLogOverlay')closeOverlay('callLogOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="btn-close" onclick="closeOverlay('callLogOverlay')">✕</button>
+    <div class="modal-title">📞 Log a Call</div>
+    <input type="hidden" id="callLogRow">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px" id="callLogName"></div>
+    <div class="form-group"><label>Outcome</label></div>
+    <div class="call-outcome-grid">
+      <button class="call-outcome-btn" onclick="selectCallOutcome(this,'Left Voicemail')">📱 Left VM</button>
+      <button class="call-outcome-btn" onclick="selectCallOutcome(this,'Spoke with Contact')">✅ Spoke</button>
+      <button class="call-outcome-btn" onclick="selectCallOutcome(this,'No Answer')">🔕 No Answer</button>
+      <button class="call-outcome-btn" onclick="selectCallOutcome(this,'Call Back Later')">🔄 Call Back</button>
+    </div>
+    <div class="form-group" style="margin-top:8px"><label>Notes (optional)</label>
+      <textarea id="callNotes" style="height:70px" placeholder="What was discussed, next steps…"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Update Status To</label>
+        <select id="callNewStatus"><option value="">— Keep current —</option></select>
+      </div>
+      <div class="form-group"><label>Next Follow-up</label>
+        <input type="date" id="callFollowup">
+      </div>
+    </div>
+    <button class="btn-save" onclick="saveCallLog()">Save Call Log</button>
+  </div>
+</div>
+
+<!-- SHARE LEAD MODAL -->
+<div class="overlay" id="shareOverlay" onclick="if(event.target.id==='shareOverlay')closeOverlay('shareOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="btn-close" onclick="closeOverlay('shareOverlay')">✕</button>
+    <div class="modal-title">📤 Share Lead</div>
+    <div class="share-card" id="shareCardContent"></div>
+    <button class="btn-save" onclick="copyShareCard()">📋 Copy to Clipboard</button>
+    <button class="btn-delete" style="margin-top:8px" onclick="closeOverlay('shareOverlay')">Done</button>
+  </div>
+</div>
+
+<!-- WEEK SUMMARY MODAL -->
+<div class="overlay" id="weekSummaryOverlay" onclick="if(event.target.id==='weekSummaryOverlay')closeOverlay('weekSummaryOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="btn-close" onclick="closeOverlay('weekSummaryOverlay')">✕</button>
+    <div class="modal-title">📊 Weekly Summary</div>
+    <div class="week-summary-content" id="weekSummaryContent"></div>
+    <button class="btn-save" onclick="copyWeeklySummary()">📋 Copy to Clipboard</button>
+  </div>
+</div>
+
+<!-- DUPLICATE WARNING MODAL -->
+<div class="overlay" id="dupOverlay" onclick="if(event.target.id==='dupOverlay')closeOverlay('dupOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="btn-close" onclick="closeOverlay('dupOverlay')">✕</button>
+    <div class="modal-title" style="color:var(--warm)">⚠ Possible Duplicate</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6" id="dupMessage"></p>
+    <div id="dupLeadList"></div>
+    <button class="btn-save" style="margin-top:12px" onclick="closeOverlay('dupOverlay');proceedSaveLead()">Save Anyway</button>
+    <button class="btn-delete" onclick="closeOverlay('dupOverlay')">Go Back & Edit</button>
+  </div>
+</div>
+
+<!-- COMPANY VIEW -->
+<div class="company-view-overlay" id="companyOverlay" onclick="if(event.target.id==='companyOverlay')closeCompanyView()">
+  <div class="company-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div>
+        <div class="company-panel-title" id="companyPanelName"></div>
+        <div style="font-size:12px;color:var(--muted)" id="companyPanelCount"></div>
+      </div>
+      <button class="btn-close" style="position:relative;top:auto;right:auto" onclick="closeCompanyView()">✕</button>
+    </div>
+    <div id="companyContactList"></div>
+  </div>
+</div>
+
+<!-- ATTACHMENT NOTE INPUT -->
+<input type="file" id="noteAttachInput" accept="image/*,.pdf,.doc,.docx" style="display:none" onchange="uploadNoteAttachment(event)">
+<input type="file" id="icsExportTrigger" style="display:none">
+
 
 <script src="https://accounts.google.com/gsi/client" async></script>
 <script>
@@ -656,6 +809,7 @@ async function loadLeads() {
     setTimeout(()=>setStatus('',''),2500);
     await loadTargets();
     renderAll();
+    renderBriefing();
   } catch(err){setStatus('error','✗ '+err.message);}
 }
 
@@ -698,10 +852,24 @@ function formatDate(s){if(!s) return ''; const d=new Date(s), m=['Jan','Feb','Ma
 async function saveLead(){
   const name=document.getElementById('f_name').value.trim();
   const company=document.getElementById('f_company').value.trim();
+  const email=document.getElementById('f_email').value.trim();
   if(!name||!company){alert('Name and Company are required.');return;}
+  const rowIndex=document.getElementById('editRowIndex').value;
+  // Check duplicates only on new leads
+  if(!rowIndex){
+    let dupChecked=false;
+    checkDuplicates(name,company,email,()=>{dupChecked=true;proceedActualSave();});
+    if(!dupChecked) return; // waiting for user confirmation
+    return;
+  }
+}
+async function proceedActualSave(){
   const rowIndex=document.getElementById('editRowIndex').value;
   const existing=rowIndex?LEADS.find(l=>l._row==rowIndex):null;
   const now=new Date().toISOString().replace('T',' ').slice(0,19);
+  const name=document.getElementById('f_name').value.trim();
+  const company=document.getElementById('f_company').value.trim();
+  const email=document.getElementById('f_email').value.trim();
   const lead={
     id:existing?.id||'', name, company,
     title:    document.getElementById('f_title').value.trim(),
@@ -922,37 +1090,51 @@ function renderAll(){
   if(!leads.length){container.innerHTML=`<div class="empty-state"><div class="big">🔍</div><p>No leads match.</p></div>`;return;}
   container.innerHTML=leads.map(l=>{
     const rc=ratingClass(l.rating), sc=statusClass(l.status);
-    const overdue=isOverdue(l), dueToday=isDueToday(l);
+    const overdue=isOverdue(l), dueToday=isDueToday(l), stale=isStale(l);
     const lastN=lastNote(l);
     const phone=l.mobile||l.phone;
     const tags=l.tags?l.tags.split(',').map(t=>t.trim()).filter(Boolean):[];
     const fuColor=overdue?'var(--overdue)':dueToday?'var(--warm)':'var(--muted)';
     const fuText=l.followup?(overdue?`⚠ Overdue: ${formatDate(l.followup)}`:dueToday?`📅 Today!`:`📅 ${formatDate(l.followup)}`): '';
-    return `<div class="lead-card ${rc} ${overdue?'overdue':''}" id="card-${l._row}" onclick="openDetail(${l._row})">
-      <div class="lead-top">
-        <div style="min-width:0;flex:1">
-          <div class="lead-name">${esc(l.name)}</div>
-          <div class="lead-company">${esc(l.company)}</div>
-          ${lastN?`<div class="lead-last-note">${esc(lastN.slice(0,55))}${lastN.length>55?'…':''}</div>`:''}
-          ${fuText?`<div class="lead-overdue-tag" style="color:${fuColor}">${fuText}</div>`:''}
-          ${l.nextAction?`<div class="next-action-bar">→ ${esc(l.nextAction)}</div>`:''}
+    const age=leadAge(l);
+    // Count contacts at same company
+    const sameCompany=LEADS.filter(x=>x.company.toLowerCase()===l.company.toLowerCase()).length;
+    return `<div class="swipe-container" id="swipe-${l._row}">
+      <div class="swipe-actions-bg"><div class="swipe-right-bg">✓ Contacted</div><div class="swipe-left-bg">🗑 Junk</div></div>
+      <div class="swipeable lead-card ${rc} ${overdue?'overdue':''}" id="card-${l._row}" onclick="openDetail(${l._row})">
+        <div class="lead-top">
+          <div style="min-width:0;flex:1">
+            <div class="lead-name">${esc(l.name)}</div>
+            <div class="lead-company" style="cursor:pointer" onclick="event.stopPropagation();openCompanyView('${l.company.replace(/'/g,"\\'")}',event)">${esc(l.company)}${sameCompany>1?` <span style="color:var(--accent);font-size:10px">(${sameCompany})</span>`:''}</div>
+            ${lastN?`<div class="lead-last-note">${esc(lastN.slice(0,55))}${lastN.length>55?'…':''}</div>`:''}
+            ${fuText?`<div class="lead-overdue-tag" style="color:${fuColor}">${fuText}</div>`:''}
+            ${l.nextAction?`<div class="next-action-bar">→ ${esc(l.nextAction)}</div>`:''}
+            ${stale?`<span class="stale-badge">🧊 Gone Cold (30+ days)</span>`:''}
+            ${age?`<div class="lead-age">${age}</div>`:''}
+          </div>
+          <div class="badge-wrap">
+            ${l.rating?`<span class="badge badge-rating ${rc}">${l.rating}</span>`:''}
+            ${l.status?`<span class="badge badge-status ${sc}">${l.status}</span>`:''}
+            ${l.stage?`<span class="badge badge-stage">${l.stage}</span>`:''}
+          </div>
         </div>
-        <div class="badge-wrap">
-          ${l.rating?`<span class="badge badge-rating ${rc}">${l.rating}</span>`:''}
-          ${l.status?`<span class="badge badge-status ${sc}">${l.status}</span>`:''}
-          ${l.stage?`<span class="badge badge-stage">${l.stage}</span>`:''}
+        <div class="card-meta">
+          ${l.email?`<span class="card-meta-item">✉ ${esc(l.email)}</span>`:''}
+          ${phone?`<span class="card-meta-item">📞 ${esc(phone)}</span>`:''}
+          ${l.source?`<span class="card-meta-item">📌 ${esc(l.tradeShow||l.source)}</span>`:''}
+          ${l.competitor?`<span class="card-meta-item">⚔ ${esc(l.competitor)}</span>`:''}
+          ${tags.length?tags.map(t=>`<span class="card-meta-item" style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();setFilter('tag:${t}',null)">🏷 ${esc(t)}</span>`).join(''):''}
         </div>
-      </div>
-      <div class="card-meta">
-        ${l.email?`<span class="card-meta-item">✉ ${esc(l.email)}</span>`:''}
-        ${phone?`<span class="card-meta-item">📞 ${esc(phone)}</span>`:''}
-        ${l.source?`<span class="card-meta-item">📌 ${esc(l.tradeShow||l.source)}</span>`:''}
-        ${l.competitor?`<span class="card-meta-item">⚔ ${esc(l.competitor)}</span>`:''}
-        ${tags.length?tags.map(t=>`<span class="card-meta-item" style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();setFilter('tag:${t}',null)">🏷 ${esc(t)}</span>`).join(''):''}
       </div>
     </div>`;
   }).join('');
-  leads.forEach(l=>{const el=document.getElementById(`card-${l._row}`);if(el)setupLongPress(el,l._row);});
+  leads.forEach(l=>{
+    const swipeEl=document.getElementById(`swipe-${l._row}`);
+    const cardEl=document.getElementById(`card-${l._row}`);
+    if(swipeEl) setupSwipe(swipeEl,l._row);
+    if(cardEl) setupLongPress(cardEl,l._row);
+  });
+  renderBriefing();
 }
 
 function setFilter(f,el){
@@ -985,8 +1167,15 @@ function openDetail(row){
   ].filter(([,v])=>v);
 
   const entries=parseNotes(l.notes);
+  const sortedEntries=[...entries].map((e,i)=>({...e,origIdx:i})).sort((a,b)=>{
+    const ap=a.text.startsWith('📌 '), bp=b.text.startsWith('📌 '); return bp-ap;
+  }).reverse();
   const logHtml=entries.length
-    ?entries.slice().reverse().map(e=>`<div class="log-entry"><div class="log-ts">${esc(e.ts)}</div><div class="log-text">${esc(e.text)}</div></div>`).join('')
+    ?sortedEntries.map(e=>`<div class="log-entry ${e.text.startsWith('📌 ')?'pinned':''}">
+        <div class="log-ts">${esc(e.ts)}</div>
+        <div class="log-text" style="flex:1">${esc(e.text)}</div>
+        <button class="pin-btn ${e.text.startsWith('📌 ')?'pinned':''}" onclick="event.stopPropagation();togglePinNote(${row},${e.origIdx})" title="Pin note">📌</button>
+      </div>`).join('')
     :'<div class="log-empty">No activity yet. Add your first note below.</div>';
 
   document.getElementById('detailContent').innerHTML=`
@@ -999,6 +1188,7 @@ function openDetail(row){
     <div class="detail-field">
       <div class="detail-label" style="margin-bottom:8px">📋 Activity Log</div>
       <div class="log-wrap" id="activityLog">${logHtml}</div>
+      <div class="template-chips">${NOTE_TEMPLATES.map(t=>`<button class="template-chip" onclick="applyTemplate('${t}')">${t}</button>`).join('')}</div>
       <div class="note-add-wrap">
         <textarea id="newNoteText" placeholder="Called today, left VM. Spoke about break/fix for western Canada…"></textarea>
         <button class="btn-log" id="btnAddNote" onclick="addNote(${row})">+ Add<br>Note</button>
@@ -1008,8 +1198,14 @@ function openDetail(row){
       ${l.email?`<button class="detail-actions btn-email-draft" onclick="draftEmail(${row})">✉ Draft Email</button>`:''}
       <button class="btn-edit-lead" onclick="closeOverlay('detailOverlay');openEdit(${row})">✏ Edit</button>
     </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="openCallLog(${row})">📞 Log Call</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="shareLead(${row})">📤 Share</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="exportToCalendar(LEADS.find(x=>x._row===${row}))">📅 To Calendar</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="triggerNoteAttachment(${row})">📎 Attach File</button>
+    </div>
     ${renderCustomFieldsInDetail(l)}
-    <button class="btn-upload" onclick="triggerCardUpload(${row})">📎 Upload Business Card Photo</button>`;
+    <button class="btn-upload" onclick="triggerCardUpload(${row})">📷 Upload Business Card Photo</button>`;
   document.getElementById('detailOverlay').classList.add('open');
 }
 
@@ -1088,6 +1284,8 @@ function switchTab(tab) {
   if (tab==='leads')    { addBtn.onclick=openAdd;        addBtn.textContent='+ Add';     addBtn.style.display='flex'; }
   if (tab==='targets')  { addBtn.onclick=openTargetAdd;  addBtn.textContent='+ Target';  addBtn.style.display='flex'; }
   if (tab==='settings') { addBtn.style.display='none'; renderSettings(); }
+  const fab=document.getElementById('fabBtn');
+  if(fab){fab.style.display=tab==='leads'?'flex':'none'; fab.onclick=tab==='leads'?openAdd:openTargetAdd; fab.title=tab==='leads'?'Add Lead':'Add Target';}
   if (tab==='targets') renderTargets();
 }
 
@@ -1549,6 +1747,366 @@ function renderCustomFieldsInDetail(lead) {
   if (!fields.length) return '';
   return '<div class="form-section" style="margin-top:12px">Custom Fields</div>' +
     fields.map(f => `<div class="detail-field"><div class="detail-label">${f.name}</div><div class="detail-value">${esc(lead[f.id]||'')}</div></div>`).join('');
+}
+
+
+// ── DAILY BRIEFING ───────────────────────────────────────────
+function renderBriefing() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dueToday = LEADS.filter(l => isDueToday(l)).length;
+  const overdue  = LEADS.filter(l => isOverdue(l)).length;
+  const hotUncontacted = LEADS.filter(l => l.rating==='Hot' && l.status==='Not Contacted').length;
+  const stale = LEADS.filter(l => isStale(l)).length;
+
+  if (!dueToday && !overdue && !hotUncontacted && !stale) {
+    document.getElementById('briefingCard').style.display='none';
+    return;
+  }
+  document.getElementById('briefingCard').style.display='block';
+  document.getElementById('briefingRow').innerHTML = [
+    dueToday   ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--warm)">${dueToday}</div><div class="briefing-label">Due Today</div></div>` : '',
+    overdue    ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--overdue)">${overdue}</div><div class="briefing-label">Overdue</div></div>` : '',
+    hotUncontacted ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--hot)">${hotUncontacted}</div><div class="briefing-label">Hot Uncontacted</div></div>` : '',
+    stale      ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--muted)">${stale}</div><div class="briefing-label">Gone Cold</div></div>` : '',
+  ].join('');
+}
+
+// ── STALE LEAD ────────────────────────────────────────────────
+function isStale(l) {
+  if (!l.lastContacted) return false;
+  const d = new Date(l.lastContacted);
+  return (Date.now() - d.getTime()) > 30 * 24 * 60 * 60 * 1000;
+}
+
+// ── LEAD AGE ─────────────────────────────────────────────────
+function leadAge(l) {
+  if (!l.created) return '';
+  const days = Math.floor((Date.now() - new Date(l.created).getTime()) / (1000*60*60*24));
+  if (days === 0) return 'Added today';
+  if (days === 1) return '1 day old';
+  return `${days} days old`;
+}
+
+// ── SWIPE ACTIONS ─────────────────────────────────────────────
+function setupSwipe(el, row) {
+  let startX = 0, currentX = 0, swiping = false;
+  const inner = el.querySelector('.swipeable');
+  const leftBg = el.querySelector('.swipe-left-bg');
+  const rightBg = el.querySelector('.swipe-right-bg');
+  if (!inner) return;
+
+  el.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX; swiping = true;
+  }, {passive:true});
+
+  el.addEventListener('touchmove', e => {
+    if (!swiping) return;
+    currentX = e.touches[0].clientX - startX;
+    const dx = Math.max(-80, Math.min(80, currentX));
+    inner.style.transform = `translateX(${dx}px)`;
+    inner.style.transition = 'none';
+    if (leftBg) leftBg.style.opacity = currentX < -20 ? Math.min(1,(Math.abs(currentX)-20)/40) : 0;
+    if (rightBg) rightBg.style.opacity = currentX > 20 ? Math.min(1,(currentX-20)/40) : 0;
+  }, {passive:true});
+
+  el.addEventListener('touchend', async () => {
+    if (!swiping) return; swiping = false;
+    inner.style.transition = 'transform .2s';
+    inner.style.transform = 'translateX(0)';
+    if (leftBg) leftBg.style.opacity = 0;
+    if (rightBg) rightBg.style.opacity = 0;
+    if (currentX < -60) {
+      // Swipe left = Junk
+      if (confirm('Mark as Junk Lead?')) await quickUpdateStatus(row, 'Junk Lead', null);
+    } else if (currentX > 60) {
+      // Swipe right = Contacted
+      await quickUpdateStatus(row, 'Contacted', null);
+      setStatus('ok','✓ Marked Contacted'); setTimeout(()=>setStatus('',''),1500);
+    }
+    currentX = 0;
+  });
+}
+
+async function quickUpdateStatus(row, status, rating) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const updated = {...l, status:status||l.status, rating:rating||l.rating, lastContacted:new Date().toISOString().slice(0,10)};
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow(updated,now)]);
+    await loadLeads();
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── COMPANY VIEW ──────────────────────────────────────────────
+function openCompanyView(companyName, event) {
+  event.stopPropagation();
+  const contacts = LEADS.filter(l => l.company.toLowerCase() === companyName.toLowerCase());
+  document.getElementById('companyPanelName').textContent = companyName;
+  document.getElementById('companyPanelCount').textContent = `${contacts.length} contact${contacts.length!==1?'s':''} at this company`;
+  document.getElementById('companyContactList').innerHTML = contacts.map(l => `
+    <div class="company-contact-card" onclick="closeCompanyView();openDetail(${l._row})">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px">${esc(l.name)}</div>
+      <div style="font-size:12px;color:var(--muted)">${esc(l.title)}</div>
+      <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+        ${l.status?`<span class="badge badge-status ${statusClass(l.status)}">${l.status}</span>`:''}
+        ${l.rating?`<span class="badge badge-rating ${ratingClass(l.rating)}">${l.rating}</span>`:''}
+        ${l.email?`<div style="font-size:11px;color:var(--muted);margin-top:4px">✉ ${esc(l.email)}</div>`:''}
+        ${l.phone?`<div style="font-size:11px;color:var(--muted);margin-top:4px">📞 ${esc(l.phone)}</div>`:''}
+      </div>
+    </div>`).join('');
+  document.getElementById('companyOverlay').classList.add('open');
+}
+function closeCompanyView() { document.getElementById('companyOverlay').classList.remove('open'); }
+
+// ── DUPLICATE DETECTOR ────────────────────────────────────────
+let pendingLeadSave = null;
+function checkDuplicates(name, company, email, onNoDup) {
+  const matches = LEADS.filter(l => {
+    const sameCompany = company && l.company.toLowerCase() === company.toLowerCase();
+    const sameEmail   = email && l.email.toLowerCase() === email.toLowerCase();
+    const sameName    = name && l.name.toLowerCase() === name.toLowerCase();
+    return sameCompany || sameEmail || sameName;
+  });
+  if (!matches.length) { onNoDup(); return; }
+  pendingLeadSave = onNoDup;
+  document.getElementById('dupMessage').textContent =
+    `We found ${matches.length} existing lead${matches.length>1?'s':''} that look similar. Review before saving:`;
+  document.getElementById('dupLeadList').innerHTML = matches.map(l => `
+    <div class="company-contact-card" onclick="closeOverlay('dupOverlay');openDetail(${l._row})" style="margin-bottom:6px">
+      <div style="font-weight:700">${esc(l.name)}</div>
+      <div style="font-size:12px;color:var(--muted)">${esc(l.company)} · ${esc(l.status)}</div>
+    </div>`).join('');
+  document.getElementById('dupOverlay').classList.add('open');
+}
+function proceedSaveLead() { if (pendingLeadSave) { pendingLeadSave(); pendingLeadSave=null; } }
+
+// ── CALL LOG ─────────────────────────────────────────────────
+let selectedCallOutcome = '';
+function openCallLog(row) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  selectedCallOutcome = '';
+  document.getElementById('callLogRow').value = row;
+  document.getElementById('callLogName').textContent = l.name + ' — ' + l.company;
+  document.getElementById('callNotes').value = '';
+  document.getElementById('callFollowup').value = '';
+  // Populate status dropdown
+  const sel = document.getElementById('callNewStatus');
+  sel.innerHTML = '<option value="">— Keep current —</option>' +
+    getOptions('Status').map(s=>`<option>${s}</option>`).join('');
+  document.querySelectorAll('.call-outcome-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('callLogOverlay').classList.add('open');
+}
+function selectCallOutcome(btn, outcome) {
+  selectedCallOutcome = outcome;
+  document.querySelectorAll('.call-outcome-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+async function saveCallLog() {
+  const row = parseInt(document.getElementById('callLogRow').value);
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  if (!selectedCallOutcome) { alert('Please select a call outcome.'); return; }
+  const notes = document.getElementById('callNotes').value.trim();
+  const newStatus = document.getElementById('callNewStatus').value;
+  const followup = document.getElementById('callFollowup').value;
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const today = new Date().toISOString().slice(0,10);
+  const entry = `${formatTs()}: 📞 ${selectedCallOutcome}${notes?' — '+notes:''}`;
+  const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
+  const updated = {...l, notes:updatedNotes, lastContacted:today,
+    status:newStatus||l.status, followup:followup||l.followup};
+  setStatus('loading','⟳ Saving call log…');
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow(updated,now)]);
+    closeOverlay('callLogOverlay'); closeOverlay('detailOverlay');
+    setStatus('ok','✓ Call logged'); setTimeout(()=>setStatus('',''),2000);
+    await loadLeads();
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── EMAIL TRACKING HINT ───────────────────────────────────────
+const _origDraftEmail = draftEmail;
+draftEmail = function(row) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  // Log email send
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const entry = `${formatTs()}: ✉ Draft email opened to ${l.email}`;
+  const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
+  sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes},now)]).catch(()=>{});
+  _origDraftEmail(row);
+};
+
+// ── NOTE TEMPLATES ────────────────────────────────────────────
+const NOTE_TEMPLATES = [
+  'Called — Left VM',
+  'Called — Spoke with contact',
+  'Called — No answer',
+  'Sent email',
+  'Sent proposal',
+  'Meeting scheduled',
+  'Meeting completed',
+  'Following up',
+  'Sent LinkedIn message',
+];
+function applyTemplate(text) {
+  const ta = document.getElementById('newNoteText');
+  if (ta) ta.value = text;
+}
+
+// ── PIN A NOTE ────────────────────────────────────────────────
+function togglePinNote(row, noteIndex) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const entries = parseNotes(l.notes);
+  if (!entries[noteIndex]) return;
+  const entry = entries[noteIndex];
+  // Toggle pin marker
+  if (entry.text.startsWith('📌 ')) {
+    entries[noteIndex].text = entry.text.slice(3);
+  } else {
+    entries[noteIndex].text = '📌 ' + entry.text;
+  }
+  const updatedNotes = entries.map(e => `${e.ts}: ${e.text}`).join(NOTE_SEP);
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  setStatus('loading','⟳ Saving…');
+  sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes},now)])
+    .then(()=>{ setStatus('ok','✓ Saved'); setTimeout(()=>setStatus('',''),1500); loadLeads().then(()=>openDetail(row)); })
+    .catch(e=>setStatus('error','✗ '+e.message));
+}
+
+// ── NOTE ATTACHMENT ───────────────────────────────────────────
+let attachNoteRow = null;
+function triggerNoteAttachment(row) {
+  attachNoteRow = row;
+  document.getElementById('noteAttachInput').click();
+}
+async function uploadNoteAttachment(event) {
+  const file = event.target.files[0]; if(!file) return;
+  const row = attachNoteRow; if(!row) return;
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  setStatus('loading','⟳ Uploading attachment…');
+  try {
+    await ensureToken();
+    const folderRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent("name='TDOT Lead Cards' and mimeType='application/vnd.google-apps.folder' and trashed=false")}&fields=files(id)`,
+      {headers:{Authorization:`Bearer ${accessToken}`}});
+    const fd = await folderRes.json();
+    let folderId = fd.files?.[0]?.id;
+    if (!folderId) {
+      const cr = await fetch('https://www.googleapis.com/drive/v3/files',{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify({name:'TDOT Lead Cards',mimeType:'application/vnd.google-apps.folder'})});
+      folderId = (await cr.json()).id;
+    }
+    const meta = {name:`${l.name} — ${file.name}`,parents:[folderId]};
+    const form = new FormData();
+    form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));
+    form.append('file',file);
+    const up = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink',{method:'POST',headers:{Authorization:`Bearer ${accessToken}`},body:form});
+    const upData = await up.json();
+    await fetch(`https://www.googleapis.com/drive/v3/files/${upData.id}/permissions`,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify({role:'reader',type:'anyone'})});
+    const now = new Date().toISOString().replace('T',' ').slice(0,19);
+    const entry = `${formatTs()}: 📎 Attachment: ${file.name} → ${upData.webViewLink}`;
+    const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes},now)]);
+    setStatus('ok','✓ Attachment uploaded'); setTimeout(()=>setStatus('',''),2000);
+    await loadLeads(); openDetail(row);
+  } catch(e) { setStatus('error','✗ Upload failed: '+e.message); }
+  event.target.value='';
+}
+
+// ── CALENDAR EXPORT ───────────────────────────────────────────
+function exportToCalendar(l) {
+  if (!l.followup) { alert('No follow-up date set for this lead.'); return; }
+  const d = new Date(l.followup);
+  const pad = n => String(n).padStart(2,'0');
+  const dt = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//TDOT Leads//EN',
+    'BEGIN:VEVENT',
+    `DTSTART;VALUE=DATE:${dt}`,
+    `DTEND;VALUE=DATE:${dt}`,
+    `SUMMARY:Follow up: ${l.name} — ${l.company}`,
+    `DESCRIPTION:Lead: ${l.name}\nCompany: ${l.company}\nStatus: ${l.status}\nNext Action: ${l.nextAction}`,
+    `UID:tdot-${l.id||l._row}@leads`,
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/calendar;charset=utf8,' + encodeURIComponent(ics);
+  a.download = `followup-${l.name.replace(/\s/g,'-')}.ics`;
+  a.click();
+}
+
+// ── SHARE LEAD ────────────────────────────────────────────────
+function shareLead(row) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const lines = [
+    `📋 LEAD SUMMARY — ${new Date().toLocaleDateString('en-CA')}`,
+    `━━━━━━━━━━━━━━━━━━━━━`,
+    `👤 ${l.name}${l.title?' — '+l.title:''}`,
+    `🏢 ${l.company}`,
+    l.email ? `✉  ${l.email}` : '',
+    l.phone ? `📞 ${l.phone}` : '',
+    l.mobile ? `📱 ${l.mobile}` : '',
+    `━━━━━━━━━━━━━━━━━━━━━`,
+    l.status ? `Status: ${l.status}` : '',
+    l.rating ? `Rating: ${l.rating}` : '',
+    l.stage  ? `Stage: ${l.stage}` : '',
+    l.industry ? `Industry: ${l.industry}` : '',
+    l.source ? `Source: ${l.tradeShow||l.source}` : '',
+    l.nextAction ? `Next Action: ${l.nextAction}` : '',
+    l.followup ? `Follow-up: ${formatDate(l.followup)}` : '',
+    `━━━━━━━━━━━━━━━━━━━━━`,
+    `Shared from TDOT Lead Tracker`,
+  ].filter(Boolean).join('\n');
+  document.getElementById('shareCardContent').textContent = lines;
+  document.getElementById('shareOverlay').classList.add('open');
+}
+function copyShareCard() {
+  const text = document.getElementById('shareCardContent').textContent;
+  navigator.clipboard.writeText(text).then(()=>{setStatus('ok','✓ Copied to clipboard');setTimeout(()=>setStatus('',''),2000);});
+}
+
+// ── WEEKLY SUMMARY ────────────────────────────────────────────
+function openWeeklySummary() {
+  const now = new Date();
+  const weekAgo = new Date(now - 7*24*60*60*1000);
+  const added    = LEADS.filter(l => l.created && new Date(l.created) >= weekAgo);
+  const contacted = LEADS.filter(l => l.lastContacted && new Date(l.lastContacted) >= weekAgo);
+  const hot = LEADS.filter(l => l.rating==='Hot');
+  const preQual = LEADS.filter(l => l.status==='Pre-Qualified');
+  const closedWon = LEADS.filter(l => l.stage==='Closed Won');
+
+  const lines = [
+    `📊 TDOT LEADS — WEEKLY SUMMARY`,
+    `Week ending ${now.toLocaleDateString('en-CA')}`,
+    `━━━━━━━━━━━━━━━━━━━━━`,
+    `Total Leads: ${LEADS.length}`,
+    `Added This Week: ${added.length}`,
+    `Contacted This Week: ${contacted.length}`,
+    ``,
+    `🔥 Hot Leads: ${hot.length}`,
+    `📋 Pre-Qualified: ${preQual.length}`,
+    `✅ Closed Won: ${closedWon.length}`,
+    ``,
+    `📌 NEW THIS WEEK:`,
+    ...added.map(l=>`  • ${l.name} — ${l.company} (${l.status||'No status'})`),
+    ``,
+    `📞 CONTACTED THIS WEEK:`,
+    ...contacted.map(l=>`  • ${l.name} — ${l.company}`),
+  ].join('\n');
+
+  document.getElementById('weekSummaryContent').textContent = lines;
+  document.getElementById('weekSummaryOverlay').classList.add('open');
+}
+function copyWeeklySummary() {
+  navigator.clipboard.writeText(document.getElementById('weekSummaryContent').textContent)
+    .then(()=>{setStatus('ok','✓ Copied');setTimeout(()=>setStatus('',''),2000);});
+}
+
+// ── EXPORT FILTERED VIEW ──────────────────────────────────────
+function exportFilteredCSV() {
+  let leads = applyFilter(LEADS);
+  leads = applySearch(leads);
+  const cols=['name','company','title','email','phone','mobile','source','tradeShow','status','rating','stage','industry','competitor','tags','nextAction','followup','lastContacted','linkedin','notes','created','lastActivity'];
+  const csv=[cols.join(','),...leads.map(l=>cols.map(col=>`"${(l[col]||'').replace(/"/g,'""')}"`).join(','))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download=`leads_filtered_${new Date().toISOString().slice(0,10)}.csv`;a.click();
 }
 
 
