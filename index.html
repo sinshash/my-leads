@@ -2195,20 +2195,19 @@ function exportFilteredCSV() {
 function setStatus(type,msg){const el=document.getElementById('syncStatus');el.className=type;el.textContent=msg;}
 
 // ── INIT ──────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async ()=>{
-  // Handle redirect back from Google with auth code
+// Check for code BEFORE DOMContentLoaded
+(async ()=>{
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code');
   if (code) {
     window.history.replaceState({}, document.title, REDIRECT_URI);
-    showApp();
-    setStatus('loading','⟳ Signing in…');
     await exchangeCode(code);
-    await loadSettings();
-    refreshFormDropdowns();
-    await loadLeads();
+    window.location.href = REDIRECT_URI;
     return;
   }
+})();
+
+document.addEventListener('DOMContentLoaded', async ()=>{
   // Returning user — refresh token silently, no popup
   if (localStorage.getItem('tdot_user') && localStorage.getItem('pkce_r')) {
     showApp();
