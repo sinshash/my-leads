@@ -772,9 +772,8 @@ async function signIn() {
     access_type: 'offline',
     include_granted_scopes: 'true',
   });
-  // Force consent only on the very first sign-in so Google issues a refresh token.
-  // After that, returning users skip the consent screen entirely.
-  if (!localStorage.getItem('pkce_r')) p.set('prompt', 'consent');
+  // Always force consent so all requested scopes (Sheets + Drive) are granted.
+  p.set('prompt', 'consent');
   window.location.href = AUTH_ENDPOINT + '?' + p.toString();
 }
 async function exchangeCode(code) {
