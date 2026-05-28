@@ -266,7 +266,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* Laptop — wider layout */
 @media(min-width:768px){
-  .lead-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+  .lead-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;width:100%}
   .lead-list .empty-state{grid-column:1/-1}
   .overlay.open{align-items:center;justify-content:center}
   .modal{max-width:560px;border-radius:16px;max-height:88vh}
@@ -542,12 +542,38 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <div class="modal-handle"></div>
     <button class="btn-close" onclick="closeOverlay('scanOverlay')">✕</button>
     <div class="modal-title">📷 Business Card Scan</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Tap inside the box → tap the scan text icon in the iPhone keyboard → point at the card → tap Parse.</p>
-    <div class="form-group">
-      <label>Card Text</label>
-      <textarea id="scanText" style="height:120px" placeholder="John Smith&#10;VP of Sales&#10;Acme Corp&#10;john@acme.com&#10;+1 416 555 0100"></textarea>
+
+    <!-- TAB SWITCHER -->
+    <div style="display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px">
+      <button id="scanTabClaude" onclick="setScanTab('claude')" style="flex:1;padding:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;border:none;background:var(--accent);color:#0d0f14;cursor:pointer">🤖 Claude Import</button>
+      <button id="scanTabOCR" onclick="setScanTab('ocr')" style="flex:1;padding:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;border:none;background:var(--surface2);color:var(--muted);cursor:pointer">📝 OCR Text</button>
     </div>
-    <button class="btn-save" onclick="parseScanText()">Parse & Fill Form</button>
+
+    <!-- CLAUDE IMPORT PANEL -->
+    <div id="scanPanelClaude">
+      <div style="background:rgba(232,255,71,.06);border:1px solid rgba(232,255,71,.2);border-radius:8px;padding:12px;margin-bottom:12px;font-size:11px;color:var(--muted);line-height:1.7">
+        <strong style="color:var(--accent)">How it works:</strong><br>
+        1. Snap a photo of the business card<br>
+        2. Send it to Claude in your chat<br>
+        3. Claude replies with an import line<br>
+        4. Paste it below → tap Import
+      </div>
+      <div class="form-group">
+        <label>Paste Claude Import Line</label>
+        <textarea id="claudeImportText" style="height:80px;font-size:13px" placeholder="Name||Title||Company||Email||Phone||Mobile||Source||Trade Show||Status||Rating||Industry||LinkedIn"></textarea>
+      </div>
+      <button class="btn-save" onclick="parseClaudeImport()">⚡ Import & Fill Form</button>
+    </div>
+
+    <!-- OCR PANEL -->
+    <div id="scanPanelOCR" style="display:none">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">Tap inside the box → tap the scan text icon in the iPhone keyboard → point at the card → tap Parse.</p>
+      <div class="form-group">
+        <label>Card Text</label>
+        <textarea id="scanText" style="height:120px" placeholder="John Smith&#10;VP of Sales&#10;Acme Corp&#10;john@acme.com&#10;+1 416 555 0100"></textarea>
+      </div>
+      <button class="btn-save" onclick="parseScanText()">Parse & Fill Form</button>
+    </div>
   </div>
 </div>
 
@@ -686,7 +712,6 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 <input type="file" id="icsExportTrigger" style="display:none">
 
 
-<script src="https://accounts.google.com/gsi/client" async></script>
 <script>
 const SHEET_ID   = '1XwCrEZaOp2AdepnBboZYfEvUx94tN6NkEbu45iOmLGM';
 const API_KEY    = 'AIzaSyBfxWQzsg0KRO5zLDWAsMsGaJTRGufCgtk';
@@ -702,7 +727,7 @@ const FIXED_COLS = 22; // A-V are fixed; custom fields start at W
 // A=0 B=1 C=2 D=3 E=4 F=5 G=6 H=7 I=8 J=9 K=10 L=11 M=12 N=13 O=14 P=15 Q=16 R=17 S=18 T=19 U=20 V=21
 const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15,mobile:16,nextAction:17,competitor:18,lastContacted:19,stage:20,tags:21};
 
-let LEADS=[], TARGETS=[], accessToken=null, tokenExpiry=0, tokenClient=null;
+let LEADS=[], TARGETS=[], accessToken=null, tokenExpiry=0;
 let currentFilter='all', currentSort='followup';
 let currentTab='leads';
 let qpRow=null, qpStatus='', qpRating='', qpStage='';
@@ -719,38 +744,71 @@ let SETTINGS = {
     'Target Status':['Watching','Researching','Ready to Reach Out','Passed'],
   },
   customFields: []
-  // Each customField: {id, name, type, options (if dropdown)}
 };
 
-// ── AUTH ─────────────────────────────────────────────────────
-function initTokenClient() {
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID, scope: SCOPES,
-    callback: async (resp) => {
-      if (resp.error) {
-        document.getElementById('authScreen').style.display='flex';
-        document.getElementById('mainApp').style.display='none';
-        return;
-      }
-      accessToken = resp.access_token;
-      tokenExpiry = Date.now() + (resp.expires_in - 60) * 1000;
-      localStorage.setItem('tdot_user','signed_in');
-      showApp(); await loadLeads();
-    }
+// ── PKCE OAuth 2.0 — persistent, no hourly popups ─────────────
+const REDIRECT_URI    = 'https://sinshash.github.io/my-leads/';
+const AUTH_ENDPOINT   = 'https://accounts.google.com/o/oauth2/v2/auth';
+const TOKEN_ENDPOINT  = 'https://oauth2.googleapis.com/token';
+
+function generateVerifier() {
+  const arr = new Uint8Array(32);
+  crypto.getRandomValues(arr);
+  return btoa(String.fromCharCode(...arr)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+async function generateChallenge(v) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v));
+  return btoa(String.fromCharCode(...new Uint8Array(digest))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+async function signIn() {
+  const verifier = generateVerifier();
+  const challenge = await generateChallenge(verifier);
+  localStorage.setItem('pkce_v', verifier);
+  const p = new URLSearchParams({
+    client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
+    response_type: 'code', scope: SCOPES,
+    code_challenge: challenge, code_challenge_method: 'S256',
+    access_type: 'offline', prompt: 'consent',
   });
+  window.location.href = AUTH_ENDPOINT + '?' + p.toString();
+}
+async function exchangeCode(code) {
+  const res = await fetch(TOKEN_ENDPOINT, {
+    method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({
+      client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
+      grant_type: 'authorization_code', code,
+      code_verifier: localStorage.getItem('pkce_v'),
+    })
+  });
+  const data = await res.json();
+  if (data.access_token) {
+    accessToken = data.access_token;
+    tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
+    if (data.refresh_token) localStorage.setItem('pkce_r', data.refresh_token);
+    localStorage.setItem('tdot_user','signed_in');
+  }
+}
+async function refreshAccessToken() {
+  const r = localStorage.getItem('pkce_r');
+  if (!r) { signOut(); return; }
+  const res = await fetch(TOKEN_ENDPOINT, {
+    method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({ client_id: CLIENT_ID, grant_type: 'refresh_token', refresh_token: r })
+  });
+  const data = await res.json();
+  if (data.access_token) {
+    accessToken = data.access_token;
+    tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
+  } else { signOut(); }
 }
 async function ensureToken() {
   if (accessToken && Date.now() < tokenExpiry) return;
-  return new Promise(resolve => {
-    const orig = tokenClient.callback;
-    tokenClient.callback = async (resp) => { await orig(resp); resolve(); };
-    tokenClient.requestAccessToken({prompt:''});
-  });
+  await refreshAccessToken();
 }
-function signIn() { tokenClient.requestAccessToken({prompt:'consent'}); }
 function signOut() {
-  if (accessToken) google.accounts.oauth2.revoke(accessToken);
-  accessToken=null; tokenExpiry=0; localStorage.removeItem('tdot_user');
+  accessToken=null; tokenExpiry=0;
+  ['tdot_user','pkce_r','pkce_v'].forEach(k=>localStorage.removeItem(k));
   document.getElementById('authScreen').style.display='flex';
   document.getElementById('mainApp').style.display='none';
 }
@@ -758,10 +816,8 @@ function showApp() {
   document.getElementById('authScreen').style.display='none';
   document.getElementById('mainApp').style.display='block';
 }
-setInterval(()=>{
-  if(localStorage.getItem('tdot_user') && document.getElementById('mainApp').style.display!=='none')
-    tokenClient.requestAccessToken({prompt:''});
-}, 45*60*1000);
+// Silent refresh every 45 mins — no popup ever
+setInterval(async()=>{ if(localStorage.getItem('pkce_r')) await refreshAccessToken(); }, 45*60*1000);
 
 // ── SHEETS API ────────────────────────────────────────────────
 async function sheetsGet(range) {
@@ -996,7 +1052,32 @@ function draftEmail(row){
 }
 
 // ── SCAN ──────────────────────────────────────────────────────
+function setScanTab(tab) {
+  document.getElementById('scanPanelClaude').style.display = tab==='claude' ? 'block' : 'none';
+  document.getElementById('scanPanelOCR').style.display    = tab==='ocr'    ? 'block' : 'none';
+  document.getElementById('scanTabClaude').style.background = tab==='claude' ? 'var(--accent)' : 'var(--surface2)';
+  document.getElementById('scanTabClaude').style.color      = tab==='claude' ? '#0d0f14' : 'var(--muted)';
+  document.getElementById('scanTabOCR').style.background    = tab==='ocr'    ? 'var(--accent)' : 'var(--surface2)';
+  document.getElementById('scanTabOCR').style.color         = tab==='ocr'    ? '#0d0f14' : 'var(--muted)';
+}
+
+function parseClaudeImport() {
+  const raw = document.getElementById('claudeImportText').value.trim();
+  if (!raw) { alert('Paste the import line from Claude first.'); return; }
+  // Format: Name||Title||Company||Email||Phone||Mobile||Source||Trade Show||Status||Rating||Industry||LinkedIn
+  const parts = raw.split('||').map(p => p.trim());
+  closeOverlay('scanOverlay');
+  openAdd();
+  const fields = ['f_name','f_title','f_company','f_email','f_phone','f_mobile','f_source','f_tradeShow','f_status','f_rating','f_industry','f_linkedin'];
+  fields.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && parts[i]) el.value = parts[i];
+  });
+  document.getElementById('claudeImportText').value = '';
+}
+
 function openScan(){document.getElementById('scanOverlay').classList.add('open');}
+
 function parseScanText(){
   const text=document.getElementById('scanText').value.trim(); if(!text) return;
   const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
@@ -1273,6 +1354,7 @@ function switchTab(tab) {
     document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active', t===tab);
   });
   document.getElementById('leadList').style.display      = tab==='leads'    ? 'flex'  : 'none';
+  const bc=document.getElementById('briefingCard'); if(bc) bc.style.display = tab==='leads' ? (bc.dataset.hasContent==='1'?'block':'none') : 'none';
   document.getElementById('targetList').style.display    = tab==='targets'  ? 'flex'  : 'none';
   document.getElementById('settingsPanel').style.display = tab==='settings' ? 'block' : 'none';
   const leadsOnly = tab==='leads';
@@ -2113,38 +2195,33 @@ function exportFilteredCSV() {
 function setStatus(type,msg){const el=document.getElementById('syncStatus');el.className=type;el.textContent=msg;}
 
 // ── INIT ──────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded',()=>{
-  const waitForGSI=setInterval(()=>{
-    if(typeof google!=='undefined'&&google.accounts){
-      clearInterval(waitForGSI);
-      initTokenClient();
-      if(localStorage.getItem('tdot_user')){
-        showApp();
-        setStatus('loading','⟳ Reconnecting…');
-        // Override token callback to load settings first
-        const origCb = tokenClient.callback;
-        tokenClient.callback = async (resp) => {
-          await origCb(resp);
-          await loadSettings();
-          refreshFormDropdowns();
-        };
-        tokenClient.requestAccessToken({prompt:''});
-      }
-    }
-  },100);
-});
-
-// Also load settings after fresh sign-in
-const _origInitTokenClient = initTokenClient;
-initTokenClient = function() {
-  _origInitTokenClient();
-  const origCb = tokenClient.callback;
-  tokenClient.callback = async (resp) => {
-    await origCb(resp);
+document.addEventListener('DOMContentLoaded', async ()=>{
+  // Handle redirect back from Google with auth code
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  if (code) {
+    window.history.replaceState({}, document.title, REDIRECT_URI);
+    showApp();
+    setStatus('loading','⟳ Signing in…');
+    await exchangeCode(code);
     await loadSettings();
     refreshFormDropdowns();
-  };
-};
+    await loadLeads();
+    return;
+  }
+  // Returning user — refresh token silently, no popup
+  if (localStorage.getItem('tdot_user') && localStorage.getItem('pkce_r')) {
+    showApp();
+    setStatus('loading','⟳ Reconnecting…');
+    await refreshAccessToken();
+    await loadSettings();
+    refreshFormDropdowns();
+    await loadLeads();
+    return;
+  }
+  // First time — show sign in screen
+  document.getElementById('authScreen').style.display='flex';
+});
 </script>
 </body>
 </html>
