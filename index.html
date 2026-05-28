@@ -768,25 +768,40 @@ async function signIn() {
     client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
     response_type: 'code', scope: SCOPES,
     code_challenge: challenge, code_challenge_method: 'S256',
-    access_type: 'offline', prompt: 'consent',
+    access_type: 'offline',
+    include_granted_scopes: 'true',
   });
+  // Force consent only on the very first sign-in so Google issues a refresh token.
+  // After that, returning users skip the consent screen entirely.
+  if (!localStorage.getItem('pkce_r')) p.set('prompt', 'consent');
   window.location.href = AUTH_ENDPOINT + '?' + p.toString();
 }
 async function exchangeCode(code) {
-  const res = await fetch(TOKEN_ENDPOINT, {
-    method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
-    body: new URLSearchParams({
-      client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
-      grant_type: 'authorization_code', code,
-      code_verifier: localStorage.getItem('pkce_v'),
-    })
-  });
-  const data = await res.json();
-  if (data.access_token) {
-    accessToken = data.access_token;
-    tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
-    if (data.refresh_token) localStorage.setItem('pkce_r', data.refresh_token);
-    localStorage.setItem('tdot_user','signed_in');
+  try {
+    const res = await fetch(TOKEN_ENDPOINT, {
+      method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({
+        client_id: CLIENT_ID, redirect_uri: REDIRECT_URI,
+        grant_type: 'authorization_code', code,
+        code_verifier: localStorage.getItem('pkce_v') || '',
+      })
+    });
+    const data = await res.json();
+    if (data.access_token) {
+      accessToken = data.access_token;
+      tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
+      if (data.refresh_token) localStorage.setItem('pkce_r', data.refresh_token);
+      localStorage.setItem('tdot_user','signed_in');
+      localStorage.removeItem('pkce_v');
+      return true;
+    }
+    console.error('Token exchange failed:', data);
+    setStatus('error', '✗ Sign in failed: ' + (data.error_description || data.error || 'unknown error'));
+    return false;
+  } catch (err) {
+    console.error('Token exchange error:', err);
+    setStatus('error', '✗ Sign in failed: ' + err.message);
+    return false;
   }
 }
 async function refreshAccessToken() {
@@ -2195,19 +2210,27 @@ function exportFilteredCSV() {
 function setStatus(type,msg){const el=document.getElementById('syncStatus');el.className=type;el.textContent=msg;}
 
 // ── INIT ──────────────────────────────────────────────────────
-// Check for code BEFORE DOMContentLoaded
-(async ()=>{
+document.addEventListener('DOMContentLoaded', async ()=>{
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code');
+
+  // OAuth callback — finish sign-in without reloading the page
   if (code) {
     window.history.replaceState({}, document.title, REDIRECT_URI);
-    await exchangeCode(code);
-    window.location.href = REDIRECT_URI;
+    showApp();
+    setStatus('loading','⟳ Completing sign in…');
+    const ok = await exchangeCode(code);
+    if (!ok) {
+      document.getElementById('authScreen').style.display='flex';
+      document.getElementById('mainApp').style.display='none';
+      return;
+    }
+    await loadSettings();
+    refreshFormDropdowns();
+    await loadLeads();
     return;
   }
-})();
 
-document.addEventListener('DOMContentLoaded', async ()=>{
   // Returning user — refresh token silently, no popup
   if (localStorage.getItem('tdot_user') && localStorage.getItem('pkce_r')) {
     showApp();
