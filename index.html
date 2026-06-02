@@ -883,7 +883,7 @@ async function exchangeCode(code) {
       // Whitelist check — verify email before granting access
       const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
       const uData = await uRes.json();
-      if (uData.email !== 'shashank.derry@gmail.com') {
+      if (!['shashank.derry@gmail.com','shashanksing@gmail.com'].includes(uData.email)) {
         document.getElementById('authDenied').style.display='block';
         setStatus('error','✗ Access denied for ' + (uData.email||'unknown account'));
         return false;
@@ -916,7 +916,7 @@ async function refreshAccessToken() {
     // Whitelist check on silent refresh too
     const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
     const uData = await uRes.json();
-    if (uData.email !== 'shashank.derry@gmail.com') { signOut(); return; }
+    if (!['shashank.derry@gmail.com','shashanksing@gmail.com'].includes(uData.email)) { signOut(); return; }
     accessToken = data.access_token;
     tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   } else { signOut(); }
