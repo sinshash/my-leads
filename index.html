@@ -245,7 +245,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* Touch targets — min 44px */
 .pill{min-height:36px;display:inline-flex;align-items:center;padding:0 12px}
-.btn-add,.btn-scan,.btn-tool,.btn-save,.btn-delete,.btn-log,.btn-edit,.btn-email-draft,.btn-edit-lead,.btn-upload,.tab-btn,.qp-btn,.qp-save,.qp-cancel{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.btn-add,.btn-scan,.btn-tool,.btn-save,.btn-delete,.btn-log,.btn-edit,.btn-email-draft,.btn-edit-lead,.tab-btn,.qp-btn,.qp-save,.qp-cancel{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 .btn-log{height:auto;min-height:60px}
 .lead-card,.target-card{padding:14px 14px 14px 17px}
 
@@ -266,10 +266,13 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 /* Laptop — wider layout */
 @media(min-width:768px){
-  .lead-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;width:100%}
-  .lead-list .empty-state{grid-column:1/-1}
+  .lead-list{display:flex;flex-direction:column;gap:8px;padding:10px 20px;width:100%}
+  .lead-card{width:100%}
   .overlay.open{align-items:center;justify-content:center}
   .modal{max-width:560px;border-radius:16px;max-height:88vh}
+}
+@media(min-width:1200px){
+  .lead-list{padding:10px 32px}
 }
 
 
@@ -294,10 +297,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .badge-priority.low{background:rgba(92,158,255,.15);color:var(--cold)}
 .badge-tstatus{background:rgba(167,139,250,.12);color:var(--not-yet)}
 
-/* UPLOAD BUTTON */
-.btn-upload{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:9px 14px;border-radius:8px;cursor:pointer;width:100%;margin-top:8px;text-align:left;transition:border-color .15s}
-.btn-upload:hover{border-color:var(--accent)}
-.card-photo-link{display:block;margin-top:8px;padding:10px;background:rgba(232,255,71,.06);border:1px solid rgba(232,255,71,.2);border-radius:8px;color:var(--accent);font-size:12px;text-decoration:none;text-align:center}
+
 
 </style>
 </head>
@@ -387,16 +387,41 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <button class="btn-tool" onclick="signOut()">Sign Out</button>
     <div class="sort-wrap">
       <label>Sort</label>
-      <select onchange="currentSort=this.value;renderAll()">
+      <select id="sortSelect" onchange="currentSort=this.value;renderAll()">
         <option value="followup">Follow-up Date</option>
-        <option value="name">Name A→Z</option>
+        <option value="created">Date Created</option>
+        <option value="lastActivity">Last Activity</option>
+        <option value="lastContacted">Last Contacted</option>
+        <option value="name">Name</option>
         <option value="company">Company</option>
         <option value="rating">Rating</option>
         <option value="status">Status</option>
         <option value="stage">Pipeline Stage</option>
-        <option value="recent">Recent Activity</option>
+        <option value="source">Source</option>
+        <option value="industry">Industry</option>
+        <option value="tags">Tags</option>
+        <option value="competitor">Competitor</option>
       </select>
+      <button id="sortDirBtn" class="btn-tool" style="padding:5px 10px;font-size:13px;min-width:36px" onclick="toggleSortDir()" title="Toggle sort direction">↑</button>
     </div>
+  </div>
+
+  <!-- DATE RANGE FILTER -->
+  <div id="dateFilterBar" style="border-bottom:1px solid var(--border);padding:6px 16px;background:var(--bg);display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+    <span style="font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);flex-shrink:0">Date Filters</span>
+    <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
+      <span style="font-size:10px;color:var(--muted)">Created</span>
+      <input type="date" id="dfCreatedFrom" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()" color-scheme="dark">
+      <span style="font-size:10px;color:var(--muted)">→</span>
+      <input type="date" id="dfCreatedTo" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
+      <span style="font-size:10px;color:var(--muted)">Last Activity</span>
+      <input type="date" id="dfActivityFrom" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
+      <span style="font-size:10px;color:var(--muted)">→</span>
+      <input type="date" id="dfActivityTo" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
+    </div>
+    <button class="btn-tool" style="font-size:10px;padding:3px 9px;min-height:28px" onclick="clearDateFilters()">✕ Clear</button>
   </div>
 
   <div class="briefing-card" id="briefingCard" style="display:none">
@@ -625,8 +650,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   <div class="modal" id="targetDetailContent"></div>
 </div>
 
-<!-- CARD PHOTO UPLOAD INPUT -->
-<input type="file" id="cardPhotoInput" accept="image/*" style="display:none" onchange="uploadCardPhoto(event)">
+
 <!-- CALL LOG MODAL -->
 <div class="overlay" id="callLogOverlay" onclick="if(event.target.id==='callLogOverlay')closeOverlay('callLogOverlay')">
   <div class="modal">
@@ -707,9 +731,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   </div>
 </div>
 
-<!-- ATTACHMENT NOTE INPUT -->
-<input type="file" id="noteAttachInput" accept="image/*,.pdf,.doc,.docx" style="display:none" onchange="uploadNoteAttachment(event)">
-<input type="file" id="icsExportTrigger" style="display:none">
+
+
 
 
 <script>
@@ -1134,34 +1157,67 @@ function statusClass(s){return {Contacted:'contacted','Not Contacted':'not-conta
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function applyFilter(leads){
-  if(currentFilter==='all') return leads;
-  if(currentFilter==='overdue') return leads.filter(l=>isOverdue(l));
-  if(currentFilter.startsWith('status:')) return leads.filter(l=>l.status===currentFilter.slice(7));
-  if(currentFilter.startsWith('rating:')) return leads.filter(l=>l.rating===currentFilter.slice(7));
-  if(currentFilter.startsWith('stage:')) return leads.filter(l=>l.stage===currentFilter.slice(6));
-  if(currentFilter.startsWith('source:')) return leads.filter(l=>l.source===currentFilter.slice(7));
-  if(currentFilter.startsWith('tag:')) return leads.filter(l=>l.tags.toLowerCase().includes(currentFilter.slice(4).toLowerCase()));
-  return leads;
+  let out = leads;
+  if(currentFilter==='overdue') out=out.filter(l=>isOverdue(l));
+  else if(currentFilter.startsWith('status:')) out=out.filter(l=>l.status===currentFilter.slice(7));
+  else if(currentFilter.startsWith('rating:')) out=out.filter(l=>l.rating===currentFilter.slice(7));
+  else if(currentFilter.startsWith('stage:')) out=out.filter(l=>l.stage===currentFilter.slice(6));
+  else if(currentFilter.startsWith('source:')) out=out.filter(l=>l.source===currentFilter.slice(7));
+  else if(currentFilter.startsWith('tag:')) out=out.filter(l=>l.tags.toLowerCase().includes(currentFilter.slice(4).toLowerCase()));
+  // Date range filters
+  const cfrom = document.getElementById('dfCreatedFrom')?.value;
+  const cto   = document.getElementById('dfCreatedTo')?.value;
+  const afrom = document.getElementById('dfActivityFrom')?.value;
+  const ato   = document.getElementById('dfActivityTo')?.value;
+  if(cfrom) out=out.filter(l=>l.created&&l.created.slice(0,10)>=cfrom);
+  if(cto)   out=out.filter(l=>l.created&&l.created.slice(0,10)<=cto);
+  if(afrom) out=out.filter(l=>l.lastActivity&&l.lastActivity.slice(0,10)>=afrom);
+  if(ato)   out=out.filter(l=>l.lastActivity&&l.lastActivity.slice(0,10)<=ato);
+  return out;
+}
+function clearDateFilters(){
+  ['dfCreatedFrom','dfCreatedTo','dfActivityFrom','dfActivityTo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  renderAll();
 }
 function applySearch(leads){
   const q=(document.getElementById('searchInput')?.value||'').toLowerCase().trim();
   if(!q) return leads;
   return leads.filter(l=>['name','company','email','title','industry','notes','tags','nextAction','competitor'].some(k=>l[k].toLowerCase().includes(q)));
 }
+let currentSortDir = 'asc'; // 'asc' or 'desc'
+function toggleSortDir(){
+  currentSortDir = currentSortDir==='asc'?'desc':'asc';
+  document.getElementById('sortDirBtn').textContent = currentSortDir==='asc'?'↑':'↓';
+  renderAll();
+}
 function applySort(leads){
   const copy=[...leads];
+  const dir = currentSortDir==='asc'?1:-1;
   const ro=['Hot','Warm','Cold','Not Yet Determined','','Not Interested/ Junk'];
   const so=['Prospecting','Qualifying','Proposal Sent','Negotiation','Closed Won','Closed Lost'];
-  if(currentSort==='name') copy.sort((a,b)=>a.name.localeCompare(b.name));
-  else if(currentSort==='company') copy.sort((a,b)=>a.company.localeCompare(b.company));
-  else if(currentSort==='rating') copy.sort((a,b)=>ro.indexOf(a.rating)-ro.indexOf(b.rating));
-  else if(currentSort==='status') copy.sort((a,b)=>a.status.localeCompare(b.status));
-  else if(currentSort==='stage') copy.sort((a,b)=>so.indexOf(a.stage)-so.indexOf(b.stage));
-  else if(currentSort==='recent') copy.sort((a,b)=>new Date(b.lastActivity||b.created)-new Date(a.lastActivity||a.created));
+  const strCmp=(a,b,k)=>(a[k]||'').localeCompare(b[k]||'');
+  const dateCmp=(a,b,k)=>{
+    const da=a[k]?new Date(a[k]):null, db=b[k]?new Date(b[k]):null;
+    if(!da&&!db) return 0; if(!da) return 1; if(!db) return -1;
+    return da-db;
+  };
+  if(currentSort==='name')          copy.sort((a,b)=>dir*strCmp(a,b,'name'));
+  else if(currentSort==='company')  copy.sort((a,b)=>dir*strCmp(a,b,'company'));
+  else if(currentSort==='rating')   copy.sort((a,b)=>dir*(ro.indexOf(a.rating)-ro.indexOf(b.rating)));
+  else if(currentSort==='status')   copy.sort((a,b)=>dir*strCmp(a,b,'status'));
+  else if(currentSort==='stage')    copy.sort((a,b)=>dir*(so.indexOf(a.stage)-so.indexOf(b.stage)));
+  else if(currentSort==='source')   copy.sort((a,b)=>dir*strCmp(a,b,'source'));
+  else if(currentSort==='industry') copy.sort((a,b)=>dir*strCmp(a,b,'industry'));
+  else if(currentSort==='tags')     copy.sort((a,b)=>dir*strCmp(a,b,'tags'));
+  else if(currentSort==='competitor') copy.sort((a,b)=>dir*strCmp(a,b,'competitor'));
+  else if(currentSort==='created')       copy.sort((a,b)=>dir*dateCmp(a,b,'created'));
+  else if(currentSort==='lastActivity')  copy.sort((a,b)=>dir*dateCmp(a,b,'lastActivity'));
+  else if(currentSort==='lastContacted') copy.sort((a,b)=>dir*dateCmp(a,b,'lastContacted'));
+  else if(currentSort==='recent')   copy.sort((a,b)=>dir*dateCmp(a,b,'lastActivity'));
   else if(currentSort==='followup') copy.sort((a,b)=>{
     if(!a.followup&&!b.followup) return 0;
-    if(!a.followup) return 1; if(!b.followup) return -1;
-    return new Date(a.followup)-new Date(b.followup);
+    if(!a.followup) return dir; if(!b.followup) return -dir;
+    return dir*(new Date(a.followup)-new Date(b.followup));
   });
   return copy;
 }
@@ -1169,13 +1225,29 @@ function applySort(leads){
 function renderStats(){
   const overdue=LEADS.filter(l=>isOverdue(l)).length;
   document.getElementById('statsBar').innerHTML=[
-    ['Total',LEADS.length,'var(--accent)'],
-    ['Overdue',overdue,'var(--overdue)'],
-    ['Hot',LEADS.filter(l=>l.rating==='Hot').length,'var(--hot)'],
-    ['Warm',LEADS.filter(l=>l.rating==='Warm').length,'var(--warm)'],
-    ['Contacted',LEADS.filter(l=>l.status==='Contacted').length,'var(--contacted)'],
-    ['Pre-Qual',LEADS.filter(l=>l.status==='Pre-Qualified').length,'var(--pre-qual)'],
-  ].map(([label,num,color])=>`<div class="stat"><div class="stat-num" style="color:${color}">${num}</div><div class="stat-label">${label}</div></div>`).join('');
+    ['Total',LEADS.length,'var(--accent)','all',null],
+    ['Overdue',overdue,'var(--overdue)','overdue',null],
+    ['Hot',LEADS.filter(l=>l.rating==='Hot').length,'var(--hot)','rating:Hot',null],
+    ['Warm',LEADS.filter(l=>l.rating==='Warm').length,'var(--warm)','rating:Warm',null],
+    ['Contacted',LEADS.filter(l=>l.status==='Contacted').length,'var(--contacted)','status:Contacted',null],
+    ['Pre-Qual',LEADS.filter(l=>l.status==='Pre-Qualified').length,'var(--pre-qual)','status:Pre-Qualified',null],
+  ].map(([label,num,color,filter])=>`<div class="stat" onclick="statBarFilter('${filter}')" title="Filter: ${label}" style="cursor:pointer"><div class="stat-num" style="color:${color}">${num}</div><div class="stat-label">${label}</div></div>`).join('');
+}
+function statBarFilter(filter){
+  currentFilter=filter;
+  // Sync pill UI
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  if(filter==='all'){
+    const allPill=document.querySelector('.pill');if(allPill)allPill.classList.add('active');
+  } else if(filter==='overdue'){
+    const op=document.querySelector('.overdue-pill');if(op)op.classList.add('active');
+  } else {
+    document.querySelectorAll('.pill').forEach(p=>{
+      if(p.getAttribute('onclick')&&p.getAttribute('onclick').includes(`'${filter}'`))p.classList.add('active');
+    });
+  }
+  renderAll();
+  document.getElementById('leadList').scrollIntoView({behavior:'smooth'});
 }
 
 function renderAll(){
@@ -1297,11 +1369,9 @@ function openDetail(row){
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="openCallLog(${row})">📞 Log Call</button>
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="shareLead(${row})">📤 Share</button>
-      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="exportToCalendar(LEADS.find(x=>x._row===${row}))">📅 To Calendar</button>
-      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="triggerNoteAttachment(${row})">📎 Attach File</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px;grid-column:1/-1" onclick="exportToCalendar(LEADS.find(x=>x._row===${row}))">📅 Add to Calendar</button>
     </div>
-    ${renderCustomFieldsInDetail(l)}
-    <button class="btn-upload" onclick="triggerCardUpload(${row})">📷 Upload Business Card Photo</button>`;
+    ${renderCustomFieldsInDetail(l)}`;
   document.getElementById('detailOverlay').classList.add('open');
 }
 
@@ -1590,70 +1660,6 @@ function openTargetEdit(row) {
 }
 
 
-// ── GOOGLE DRIVE CARD PHOTO UPLOAD ────────────────────────────
-let uploadingForRow = null;
-
-function triggerCardUpload(row) {
-  uploadingForRow = row;
-  document.getElementById('cardPhotoInput').click();
-}
-
-async function uploadCardPhoto(event) {
-  const file = event.target.files[0]; if(!file) return;
-  const row = uploadingForRow; if(!row) return;
-  const l = LEADS.find(x=>x._row===row); if(!l) return;
-  setStatus('loading','⟳ Uploading card photo to Google Drive…');
-  try {
-    await ensureToken();
-    // Step 1 — find or create TDOT Lead Cards folder
-    const folderRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent("name='TDOT Lead Cards' and mimeType='application/vnd.google-apps.folder' and trashed=false")}&fields=files(id,name)`,
-      {headers:{Authorization:`Bearer ${accessToken}`}});
-    const folderData = await folderRes.json();
-    let folderId;
-    if (folderData.files && folderData.files.length > 0) {
-      folderId = folderData.files[0].id;
-    } else {
-      // Create folder
-      const createRes = await fetch('https://www.googleapis.com/drive/v3/files',{
-        method:'POST',
-        headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
-        body:JSON.stringify({name:'TDOT Lead Cards',mimeType:'application/vnd.google-apps.folder'})
-      });
-      const createData = await createRes.json();
-      folderId = createData.id;
-    }
-    // Step 2 — upload file
-    const metadata = {name:`${l.name} — ${l.company}`,parents:[folderId]};
-    const formData = new FormData();
-    formData.append('metadata',new Blob([JSON.stringify(metadata)],{type:'application/json'}));
-    formData.append('file',file);
-    const uploadRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink',{
-      method:'POST',
-      headers:{Authorization:`Bearer ${accessToken}`},
-      body:formData
-    });
-    const uploadData = await uploadRes.json();
-    const fileLink = uploadData.webViewLink;
-    // Step 3 — make file viewable by link
-    await fetch(`https://www.googleapis.com/drive/v3/files/${uploadData.id}/permissions`,{
-      method:'POST',
-      headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},
-      body:JSON.stringify({role:'reader',type:'anyone'})
-    });
-    // Step 4 — save link to lead notes/card field
-    const now = new Date().toISOString().replace('T',' ').slice(0,19);
-    // Store in notes as a special entry
-    const cardEntry = `${formatTs()}: 📎 Business card photo uploaded → ${fileLink}`;
-    const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${cardEntry}` : cardEntry;
-    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes},now)]);
-    setStatus('ok','✓ Card photo uploaded to Google Drive!');
-    setTimeout(()=>setStatus('',''),3000);
-    await loadLeads();
-    openDetail(row);
-  } catch(err) { setStatus('error','✗ Upload failed: '+err.message); }
-  event.target.value='';
-}
-
 // ── SETTINGS ──────────────────────────────────────────────────
 async function loadSettings() {
   try {
@@ -1847,7 +1853,6 @@ function renderCustomFieldsInDetail(lead) {
 }
 
 
-// ── DAILY BRIEFING ───────────────────────────────────────────
 function renderBriefing() {
   const today = new Date(); today.setHours(0,0,0,0);
   const dueToday = LEADS.filter(l => isDueToday(l)).length;
@@ -1859,11 +1864,12 @@ function renderBriefing() {
     document.getElementById('briefingCard').style.display='none';
     return;
   }
+  document.getElementById('briefingCard').dataset.hasContent='1';
   document.getElementById('briefingCard').style.display='block';
   document.getElementById('briefingRow').innerHTML = [
-    dueToday   ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--warm)">${dueToday}</div><div class="briefing-label">Due Today</div></div>` : '',
-    overdue    ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--overdue)">${overdue}</div><div class="briefing-label">Overdue</div></div>` : '',
-    hotUncontacted ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--hot)">${hotUncontacted}</div><div class="briefing-label">Hot Uncontacted</div></div>` : '',
+    dueToday   ? `<div class="briefing-item" onclick="statBarFilter('overdue')" style="cursor:pointer" title="Show overdue leads"><div class="briefing-num" style="color:var(--warm)">${dueToday}</div><div class="briefing-label">Due Today</div></div>` : '',
+    overdue    ? `<div class="briefing-item" onclick="statBarFilter('overdue')" style="cursor:pointer" title="Show overdue leads"><div class="briefing-num" style="color:var(--overdue)">${overdue}</div><div class="briefing-label">Overdue</div></div>` : '',
+    hotUncontacted ? `<div class="briefing-item" onclick="statBarFilter('rating:Hot')" style="cursor:pointer" title="Show Hot leads"><div class="briefing-num" style="color:var(--hot)">${hotUncontacted}</div><div class="briefing-label">Hot Uncontacted</div></div>` : '',
     stale      ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--muted)">${stale}</div><div class="briefing-label">Gone Cold</div></div>` : '',
   ].join('');
 }
@@ -2067,44 +2073,6 @@ function togglePinNote(row, noteIndex) {
   sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes},now)])
     .then(()=>{ setStatus('ok','✓ Saved'); setTimeout(()=>setStatus('',''),1500); loadLeads().then(()=>openDetail(row)); })
     .catch(e=>setStatus('error','✗ '+e.message));
-}
-
-// ── NOTE ATTACHMENT ───────────────────────────────────────────
-let attachNoteRow = null;
-function triggerNoteAttachment(row) {
-  attachNoteRow = row;
-  document.getElementById('noteAttachInput').click();
-}
-async function uploadNoteAttachment(event) {
-  const file = event.target.files[0]; if(!file) return;
-  const row = attachNoteRow; if(!row) return;
-  const l = LEADS.find(x=>x._row===row); if(!l) return;
-  setStatus('loading','⟳ Uploading attachment…');
-  try {
-    await ensureToken();
-    const folderRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent("name='TDOT Lead Cards' and mimeType='application/vnd.google-apps.folder' and trashed=false")}&fields=files(id)`,
-      {headers:{Authorization:`Bearer ${accessToken}`}});
-    const fd = await folderRes.json();
-    let folderId = fd.files?.[0]?.id;
-    if (!folderId) {
-      const cr = await fetch('https://www.googleapis.com/drive/v3/files',{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify({name:'TDOT Lead Cards',mimeType:'application/vnd.google-apps.folder'})});
-      folderId = (await cr.json()).id;
-    }
-    const meta = {name:`${l.name} — ${file.name}`,parents:[folderId]};
-    const form = new FormData();
-    form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));
-    form.append('file',file);
-    const up = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink',{method:'POST',headers:{Authorization:`Bearer ${accessToken}`},body:form});
-    const upData = await up.json();
-    await fetch(`https://www.googleapis.com/drive/v3/files/${upData.id}/permissions`,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'},body:JSON.stringify({role:'reader',type:'anyone'})});
-    const now = new Date().toISOString().replace('T',' ').slice(0,19);
-    const entry = `${formatTs()}: 📎 Attachment: ${file.name} → ${upData.webViewLink}`;
-    const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
-    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes},now)]);
-    setStatus('ok','✓ Attachment uploaded'); setTimeout(()=>setStatus('',''),2000);
-    await loadLeads(); openDetail(row);
-  } catch(e) { setStatus('error','✗ Upload failed: '+e.message); }
-  event.target.value='';
 }
 
 // ── CALENDAR EXPORT ───────────────────────────────────────────
