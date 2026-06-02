@@ -181,6 +181,34 @@ input[type="date"]{color-scheme:dark}
 /* STALE LEAD */
 .stale-badge{font-size:10px;color:var(--muted);background:rgba(107,114,128,.12);border-radius:4px;padding:2px 6px;display:inline-block;margin-top:3px}
 
+/* LAST CONTACTED ON CARD */
+.card-last-contact{font-size:10px;color:var(--muted);margin-top:3px}
+.card-last-contact.recent{color:var(--contacted)}
+.card-last-contact.stale{color:var(--warm)}
+.card-last-contact.old{color:var(--overdue)}
+
+/* QUICK ACTIONS ROW */
+.card-quick-actions{display:flex;gap:5px;margin-top:7px;padding-top:7px;border-top:1px solid var(--border);flex-wrap:wrap}
+.qa-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;padding:4px 9px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s;min-height:28px;display:inline-flex;align-items:center}
+.qa-btn:active{background:var(--accent);color:#0d0f14;border-color:var(--accent)}
+.qa-btn.snooze-btn{color:var(--warm);border-color:rgba(255,159,64,.3)}
+.snooze-opts{display:none;position:absolute;z-index:400;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px;box-shadow:0 10px 40px rgba(0,0,0,.5);bottom:calc(100% + 4px);left:0}
+.snooze-opts.open{display:block}
+.snooze-opt{display:block;width:100%;background:none;border:none;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:8px 14px;border-radius:6px;cursor:pointer;text-align:left;white-space:nowrap}
+.snooze-opt:hover{background:var(--surface2)}
+.snooze-wrap{position:relative}
+
+/* BULK SELECT */
+.bulk-checkbox{position:absolute;top:10px;left:10px;z-index:10;width:20px;height:20px;accent-color:var(--accent);cursor:pointer;display:none}
+.select-mode .bulk-checkbox{display:block}
+.select-mode .lead-card{padding-left:38px}
+.bulk-bar{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:300;background:var(--surface);border:1px solid var(--accent);border-radius:14px;padding:12px 16px;display:none;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.6);white-space:nowrap}
+.bulk-bar.open{display:flex}
+.bulk-bar-label{font-size:12px;color:var(--accent);font-family:'Syne',sans-serif;font-weight:700}
+.bulk-bar select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 8px;border-radius:6px;outline:none}
+.bulk-bar-apply{background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:7px 14px;border-radius:8px;cursor:pointer}
+.bulk-bar-cancel{background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;padding:4px 8px}
+
 /* LEAD AGE */
 .lead-age{font-size:10px;color:var(--muted);margin-top:2px}
 
@@ -312,6 +340,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
       Sign in with Google
     </button>
     <div class="auth-note">First time? It'll ask for Google Sheets access.</div>
+    <div id="authDenied" style="display:none;margin-top:16px;background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.3);border-radius:8px;padding:12px;font-size:12px;color:var(--hot);line-height:1.6">⛔ Access denied. This app is private.<br>Sign in with the authorised account.</div>
   </div>
 </div>
 
@@ -385,6 +414,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <button class="btn-tool" onclick="openWeeklySummary()">📊 Week</button>
     <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
     <button class="btn-tool" onclick="signOut()">Sign Out</button>
+    <button class="btn-tool" id="selectModeBtn" onclick="toggleSelectMode()">☑ Select</button>
     <div class="sort-wrap">
       <label>Sort</label>
       <select id="sortSelect" onchange="currentSort=this.value;renderAll()">
@@ -431,6 +461,22 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   <div class="lead-list" id="leadList"></div>
   <div class="lead-list" id="targetList" style="display:none"></div>
   <button class="fab" id="fabBtn" onclick="openAdd()" title="Add Lead">+</button>
+
+  <!-- BULK ACTION BAR -->
+  <div class="bulk-bar" id="bulkBar">
+    <span class="bulk-bar-label" id="bulkBarLabel">0 selected</span>
+    <select id="bulkField">
+      <option value="">— Field —</option>
+      <option value="status">Status</option>
+      <option value="rating">Rating</option>
+      <option value="stage">Pipeline Stage</option>
+    </select>
+    <select id="bulkValue" style="min-width:130px">
+      <option value="">— Value —</option>
+    </select>
+    <button class="bulk-bar-apply" onclick="applyBulkUpdate()">Apply</button>
+    <button class="bulk-bar-cancel" onclick="toggleSelectMode()">✕ Cancel</button>
+  </div>
 
   <!-- SETTINGS PANEL -->
   <div id="settingsPanel" style="display:none;padding:16px">
@@ -571,6 +617,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <!-- TAB SWITCHER -->
     <div style="display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px">
       <button id="scanTabClaude" onclick="setScanTab('claude')" style="flex:1;padding:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;border:none;background:var(--accent);color:#0d0f14;cursor:pointer">🤖 Claude Import</button>
+      <button id="scanTabBulk" onclick="setScanTab('bulk')" style="flex:1;padding:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;border:none;background:var(--surface2);color:var(--muted);cursor:pointer">📦 Bulk Import</button>
       <button id="scanTabOCR" onclick="setScanTab('ocr')" style="flex:1;padding:9px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;border:none;background:var(--surface2);color:var(--muted);cursor:pointer">📝 OCR Text</button>
     </div>
 
@@ -588,6 +635,28 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         <textarea id="claudeImportText" style="height:80px;font-size:13px" placeholder="Name||Title||Company||Email||Phone||Mobile||Source||Trade Show||Status||Rating||Industry||LinkedIn"></textarea>
       </div>
       <button class="btn-save" onclick="parseClaudeImport()">⚡ Import & Fill Form</button>
+    </div>
+
+    <!-- BULK IMPORT PANEL -->
+    <div id="scanPanelBulk" style="display:none">
+      <div style="background:rgba(232,255,71,.06);border:1px solid rgba(232,255,71,.2);border-radius:8px;padding:12px;margin-bottom:12px;font-size:11px;color:var(--muted);line-height:1.7">
+        <strong style="color:var(--accent)">How it works:</strong><br>
+        1. Send all card photos to Claude in chat<br>
+        2. Ask Claude: <em style="color:var(--text)">"Extract each card in bulk import format"</em><br>
+        3. Copy all lines Claude returns<br>
+        4. Paste below → Preview → Import All
+      </div>
+      <div class="form-group">
+        <label>Paste Bulk Import Lines (one per card)</label>
+        <textarea id="bulkImportText" style="height:120px;font-size:12px" placeholder="John Smith||VP Sales||Acme Corp||john@acme.com||4165550100||||Trade Show||InfoComm 2026||Not Contacted||Warm||Technology||
+Jane Doe||Director IT||Beta Inc||jane@beta.com||6475550200||||Trade Show||InfoComm 2026||Not Contacted||Hot||Retail||"></textarea>
+      </div>
+      <button class="btn-save" onclick="parseBulkImport()" style="margin-bottom:10px">👁 Preview Leads</button>
+      <div id="bulkPreview" style="display:none">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px" id="bulkPreviewLabel"></div>
+        <div id="bulkPreviewList" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:10px"></div>
+        <button class="btn-save" id="btnBulkImport" onclick="executeBulkImport()">⚡ Import All</button>
+      </div>
     </div>
 
     <!-- OCR PANEL -->
@@ -811,6 +880,14 @@ async function exchangeCode(code) {
     });
     const data = await res.json();
     if (data.access_token) {
+      // Whitelist check — verify email before granting access
+      const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
+      const uData = await uRes.json();
+      if (uData.email !== 'shashank.derry@gmail.com') {
+        document.getElementById('authDenied').style.display='block';
+        setStatus('error','✗ Access denied for ' + (uData.email||'unknown account'));
+        return false;
+      }
       accessToken = data.access_token;
       tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
       if (data.refresh_token) localStorage.setItem('pkce_r', data.refresh_token);
@@ -836,6 +913,10 @@ async function refreshAccessToken() {
   });
   const data = await res.json();
   if (data.access_token) {
+    // Whitelist check on silent refresh too
+    const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
+    const uData = await uRes.json();
+    if (uData.email !== 'shashank.derry@gmail.com') { signOut(); return; }
     accessToken = data.access_token;
     tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   } else { signOut(); }
@@ -1092,11 +1173,81 @@ function draftEmail(row){
 // ── SCAN ──────────────────────────────────────────────────────
 function setScanTab(tab) {
   document.getElementById('scanPanelClaude').style.display = tab==='claude' ? 'block' : 'none';
-  document.getElementById('scanPanelOCR').style.display    = tab==='ocr'    ? 'block' : 'none';
-  document.getElementById('scanTabClaude').style.background = tab==='claude' ? 'var(--accent)' : 'var(--surface2)';
-  document.getElementById('scanTabClaude').style.color      = tab==='claude' ? '#0d0f14' : 'var(--muted)';
-  document.getElementById('scanTabOCR').style.background    = tab==='ocr'    ? 'var(--accent)' : 'var(--surface2)';
-  document.getElementById('scanTabOCR').style.color         = tab==='ocr'    ? '#0d0f14' : 'var(--muted)';
+  document.getElementById('scanPanelBulk').style.display  = tab==='bulk'   ? 'block' : 'none';
+  document.getElementById('scanPanelOCR').style.display   = tab==='ocr'    ? 'block' : 'none';
+  ['claude','bulk','ocr'].forEach(t=>{
+    const btn = document.getElementById('scanTab'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(btn){ btn.style.background = t===tab?'var(--accent)':'var(--surface2)'; btn.style.color = t===tab?'#0d0f14':'var(--muted)'; }
+  });
+}
+
+let bulkLeadsParsed = [];
+
+function parseBulkImport() {
+  const raw = document.getElementById('bulkImportText').value.trim();
+  if (!raw) { alert('Paste import lines first.'); return; }
+  const lines = raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  bulkLeadsParsed = lines.map(line => {
+    const parts = line.split('||').map(p=>p.trim());
+    return {
+      name:       parts[0]||'',
+      title:      parts[1]||'',
+      company:    parts[2]||'',
+      email:      parts[3]||'',
+      phone:      parts[4]||'',
+      mobile:     parts[5]||'',
+      source:     parts[6]||'Trade Show',
+      tradeShow:  parts[7]||'',
+      status:     parts[8]||'Not Contacted',
+      rating:     parts[9]||'',
+      industry:   parts[10]||'',
+      linkedin:   parts[11]||'',
+      notes:'', tags:'', competitor:'', nextAction:'', followup:'', lastContacted:'', stage:'', id:'',
+    };
+  }).filter(l=>l.name&&l.company);
+  if (!bulkLeadsParsed.length) { alert('No valid leads found. Check the format.'); return; }
+  document.getElementById('bulkPreviewLabel').textContent = `${bulkLeadsParsed.length} lead${bulkLeadsParsed.length>1?'s':''} ready to import:`;
+  document.getElementById('bulkPreviewList').innerHTML = bulkLeadsParsed.map((l,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 4px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" id="bchk-${i}" checked style="accent-color:var(--accent);flex-shrink:0">
+      <div style="min-width:0">
+        <div style="font-size:12px;font-family:'Syne',sans-serif;font-weight:700">${esc(l.name)}</div>
+        <div style="font-size:11px;color:var(--muted)">${esc(l.company)}${l.title?' · '+esc(l.title):''}</div>
+        ${l.email?`<div style="font-size:10px;color:var(--muted)">✉ ${esc(l.email)}</div>`:''}
+      </div>
+      ${l.rating?`<span class="badge badge-rating ${ratingClass(l.rating)}" style="flex-shrink:0">${l.rating}</span>`:''}
+    </div>`).join('');
+  document.getElementById('bulkPreview').style.display='block';
+}
+
+async function executeBulkImport() {
+  const toImport = bulkLeadsParsed.filter((_,i)=>document.getElementById('bchk-'+i)?.checked);
+  if (!toImport.length) { alert('No leads selected.'); return; }
+  const btn = document.getElementById('btnBulkImport');
+  btn.disabled=true; btn.innerHTML=`<span class="spinner"></span>Importing 0/${toImport.length}…`;
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  let done=0, errors=0;
+  for (const l of toImport) {
+    try {
+      l.id = 'local_'+Date.now();
+      l.created = now;
+      await sheetsAppend([leadToRow(l,now)]);
+      done++;
+      btn.innerHTML=`<span class="spinner"></span>Importing ${done}/${toImport.length}…`;
+    } catch(e) { errors++; }
+  }
+  btn.disabled=false;
+  if (errors) {
+    setStatus('error',`⚠ ${done} imported, ${errors} failed`);
+  } else {
+    setStatus('ok',`✓ ${done} lead${done>1?'s':''} imported!`);
+  }
+  setTimeout(()=>setStatus('',''),3000);
+  closeOverlay('scanOverlay');
+  document.getElementById('bulkImportText').value='';
+  document.getElementById('bulkPreview').style.display='none';
+  bulkLeadsParsed=[];
+  await loadLeads();
 }
 
 function parseClaudeImport() {
@@ -1265,17 +1416,28 @@ function renderAll(){
     const fuColor=overdue?'var(--overdue)':dueToday?'var(--warm)':'var(--muted)';
     const fuText=l.followup?(overdue?`⚠ Overdue: ${formatDate(l.followup)}`:dueToday?`📅 Today!`:`📅 ${formatDate(l.followup)}`): '';
     const age=leadAge(l);
-    // Count contacts at same company
     const sameCompany=LEADS.filter(x=>x.company.toLowerCase()===l.company.toLowerCase()).length;
-    return `<div class="swipe-container" id="swipe-${l._row}">
+    // Last contacted display
+    let lcText='', lcClass='';
+    if(l.lastContacted){
+      const days=Math.floor((Date.now()-new Date(l.lastContacted).getTime())/(1000*60*60*24));
+      if(days===0){lcText='Last contact: Today';lcClass='recent';}
+      else if(days===1){lcText='Last contact: Yesterday';lcClass='recent';}
+      else if(days<=7){lcText=`Last contact: ${days}d ago`;lcClass='recent';}
+      else if(days<=30){lcText=`Last contact: ${days}d ago`;lcClass='stale';}
+      else{lcText=`Last contact: ${days}d ago`;lcClass='old';}
+    }
+    return `<div class="swipe-container" id="swipe-${l._row}" style="position:relative">
+      <input type="checkbox" class="bulk-checkbox" id="chk-${l._row}" onchange="onBulkCheck()" onclick="event.stopPropagation()">
       <div class="swipe-actions-bg"><div class="swipe-right-bg">✓ Contacted</div><div class="swipe-left-bg">🗑 Junk</div></div>
-      <div class="swipeable lead-card ${rc} ${overdue?'overdue':''}" id="card-${l._row}" onclick="openDetail(${l._row})">
+      <div class="swipeable lead-card ${rc} ${overdue?'overdue':''}" id="card-${l._row}" onclick="onCardClick(event,${l._row})">
         <div class="lead-top">
           <div style="min-width:0;flex:1">
             <div class="lead-name">${esc(l.name)}</div>
             <div class="lead-company" style="cursor:pointer" onclick="event.stopPropagation();openCompanyView('${l.company.replace(/'/g,"\\'")}',event)">${esc(l.company)}${sameCompany>1?` <span style="color:var(--accent);font-size:10px">(${sameCompany})</span>`:''}</div>
             ${lastN?`<div class="lead-last-note">${esc(lastN.slice(0,55))}${lastN.length>55?'…':''}</div>`:''}
             ${fuText?`<div class="lead-overdue-tag" style="color:${fuColor}">${fuText}</div>`:''}
+            ${lcText?`<div class="card-last-contact ${lcClass}">${lcText}</div>`:''}
             ${l.nextAction?`<div class="next-action-bar">→ ${esc(l.nextAction)}</div>`:''}
             ${stale?`<span class="stale-badge">🧊 Gone Cold (30+ days)</span>`:''}
             ${age?`<div class="lead-age">${age}</div>`:''}
@@ -1293,6 +1455,18 @@ function renderAll(){
           ${l.competitor?`<span class="card-meta-item">⚔ ${esc(l.competitor)}</span>`:''}
           ${tags.length?tags.map(t=>`<span class="card-meta-item" style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();setFilter('tag:${t}',null)">🏷 ${esc(t)}</span>`).join(''):''}
         </div>
+        <div class="card-quick-actions">
+          <button class="qa-btn" onclick="event.stopPropagation();quickLog(${l._row},'called')">📞 Called</button>
+          <button class="qa-btn" onclick="event.stopPropagation();quickLog(${l._row},'emailed')">📧 Emailed</button>
+          <div class="snooze-wrap">
+            <button class="qa-btn snooze-btn" onclick="event.stopPropagation();toggleSnooze(${l._row})">💤 Snooze</button>
+            <div class="snooze-opts" id="snooze-${l._row}">
+              <button class="snooze-opt" onclick="event.stopPropagation();snooze(${l._row},3)">3 days</button>
+              <button class="snooze-opt" onclick="event.stopPropagation();snooze(${l._row},7)">1 week</button>
+              <button class="snooze-opt" onclick="event.stopPropagation();snooze(${l._row},14)">2 weeks</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -1303,6 +1477,109 @@ function renderAll(){
     if(cardEl) setupLongPress(cardEl,l._row);
   });
   renderBriefing();
+}
+
+// ── CARD CLICK (respects select mode) ────────────────────────
+function onCardClick(e, row) {
+  if (selectMode) {
+    const chk = document.getElementById('chk-'+row);
+    if (chk) { chk.checked = !chk.checked; onBulkCheck(); }
+    return;
+  }
+  openDetail(row);
+}
+
+// ── QUICK LOG ─────────────────────────────────────────────────
+async function quickLog(row, type) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const today = new Date().toISOString().slice(0,10);
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const text = type==='called' ? 'Called — Quick log (Called Today)' : 'Sent email — Quick log (Emailed Today)';
+  const entry = `${formatTs()}: ${text}`;
+  const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
+  setStatus('loading','⟳ Logging…');
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes,lastContacted:today},now)]);
+    setStatus('ok', type==='called'?'✓ Call logged':'✓ Email logged');
+    setTimeout(()=>setStatus('',''),1500);
+    await loadLeads();
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── SNOOZE ────────────────────────────────────────────────────
+function toggleSnooze(row) {
+  document.querySelectorAll('.snooze-opts').forEach(el=>{
+    if(el.id!=='snooze-'+row) el.classList.remove('open');
+  });
+  document.getElementById('snooze-'+row)?.classList.toggle('open');
+}
+document.addEventListener('click', ()=>{ document.querySelectorAll('.snooze-opts').forEach(el=>el.classList.remove('open')); });
+
+async function snooze(row, days) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const base = l.followup ? new Date(l.followup) : new Date();
+  base.setDate(base.getDate() + days);
+  const newDate = base.toISOString().slice(0,10);
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const entry = `${formatTs()}: 💤 Snoozed follow-up by ${days} day${days>1?'s':''} → ${formatDate(newDate)}`;
+  const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
+  setStatus('loading','⟳ Snoozing…');
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,followup:newDate,notes:updatedNotes},now)]);
+    setStatus('ok',`✓ Snoozed to ${formatDate(newDate)}`);
+    setTimeout(()=>setStatus('',''),2000);
+    await loadLeads();
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── BULK SELECT ───────────────────────────────────────────────
+let selectMode = false;
+let selectedRows = new Set();
+
+function toggleSelectMode() {
+  selectMode = !selectMode;
+  selectedRows.clear();
+  const list = document.getElementById('leadList');
+  const bar = document.getElementById('bulkBar');
+  const btn = document.getElementById('selectModeBtn');
+  list.classList.toggle('select-mode', selectMode);
+  bar.classList.toggle('open', selectMode);
+  if(btn) { btn.textContent = selectMode ? '✕ Cancel' : '☑ Select'; btn.style.borderColor = selectMode?'var(--accent)':''; }
+  updateBulkBar();
+}
+
+function onBulkCheck() {
+  selectedRows.clear();
+  document.querySelectorAll('.bulk-checkbox:checked').forEach(chk=>{
+    const row = parseInt(chk.id.replace('chk-',''));
+    if(!isNaN(row)) selectedRows.add(row);
+  });
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  const label = document.getElementById('bulkBarLabel');
+  if(label) label.textContent = `${selectedRows.size} selected`;
+}
+
+async function applyBulkUpdate() {
+  if(!selectedRows.size) { alert('No leads selected.'); return; }
+  const field = document.getElementById('bulkField').value;
+  const value = document.getElementById('bulkValue').value;
+  if(!field||!value) { alert('Choose a field and value.'); return; }
+  if(!confirm(`Update ${field} to "${value}" for ${selectedRows.size} lead${selectedRows.size>1?'s':''}?`)) return;
+  setStatus('loading',`⟳ Updating ${selectedRows.size} leads…`);
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  try {
+    for(const row of selectedRows) {
+      const l = LEADS.find(x=>x._row===row); if(!l) continue;
+      await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,[field]:value},now)]);
+    }
+    setStatus('ok',`✓ Updated ${selectedRows.size} leads`);
+    setTimeout(()=>setStatus('',''),2000);
+    toggleSelectMode();
+    await loadLeads();
+  } catch(e) { setStatus('error','✗ '+e.message); }
 }
 
 function setFilter(f,el){
@@ -2043,7 +2320,11 @@ const NOTE_TEMPLATES = [
   'Called — Left VM',
   'Called — Spoke with contact',
   'Called — No answer',
-  'Sent email',
+  'Sent email — Initial outreach',
+  'Sent email — Follow-up #1',
+  'Sent email — Follow-up #2',
+  'Sent email — Follow-up #3',
+  'Sent email — Proposal follow-up',
   'Sent proposal',
   'Meeting scheduled',
   'Meeting completed',
@@ -2179,6 +2460,19 @@ function setStatus(type,msg){const el=document.getElementById('syncStatus');el.c
 
 // ── INIT ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async ()=>{
+  // Wire bulk field → value dropdown
+  const bulkField = document.getElementById('bulkField');
+  if(bulkField) bulkField.addEventListener('change', function(){
+    const bulkValue = document.getElementById('bulkValue');
+    bulkValue.innerHTML = '<option value="">— Value —</option>';
+    const opts = {
+      status: ['Not Contacted','Attempted to Contact','Contacted','Pre-Qualified','Contact in Future','Not Qualified','Lost Lead','Junk Lead','Do Not Contact - Check Notes'],
+      rating: ['Hot','Warm','Cold','Not Yet Determined','Not Interested/ Junk'],
+      stage:  ['Prospecting','Qualifying','Proposal Sent','Negotiation','Closed Won','Closed Lost'],
+    }[this.value] || [];
+    opts.forEach(o=>{ const op=document.createElement('option'); op.value=op.textContent=o; bulkValue.appendChild(op); });
+  });
+
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code');
 
