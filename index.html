@@ -180,6 +180,9 @@ input[type="date"]{color-scheme:dark}
 
 /* STALE LEAD */
 .stale-badge{font-size:10px;color:var(--muted);background:rgba(107,114,128,.12);border-radius:4px;padding:2px 6px;display:inline-block;margin-top:3px}
+/* AGED LEAD — 60+ days */
+.lead-card.aged{border-color:rgba(167,139,250,.25)}
+.lead-card.aged::after{content:'60d+';position:absolute;top:6px;right:6px;font-size:9px;color:rgba(167,139,250,.5);font-family:'DM Mono',monospace}
 
 /* LAST CONTACTED ON CARD */
 .card-last-contact{font-size:10px;color:var(--muted);margin-top:3px}
@@ -351,7 +354,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <div id="topbarCount"></div>
     <div class="search-wrap">
       <span class="si">⌕</span>
-      <input type="text" id="searchInput" placeholder="Search name, company, tags…" oninput="renderAll()">
+      <input type="text" id="searchInput" placeholder="Search name, company, tags…" oninput="onSearchInput()" style="padding-right:28px"><button id="searchClear" onclick="clearSearch()" style="display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:0;line-height:1;min-height:auto">✕</button>
     </div>
     <div class="topbar-btns">
       <button class="btn-scan" onclick="openScan()" title="Scan business card">📷</button>
@@ -361,6 +364,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <div class="tab-bar">
       <button class="tab-btn active" id="tabLeads" onclick="switchTab('leads')">⚡ Leads</button>
       <button class="tab-btn" id="tabTargets" onclick="switchTab('targets')">🎯 Targets</button>
+      <button class="tab-btn" id="tabBd" onclick="switchTab('bd')">🚀 BD</button>
       <button class="tab-btn" id="tabSettings" onclick="switchTab('settings')">⚙ Settings</button>
     </div>
   </div>
@@ -370,39 +374,39 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   <div class="filter-section">
     <span class="filter-label">Rating & Special</span>
     <div class="filter-row" id="filterRow1">
-      <div class="pill active" onclick="setFilter('all',this)">All</div>
-      <div class="pill overdue-pill" onclick="setFilter('overdue',this)">🔴 Overdue</div>
-      <div class="pill" onclick="setFilter('rating:Hot',this)">🔥 Hot</div>
-      <div class="pill" onclick="setFilter('rating:Warm',this)">☀️ Warm</div>
-      <div class="pill" onclick="setFilter('rating:Cold',this)">❄️ Cold</div>
+      <div class="pill active" onclick="setFilter('all',this)" data-filter="all" data-label="All">All</div>
+      <div class="pill overdue-pill" onclick="setFilter('overdue',this)" data-filter="overdue" data-label="🔴 Overdue">🔴 Overdue</div>
+      <div class="pill" onclick="setFilter('rating:Hot',this)" data-filter="rating:Hot" data-label="🔥 Hot">🔥 Hot</div>
+      <div class="pill" onclick="setFilter('rating:Warm',this)" data-filter="rating:Warm" data-label="☀️ Warm">☀️ Warm</div>
+      <div class="pill" onclick="setFilter('rating:Cold',this)" data-filter="rating:Cold" data-label="❄️ Cold">❄️ Cold</div>
     </div>
     <span class="filter-label">Status</span>
     <div class="filter-row" id="filterRow2">
-      <div class="pill" onclick="setFilter('status:Not Contacted',this)">Not Contacted</div>
-      <div class="pill" onclick="setFilter('status:Attempted to Contact',this)">Attempted</div>
-      <div class="pill" onclick="setFilter('status:Contacted',this)">Contacted</div>
-      <div class="pill" onclick="setFilter('status:Pre-Qualified',this)">Pre-Qualified</div>
-      <div class="pill" onclick="setFilter('status:Contact in Future',this)">Future</div>
-      <div class="pill" onclick="setFilter('status:Not Qualified',this)">Not Qualified</div>
-      <div class="pill" onclick="setFilter('status:Lost Lead',this)">Lost</div>
-      <div class="pill" onclick="setFilter('status:Junk Lead',this)">Junk</div>
-      <div class="pill" onclick="setFilter('status:Do Not Contact - Check Notes',this)">DNC</div>
+      <div class="pill" onclick="setFilter('status:Not Contacted',this)" data-filter="status:Not Contacted" data-label="Not Contacted">Not Contacted</div>
+      <div class="pill" onclick="setFilter('status:Attempted to Contact',this)" data-filter="status:Attempted to Contact" data-label="Attempted">Attempted</div>
+      <div class="pill" onclick="setFilter('status:Contacted',this)" data-filter="status:Contacted" data-label="Contacted">Contacted</div>
+      <div class="pill" onclick="setFilter('status:Pre-Qualified',this)" data-filter="status:Pre-Qualified" data-label="Pre-Qualified">Pre-Qualified</div>
+      <div class="pill" onclick="setFilter('status:Contact in Future',this)" data-filter="status:Contact in Future" data-label="Future">Future</div>
+      <div class="pill" onclick="setFilter('status:Not Qualified',this)" data-filter="status:Not Qualified" data-label="Not Qualified">Not Qualified</div>
+      <div class="pill" onclick="setFilter('status:Lost Lead',this)" data-filter="status:Lost Lead" data-label="Lost">Lost</div>
+      <div class="pill" onclick="setFilter('status:Junk Lead',this)" data-filter="status:Junk Lead" data-label="Junk">Junk</div>
+      <div class="pill" onclick="setFilter('status:Do Not Contact - Check Notes',this)" data-filter="status:Do Not Contact - Check Notes" data-label="DNC">DNC</div>
     </div>
     <span class="filter-label">Pipeline Stage</span>
     <div class="filter-row" id="filterRow3">
-      <div class="pill" onclick="setFilter('stage:Prospecting',this)">Prospecting</div>
-      <div class="pill" onclick="setFilter('stage:Qualifying',this)">Qualifying</div>
-      <div class="pill" onclick="setFilter('stage:Proposal Sent',this)">Proposal Sent</div>
-      <div class="pill" onclick="setFilter('stage:Negotiation',this)">Negotiation</div>
-      <div class="pill" onclick="setFilter('stage:Closed Won',this)">✅ Closed Won</div>
-      <div class="pill" onclick="setFilter('stage:Closed Lost',this)">❌ Closed Lost</div>
+      <div class="pill" onclick="setFilter('stage:Prospecting',this)" data-filter="stage:Prospecting" data-label="Prospecting">Prospecting</div>
+      <div class="pill" onclick="setFilter('stage:Qualifying',this)" data-filter="stage:Qualifying" data-label="Qualifying">Qualifying</div>
+      <div class="pill" onclick="setFilter('stage:Proposal Sent',this)" data-filter="stage:Proposal Sent" data-label="Proposal Sent">Proposal Sent</div>
+      <div class="pill" onclick="setFilter('stage:Negotiation',this)" data-filter="stage:Negotiation" data-label="Negotiation">Negotiation</div>
+      <div class="pill" onclick="setFilter('stage:Closed Won',this)" data-filter="stage:Closed Won" data-label="✅ Closed Won">✅ Closed Won</div>
+      <div class="pill" onclick="setFilter('stage:Closed Lost',this)" data-filter="stage:Closed Lost" data-label="❌ Closed Lost">❌ Closed Lost</div>
     </div>
     <span class="filter-label">Source</span>
     <div class="filter-row" id="filterRow4">
-      <div class="pill" onclick="setFilter('source:Trade Show',this)">Trade Show</div>
-      <div class="pill" onclick="setFilter('source:Cold Call',this)">Cold Call</div>
-      <div class="pill" onclick="setFilter('source:External Referral',this)">Referral</div>
-      <div class="pill" onclick="setFilter('source:Partner',this)">Partner</div>
+      <div class="pill" onclick="setFilter('source:Trade Show',this)" data-filter="source:Trade Show" data-label="Trade Show">Trade Show</div>
+      <div class="pill" onclick="setFilter('source:Cold Call',this)" data-filter="source:Cold Call" data-label="Cold Call">Cold Call</div>
+      <div class="pill" onclick="setFilter('source:External Referral',this)" data-filter="source:External Referral" data-label="Referral">Referral</div>
+      <div class="pill" onclick="setFilter('source:Partner',this)" data-filter="source:Partner" data-label="Partner">Partner</div>
     </div>
   </div>
 
@@ -415,9 +419,11 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
     <button class="btn-tool" onclick="signOut()">Sign Out</button>
     <button class="btn-tool" id="selectModeBtn" onclick="toggleSelectMode()">☑ Select</button>
+    <button class="btn-tool" onclick="openActivityFeed()">📋 Activity</button>
+    <button class="btn-tool" onclick="openAnalytics()">📊 Analytics</button>
     <div class="sort-wrap">
       <label>Sort</label>
-      <select id="sortSelect" onchange="currentSort=this.value;renderAll()">
+      <select id="sortSelect" onchange="currentSort=this.value;localStorage.setItem('tdot_sort',currentSort);renderAll()">
         <option value="followup">Follow-up Date</option>
         <option value="created">Date Created</option>
         <option value="lastActivity">Last Activity</option>
@@ -460,7 +466,76 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   </div>
   <div class="lead-list" id="leadList"></div>
   <div class="lead-list" id="targetList" style="display:none"></div>
+  <div class="stats" id="bdStatsBar" style="display:none"></div>
+  <div class="lead-list" id="bdList" style="display:none"></div>
   <button class="fab" id="fabBtn" onclick="openAdd()" title="Add Lead">+</button>
+
+  <!-- ACTIVITY FEED OVERLAY -->
+  <div class="overlay" id="activityFeedOverlay" onclick="if(event.target.id==='activityFeedOverlay')closeOverlay('activityFeedOverlay')">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <button class="btn-close" onclick="closeOverlay('activityFeedOverlay')">✕</button>
+      <div class="modal-title">📋 Activity Feed</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Last 100 activities across all leads, newest first. Tap to open lead.</div>
+      <div id="activityFeedContent"></div>
+    </div>
+  </div>
+
+  <!-- ANALYTICS OVERLAY -->
+  <div class="overlay" id="analyticsOverlay" onclick="if(event.target.id==='analyticsOverlay')closeOverlay('analyticsOverlay')">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <button class="btn-close" onclick="closeOverlay('analyticsOverlay')">✕</button>
+      <div class="modal-title">📊 Analytics</div>
+      <div id="analyticsContent"></div>
+    </div>
+  </div>
+
+  <!-- BD DETAIL OVERLAY -->
+  <div class="overlay" id="bdDetailOverlay" onclick="if(event.target.id==='bdDetailOverlay')closeOverlay('bdDetailOverlay')">
+    <div class="modal" id="bdDetailContent"></div>
+  </div>
+
+  <!-- BD FORM OVERLAY -->
+  <div class="overlay" id="bdFormOverlay" onclick="if(event.target.id==='bdFormOverlay')closeOverlay('bdFormOverlay')">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <button class="btn-close" onclick="closeOverlay('bdFormOverlay')">✕</button>
+      <div class="modal-title" id="bdFormTitle">New BD Initiative</div>
+      <input type="hidden" id="bdEditRow">
+      <div class="form-section">Initiative Info</div>
+      <div class="form-group"><label>Initiative Name *</label><input type="text" id="bd_name" placeholder="Apple Certified Partner"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label>
+          <select id="bd_category"><option value="">— Select —</option><option>Certification</option><option>Partnership</option><option>New Service Line</option><option>Event</option><option>Internal Ops</option><option>BD Campaign</option></select>
+        </div>
+        <div class="form-group"><label>Status</label>
+          <select id="bd_status"><option value="">— Select —</option><option>Idea</option><option>Research</option><option>In Progress</option><option>Pending Approval</option><option>Active</option><option>On Hold</option><option>Completed</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Priority</label>
+          <select id="bd_priority"><option value="">— Select —</option><option>High</option><option>Medium</option><option>Low</option></select>
+        </div>
+        <div class="form-group"><label>Owner</label><input type="text" id="bd_owner" placeholder="Shashank, Rick, Raj…"></div>
+      </div>
+      <div class="form-section">Timeline</div>
+      <div class="form-row">
+        <div class="form-group"><label>Target Date</label><input type="date" id="bd_targetdate"></div>
+        <div class="form-group"><label>Follow-up Date</label><input type="date" id="bd_followupdate"></div>
+      </div>
+      <div class="form-group"><label>Next Action</label><input type="text" id="bd_nextaction" placeholder="Submit application, Schedule call…"></div>
+      <div class="form-section">Details</div>
+      <div class="form-group"><label>Revenue Potential</label><input type="text" id="bd_revenue" placeholder="$50K ARR, TBD…"></div>
+      <div class="form-group"><label>Links</label><input type="url" id="bd_links" placeholder="https://…"></div>
+      <div class="form-group"><label>Linked Lead Row Numbers</label><input type="text" id="bd_linkedleads" placeholder="e.g. 5,12,34 (row numbers from Leads sheet)"></div>
+      <div class="form-section">Milestones</div>
+      <div class="form-group"><label>Add Milestones (one per line)</label><textarea id="bd_milestones" style="height:80px" placeholder="Research requirements&#10;Submit application&#10;Attend training&#10;Pass exam&#10;Go live"></textarea></div>
+      <div class="form-section">Notes</div>
+      <div class="form-group"><label>Initial Notes</label><textarea id="bd_notes" style="height:60px" placeholder="Background on this initiative…"></textarea></div>
+      <button class="btn-save" id="btnBDSave" onclick="saveBD()">Save Initiative</button>
+    </div>
+  </div>
 
   <!-- BULK ACTION BAR -->
   <div class="bulk-bar" id="bulkBar">
@@ -523,10 +598,10 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 </div>
 
 <!-- FORM MODAL -->
-<div class="overlay" id="formOverlay" onclick="if(event.target.id==='formOverlay')closeOverlay('formOverlay')">
+<div class="overlay" id="formOverlay" onclick="if(event.target.id==='formOverlay')confirmCloseForm()">
   <div class="modal">
     <div class="modal-handle"></div>
-    <button class="btn-close" onclick="closeOverlay('formOverlay')">✕</button>
+    <button class="btn-close" onclick="confirmCloseForm()">✕</button>
     <div class="modal-title" id="formTitle">New Lead</div>
     <input type="hidden" id="editRowIndex">
 
@@ -781,7 +856,8 @@ Jane Doe||Director IT||Beta Inc||jane@beta.com||6475550200||||Trade Show||InfoCo
     <div class="modal-title" style="color:var(--warm)">⚠ Possible Duplicate</div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6" id="dupMessage"></p>
     <div id="dupLeadList"></div>
-    <button class="btn-save" style="margin-top:12px" onclick="closeOverlay('dupOverlay');proceedSaveLead()">Save Anyway</button>
+    <button class="btn-save" style="margin-top:12px" onclick="closeOverlay('dupOverlay');proceedSaveLead()">Save Anyway (New Lead)</button>
+    <button class="btn-save" id="btnMergeDup" style="margin-top:6px;background:var(--warm);display:none" onclick="mergeDuplicate()">🔀 Merge into Existing</button>
     <button class="btn-delete" onclick="closeOverlay('dupOverlay')">Go Back & Edit</button>
   </div>
 </div>
@@ -821,7 +897,8 @@ const FIXED_COLS = 22; // A-V are fixed; custom fields start at W
 const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15,mobile:16,nextAction:17,competitor:18,lastContacted:19,stage:20,tags:21};
 
 let LEADS=[], TARGETS=[], accessToken=null, tokenExpiry=0;
-let currentFilter='all', currentSort='followup';
+let currentFilter='all', currentSort=localStorage.getItem('tdot_sort')||'followup';
+let currentSortDir=localStorage.getItem('tdot_sort_dir')||'asc';
 let currentTab='leads';
 let qpRow=null, qpStatus='', qpRating='', qpStage='';
 
@@ -883,7 +960,7 @@ async function exchangeCode(code) {
       // Whitelist check — verify email before granting access
       const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
       const uData = await uRes.json();
-      if (false) {
+      if (!['shashank.derry@gmail.com','shashanksing@gmail.com'].includes(uData.email)) {
         document.getElementById('authDenied').style.display='block';
         setStatus('error','✗ Access denied for ' + (uData.email||'unknown account'));
         return false;
@@ -916,7 +993,7 @@ async function refreshAccessToken() {
     // Whitelist check on silent refresh too
     const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
     const uData = await uRes.json();
-    if (false) { signOut(); return; }
+    if (!['shashank.derry@gmail.com','shashanksing@gmail.com'].includes(uData.email)) { signOut(); return; }
     accessToken = data.access_token;
     tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   } else { signOut(); }
@@ -983,6 +1060,7 @@ async function loadLeads() {
     setStatus('ok',`✓ ${LEADS.length} leads loaded`);
     setTimeout(()=>setStatus('',''),2500);
     await loadTargets();
+    await loadBD();
     renderAll();
     renderBriefing();
   } catch(err){setStatus('error','✗ '+err.message);}
@@ -1030,12 +1108,12 @@ async function saveLead(){
   const email=document.getElementById('f_email').value.trim();
   if(!name||!company){alert('Name and Company are required.');return;}
   const rowIndex=document.getElementById('editRowIndex').value;
+  // Check duplicates only on new leads
   if(!rowIndex){
-    // New lead — check duplicates first
-    checkDuplicates(name,company,email,()=>proceedActualSave());
-  } else {
-    // Editing existing lead — save directly
-    proceedActualSave();
+    let dupChecked=false;
+    checkDuplicates(name,company,email,()=>{dupChecked=true;proceedActualSave();});
+    if(!dupChecked) return; // waiting for user confirmation
+    return;
   }
 }
 async function proceedActualSave(){
@@ -1333,11 +1411,24 @@ function clearDateFilters(){
 function applySearch(leads){
   const q=(document.getElementById('searchInput')?.value||'').toLowerCase().trim();
   if(!q) return leads;
-  return leads.filter(l=>['name','company','email','title','industry','notes','tags','nextAction','competitor'].some(k=>l[k].toLowerCase().includes(q)));
+  return leads.filter(l=>['name','company','email','title','industry','notes','tags','nextAction','competitor'].some(k=>(l[k]||'').toLowerCase().includes(q)));
 }
-let currentSortDir = 'asc'; // 'asc' or 'desc'
+function onSearchInput(){
+  const val=document.getElementById('searchInput').value;
+  const clr=document.getElementById('searchClear');
+  if(clr) clr.style.display=val?'block':'none';
+  renderAll();
+}
+function clearSearch(){
+  const inp=document.getElementById('searchInput');
+  const clr=document.getElementById('searchClear');
+  if(inp) inp.value='';
+  if(clr) clr.style.display='none';
+  renderAll();
+}
 function toggleSortDir(){
   currentSortDir = currentSortDir==='asc'?'desc':'asc';
+  localStorage.setItem('tdot_sort_dir',currentSortDir);
   document.getElementById('sortDirBtn').textContent = currentSortDir==='asc'?'↑':'↓';
   renderAll();
 }
@@ -1376,13 +1467,47 @@ function applySort(leads){
 function renderStats(){
   const overdue=LEADS.filter(l=>isOverdue(l)).length;
   document.getElementById('statsBar').innerHTML=[
-    ['Total',LEADS.length,'var(--accent)','all',null],
-    ['Overdue',overdue,'var(--overdue)','overdue',null],
-    ['Hot',LEADS.filter(l=>l.rating==='Hot').length,'var(--hot)','rating:Hot',null],
-    ['Warm',LEADS.filter(l=>l.rating==='Warm').length,'var(--warm)','rating:Warm',null],
-    ['Contacted',LEADS.filter(l=>l.status==='Contacted').length,'var(--contacted)','status:Contacted',null],
-    ['Pre-Qual',LEADS.filter(l=>l.status==='Pre-Qualified').length,'var(--pre-qual)','status:Pre-Qualified',null],
+    ['Total',LEADS.length,'var(--accent)','all'],
+    ['Overdue',overdue,'var(--overdue)','overdue'],
+    ['Hot',LEADS.filter(l=>l.rating==='Hot').length,'var(--hot)','rating:Hot'],
+    ['Warm',LEADS.filter(l=>l.rating==='Warm').length,'var(--warm)','rating:Warm'],
+    ['Contacted',LEADS.filter(l=>l.status==='Contacted').length,'var(--contacted)','status:Contacted'],
+    ['Pre-Qual',LEADS.filter(l=>l.status==='Pre-Qualified').length,'var(--pre-qual)','status:Pre-Qualified'],
   ].map(([label,num,color,filter])=>`<div class="stat" onclick="statBarFilter('${filter}')" title="Filter: ${label}" style="cursor:pointer"><div class="stat-num" style="color:${color}">${num}</div><div class="stat-label">${label}</div></div>`).join('');
+  // Update pill counts
+  const pillCounts = {
+    'all': LEADS.length,
+    'overdue': overdue,
+    'rating:Hot': LEADS.filter(l=>l.rating==='Hot').length,
+    'rating:Warm': LEADS.filter(l=>l.rating==='Warm').length,
+    'rating:Cold': LEADS.filter(l=>l.rating==='Cold').length,
+    'status:Not Contacted': LEADS.filter(l=>l.status==='Not Contacted').length,
+    'status:Attempted to Contact': LEADS.filter(l=>l.status==='Attempted to Contact').length,
+    'status:Contacted': LEADS.filter(l=>l.status==='Contacted').length,
+    'status:Pre-Qualified': LEADS.filter(l=>l.status==='Pre-Qualified').length,
+    'status:Contact in Future': LEADS.filter(l=>l.status==='Contact in Future').length,
+    'status:Not Qualified': LEADS.filter(l=>l.status==='Not Qualified').length,
+    'status:Lost Lead': LEADS.filter(l=>l.status==='Lost Lead').length,
+    'status:Junk Lead': LEADS.filter(l=>l.status==='Junk Lead').length,
+    'status:Do Not Contact - Check Notes': LEADS.filter(l=>l.status==='Do Not Contact - Check Notes').length,
+    'stage:Prospecting': LEADS.filter(l=>l.stage==='Prospecting').length,
+    'stage:Qualifying': LEADS.filter(l=>l.stage==='Qualifying').length,
+    'stage:Proposal Sent': LEADS.filter(l=>l.stage==='Proposal Sent').length,
+    'stage:Negotiation': LEADS.filter(l=>l.stage==='Negotiation').length,
+    'stage:Closed Won': LEADS.filter(l=>l.stage==='Closed Won').length,
+    'stage:Closed Lost': LEADS.filter(l=>l.stage==='Closed Lost').length,
+    'source:Trade Show': LEADS.filter(l=>l.source==='Trade Show').length,
+    'source:Cold Call': LEADS.filter(l=>l.source==='Cold Call').length,
+    'source:External Referral': LEADS.filter(l=>l.source==='External Referral').length,
+    'source:Partner': LEADS.filter(l=>l.source==='Partner').length,
+  };
+  document.querySelectorAll('.pill[data-filter]').forEach(pill=>{
+    const f=pill.getAttribute('data-filter');
+    const cnt=pillCounts[f]??'';
+    const base=pill.getAttribute('data-label')||pill.textContent.replace(/\s*\(\d+\)$/,'');
+    pill.setAttribute('data-label',base);
+    pill.textContent=cnt!==''?`${base} (${cnt})`:base;
+  });
 }
 function statBarFilter(filter){
   currentFilter=filter;
@@ -1427,6 +1552,7 @@ function renderAll(){
       else if(days<=30){lcText=`Last contact: ${days}d ago`;lcClass='stale';}
       else{lcText=`Last contact: ${days}d ago`;lcClass='old';}
     }
+    const isAged=leadAge60(l);
     return `<div class="swipe-container" id="swipe-${l._row}" style="position:relative">
       <input type="checkbox" class="bulk-checkbox" id="chk-${l._row}" onchange="onBulkCheck()" onclick="event.stopPropagation()">
       <div class="swipe-actions-bg"><div class="swipe-right-bg">✓ Contacted</div><div class="swipe-left-bg">🗑 Junk</div></div>
@@ -1454,6 +1580,8 @@ function renderAll(){
           ${l.source?`<span class="card-meta-item">📌 ${esc(l.tradeShow||l.source)}</span>`:''}
           ${l.competitor?`<span class="card-meta-item">⚔ ${esc(l.competitor)}</span>`:''}
           ${tags.length?tags.map(t=>`<span class="card-meta-item" style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();setFilter('tag:${t}',null)">🏷 ${esc(t)}</span>`).join(''):''}
+          ${l.email?`<span class="card-meta-item" style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();window.location.href='mailto:${l.email}'">✉ Email</span>`:''}
+          ${(l.mobile||l.phone)?`<span class="card-meta-item" style="color:var(--contacted);cursor:pointer" onclick="event.stopPropagation();window.location.href='tel:${l.mobile||l.phone}'">📞 Call</span>`:''}
         </div>
         <div class="card-quick-actions">
           <button class="qa-btn" onclick="event.stopPropagation();quickLog(${l._row},'called')">📞 Called</button>
@@ -1699,6 +1827,14 @@ function openEdit(row){
 }
 
 function closeOverlay(id){document.getElementById(id).classList.remove('open');}
+function confirmCloseForm(){
+  const name=document.getElementById('f_name')?.value||'';
+  const company=document.getElementById('f_company')?.value||'';
+  if(name||company){
+    if(!confirm('You have unsaved changes. Leave without saving?')) return;
+  }
+  closeOverlay('formOverlay');
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeOverlay('formOverlay');closeOverlay('detailOverlay');closeOverlay('scanOverlay');closeQuickPopup();}});
 
 // ── EXPORT ────────────────────────────────────────────────────
@@ -1712,12 +1848,15 @@ function exportCSV(){
 // ── TAB SWITCHING ─────────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
-  ['leads','targets','settings'].forEach(t => {
-    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active', t===tab);
+  ['leads','targets','bd','settings'].forEach(t => {
+    const el=document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(el) el.classList.toggle('active', t===tab);
   });
   document.getElementById('leadList').style.display      = tab==='leads'    ? 'flex'  : 'none';
   const bc=document.getElementById('briefingCard'); if(bc) bc.style.display = tab==='leads' ? (bc.dataset.hasContent==='1'?'block':'none') : 'none';
   document.getElementById('targetList').style.display    = tab==='targets'  ? 'flex'  : 'none';
+  document.getElementById('bdList').style.display        = tab==='bd'       ? 'flex'  : 'none';
+  const bdStats=document.getElementById('bdStatsBar'); if(bdStats) bdStats.style.display = tab==='bd'?'flex':'none';
   document.getElementById('settingsPanel').style.display = tab==='settings' ? 'block' : 'none';
   const leadsOnly = tab==='leads';
   document.querySelector('.filter-section').style.display = leadsOnly ? 'block' : 'none';
@@ -1727,10 +1866,16 @@ function switchTab(tab) {
   const addBtn = document.querySelector('.btn-add');
   if (tab==='leads')    { addBtn.onclick=openAdd;        addBtn.textContent='+ Add';     addBtn.style.display='flex'; }
   if (tab==='targets')  { addBtn.onclick=openTargetAdd;  addBtn.textContent='+ Target';  addBtn.style.display='flex'; }
+  if (tab==='bd')       { addBtn.onclick=openBDAdd;      addBtn.textContent='+ BD';      addBtn.style.display='flex'; }
   if (tab==='settings') { addBtn.style.display='none'; renderSettings(); }
   const fab=document.getElementById('fabBtn');
-  if(fab){fab.style.display=tab==='leads'?'flex':'none'; fab.onclick=tab==='leads'?openAdd:openTargetAdd; fab.title=tab==='leads'?'Add Lead':'Add Target';}
+  if(fab){
+    fab.style.display=tab==='settings'?'none':'flex';
+    fab.onclick=tab==='leads'?openAdd:tab==='targets'?openTargetAdd:openBDAdd;
+    fab.title=tab==='leads'?'Add Lead':tab==='targets'?'Add Target':'Add Initiative';
+  }
   if (tab==='targets') renderTargets();
+  if (tab==='bd') { renderBD(); renderBDStats(); }
 }
 
 // ── TARGET DATA ───────────────────────────────────────────────
@@ -2137,17 +2282,20 @@ function renderBriefing() {
   const hotUncontacted = LEADS.filter(l => l.rating==='Hot' && l.status==='Not Contacted').length;
   const stale = LEADS.filter(l => isStale(l)).length;
 
-  if (!dueToday && !overdue && !hotUncontacted && !stale) {
+  const bdOvCheck = BD_ITEMS.filter(b=>bdIsOverdue(b)).length;
+  if (!dueToday && !overdue && !hotUncontacted && !stale && !bdOvCheck) {
     document.getElementById('briefingCard').style.display='none';
     return;
   }
   document.getElementById('briefingCard').dataset.hasContent='1';
   document.getElementById('briefingCard').style.display='block';
+  const bdOverdueCount = BD_ITEMS.filter(b=>bdIsOverdue(b)).length;
   document.getElementById('briefingRow').innerHTML = [
     dueToday   ? `<div class="briefing-item" onclick="statBarFilter('overdue')" style="cursor:pointer" title="Show overdue leads"><div class="briefing-num" style="color:var(--warm)">${dueToday}</div><div class="briefing-label">Due Today</div></div>` : '',
     overdue    ? `<div class="briefing-item" onclick="statBarFilter('overdue')" style="cursor:pointer" title="Show overdue leads"><div class="briefing-num" style="color:var(--overdue)">${overdue}</div><div class="briefing-label">Overdue</div></div>` : '',
     hotUncontacted ? `<div class="briefing-item" onclick="statBarFilter('rating:Hot')" style="cursor:pointer" title="Show Hot leads"><div class="briefing-num" style="color:var(--hot)">${hotUncontacted}</div><div class="briefing-label">Hot Uncontacted</div></div>` : '',
     stale      ? `<div class="briefing-item"><div class="briefing-num" style="color:var(--muted)">${stale}</div><div class="briefing-label">Gone Cold</div></div>` : '',
+    bdOverdueCount ? `<div class="briefing-item" onclick="switchTab('bd')" style="cursor:pointer" title="Show BD initiatives"><div class="briefing-num" style="color:var(--not-yet)">${bdOverdueCount}</div><div class="briefing-label">BD Overdue</div></div>` : '',
   ].join('');
 }
 
@@ -2165,6 +2313,11 @@ function leadAge(l) {
   if (days === 0) return 'Added today';
   if (days === 1) return '1 day old';
   return `${days} days old`;
+}
+function leadAge60(l) {
+  if (!l.created) return false;
+  const days = Math.floor((Date.now() - new Date(l.created).getTime()) / (1000*60*60*24));
+  return days >= 60;
 }
 
 // ── SWIPE ACTIONS ─────────────────────────────────────────────
@@ -2418,6 +2571,8 @@ function openWeeklySummary() {
   const preQual = LEADS.filter(l => l.status==='Pre-Qualified');
   const closedWon = LEADS.filter(l => l.stage==='Closed Won');
 
+  const bdActive = BD_ITEMS.filter(b=>b.status==='Active'||b.status==='In Progress');
+  const bdOverdue = BD_ITEMS.filter(b=>bdIsOverdue(b));
   const lines = [
     `📊 TDOT LEADS — WEEKLY SUMMARY`,
     `Week ending ${now.toLocaleDateString('en-CA')}`,
@@ -2435,7 +2590,13 @@ function openWeeklySummary() {
     ``,
     `📞 CONTACTED THIS WEEK:`,
     ...contacted.map(l=>`  • ${l.name} — ${l.company}`),
-  ].join('\n');
+    ``,
+    `🚀 BD INITIATIVES (Active/In Progress):`,
+    ...bdActive.map(b=>`  • ${b.name} — ${b.status}${b.nextAction?' → '+b.nextAction:''}`),
+    bdOverdue.length?``,
+    bdOverdue.length?`⚠ BD OVERDUE:`,
+    ...bdOverdue.map(b=>`  • ${b.name} — follow-up ${formatDate(b.followupDate)}`),
+  ].filter(l=>l!==false).join('\n');
 
   document.getElementById('weekSummaryContent').textContent = lines;
   document.getElementById('weekSummaryOverlay').classList.add('open');
@@ -2453,6 +2614,465 @@ function exportFilteredCSV() {
   const csv=[cols.join(','),...leads.map(l=>cols.map(col=>`"${(l[col]||'').replace(/"/g,'""')}"`).join(','))].join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download=`leads_filtered_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+}
+
+
+
+// ── MERGE DUPLICATE ───────────────────────────────────────────
+let mergeTargetRow = null;
+function checkDuplicatesWithMerge(name, company, email, onNoDup) {
+  const matches = LEADS.filter(l => {
+    const sameCompany = company && l.company.toLowerCase() === company.toLowerCase();
+    const sameEmail   = email && l.email && l.email.toLowerCase() === email.toLowerCase();
+    const sameName    = name && l.name.toLowerCase() === name.toLowerCase();
+    return sameCompany || sameEmail || sameName;
+  });
+  if (!matches.length) { onNoDup(); return; }
+  pendingLeadSave = onNoDup;
+  mergeTargetRow = matches.length === 1 ? matches[0]._row : null;
+  document.getElementById('dupMessage').textContent =
+    `We found ${matches.length} existing lead${matches.length>1?'s':''} that look similar. Review before saving:`;
+  document.getElementById('dupLeadList').innerHTML = matches.map(l => `
+    <div class="company-contact-card" onclick="selectMergeTarget(${l._row},this)" style="margin-bottom:6px;cursor:pointer">
+      <div style="font-weight:700">${esc(l.name)}</div>
+      <div style="font-size:12px;color:var(--muted)">${esc(l.company)} · ${esc(l.status)}</div>
+    </div>`).join('');
+  const mergeBtn = document.getElementById('btnMergeDup');
+  if(mergeBtn) mergeBtn.style.display = matches.length===1?'block':'none';
+  document.getElementById('dupOverlay').classList.add('open');
+}
+function selectMergeTarget(row, el) {
+  mergeTargetRow = row;
+  document.querySelectorAll('#dupLeadList .company-contact-card').forEach(c=>c.style.borderColor='');
+  el.style.borderColor='var(--warm)';
+  const mergeBtn = document.getElementById('btnMergeDup');
+  if(mergeBtn) mergeBtn.style.display='block';
+}
+async function mergeDuplicate() {
+  if(!mergeTargetRow) { alert('Select a lead to merge into.'); return; }
+  const existing = LEADS.find(l=>l._row===mergeTargetRow); if(!existing) return;
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const newNotes = document.getElementById('f_notes').value.trim();
+  const mergedNotes = newNotes
+    ? (existing.notes ? `${existing.notes.trim()}${NOTE_SEP}${formatTs()}: 📎 Merged note: ${newNotes}` : `${formatTs()}: 📎 Merged note: ${newNotes}`)
+    : existing.notes;
+  const merged = {
+    ...existing,
+    status: document.getElementById('f_status').value || existing.status,
+    rating: document.getElementById('f_rating').value || existing.rating,
+    stage:  document.getElementById('f_stage').value || existing.stage,
+    followup: document.getElementById('f_followup').value || existing.followup,
+    nextAction: document.getElementById('f_nextaction').value || existing.nextAction,
+    notes: mergedNotes,
+  };
+  closeOverlay('dupOverlay');
+  setStatus('loading','⟳ Merging…');
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${mergeTargetRow}:V${mergeTargetRow}`,[leadToRow(merged,now)]);
+    closeOverlay('formOverlay');
+    setStatus('ok','✓ Merged into existing lead');
+    setTimeout(()=>setStatus('',''),2000);
+    await loadLeads();
+    openDetail(mergeTargetRow);
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── ACTIVITY FEED ─────────────────────────────────────────────
+function openActivityFeed() {
+  const allEntries = [];
+  LEADS.forEach(l => {
+    const notes = parseNotes(l.notes);
+    notes.forEach(n => {
+      if(!n.ts) return;
+      const d = new Date(n.ts);
+      if(isNaN(d.getTime())) return;
+      allEntries.push({ts:n.ts, text:n.text, lead:l, date:d});
+    });
+  });
+  allEntries.sort((a,b)=>b.date-a.date);
+  const recent = allEntries.slice(0,100);
+  const html = recent.length ? recent.map(e=>`
+    <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;cursor:pointer" onclick="closeOverlay('activityFeedOverlay');openDetail(${e.lead._row})">
+      <div style="flex-shrink:0;text-align:right;min-width:80px">
+        <div style="font-size:10px;color:var(--accent);font-weight:500">${esc(e.ts.split(' ')[0])}</div>
+        <div style="font-size:9px;color:var(--muted)">${esc(e.ts.split(' ')[1]||'')}</div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-family:'Syne',sans-serif;font-weight:700;color:var(--text)">${esc(e.lead.name)}</div>
+        <div style="font-size:11px;color:var(--muted)">${esc(e.lead.company)}</div>
+        <div style="font-size:12px;color:var(--text);margin-top:3px">${esc(e.text)}</div>
+      </div>
+    </div>`).join('')
+    : '<div style="padding:20px;text-align:center;color:var(--muted)">No activity logged yet.</div>';
+
+  document.getElementById('activityFeedContent').innerHTML = html;
+  document.getElementById('activityFeedOverlay').classList.add('open');
+}
+
+// ── LEAD SOURCE ANALYTICS ─────────────────────────────────────
+function openAnalytics() {
+  const sourceCounts = {};
+  LEADS.forEach(l => {
+    const src = l.tradeShow || l.source || 'Unknown';
+    sourceCounts[src] = (sourceCounts[src]||0) + 1;
+  });
+  const sorted = Object.entries(sourceCounts).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const max = sorted[0]?.[1]||1;
+  const colors = ['var(--accent)','var(--warm)','var(--cold)','var(--not-yet)','var(--contacted)','var(--pre-qual)','var(--hot)','var(--muted)','var(--dnc)','var(--attempt)'];
+  
+  // Rating breakdown
+  const hotCount = LEADS.filter(l=>l.rating==='Hot').length;
+  const warmCount = LEADS.filter(l=>l.rating==='Warm').length;
+  const coldCount = LEADS.filter(l=>l.rating==='Cold').length;
+  const notYetCount = LEADS.filter(l=>l.rating==='Not Yet Determined'||!l.rating).length;
+
+  // Stage breakdown
+  const stageCounts = {};
+  ['Prospecting','Qualifying','Proposal Sent','Negotiation','Closed Won','Closed Lost'].forEach(s=>{
+    stageCounts[s]=LEADS.filter(l=>l.stage===s).length;
+  });
+
+  const chartHtml = `
+    <div style="margin-bottom:20px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Lead Source</div>
+      ${sorted.map(([src,cnt],i)=>`
+        <div style="margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">
+            <span style="color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%">${esc(src)}</span>
+            <span style="color:${colors[i]};font-weight:700;flex-shrink:0">${cnt}</span>
+          </div>
+          <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+            <div style="background:${colors[i]};height:100%;width:${Math.round(cnt/max*100)}%;border-radius:4px;transition:width .3s"></div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-bottom:20px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Rating Breakdown</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${[['Hot',hotCount,'var(--hot)'],['Warm',warmCount,'var(--warm)'],['Cold',coldCount,'var(--cold)'],['Not Yet',notYetCount,'var(--muted)']].map(([l,c,col])=>`
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:${col}">${c}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">${l}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Pipeline Stage</div>
+      ${Object.entries(stageCounts).map(([s,c])=>`
+        <div style="margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px">
+            <span style="color:var(--text)">${s}</span>
+            <span style="color:var(--accent);font-weight:700">${c}</span>
+          </div>
+          <div style="background:var(--surface2);border-radius:4px;height:6px">
+            <div style="background:var(--accent);height:100%;width:${c?Math.round(c/LEADS.length*100):0}%;border-radius:4px;opacity:${s==='Closed Won'?1:s==='Closed Lost'?0.3:0.7}"></div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('analyticsContent').innerHTML = chartHtml;
+  document.getElementById('analyticsOverlay').classList.add('open');
+}
+
+// ── BD INITIATIVES ────────────────────────────────────────────
+const BD_SHEET = 'BD Initiatives';
+const BD_RANGE = `${BD_SHEET}!A2:P`;
+const BD_FM = {id:0,name:1,category:2,status:3,priority:4,owner:5,targetDate:6,followupDate:7,nextAction:8,links:9,revenue:10,milestones:11,linkedLeads:12,notes:13,created:14,lastActivity:15};
+let BD_ITEMS = [];
+
+const BD_STATUSES = ['Idea','Research','In Progress','Pending Approval','Active','On Hold','Completed'];
+const BD_CATEGORIES = ['Certification','Partnership','New Service Line','Event','Internal Ops','BD Campaign'];
+const BD_PRIORITIES = ['High','Medium','Low'];
+const BD_NOTE_TEMPLATES = ['Researched requirements','Submitted application','Attended meeting/call','Awaiting approval','Received approval','Shared with Rick/Raj','On hold — reason noted','Completed milestone','Updated status'];
+
+function bdToRow(b, now) {
+  return [
+    b.id||('bd_'+Date.now()), b.name, b.category, b.status, b.priority,
+    b.owner, b.targetDate||'', b.followupDate||'', b.nextAction||'',
+    b.links||'', b.revenue||'', b.milestones||'', b.linkedLeads||'',
+    b.notes||'', b.created||now, now
+  ];
+}
+
+async function loadBD() {
+  try {
+    const data = await sheetsGet(BD_RANGE);
+    BD_ITEMS = (data.values||[]).map((row,i) => {
+      const b = {};
+      Object.entries(BD_FM).forEach(([k,idx]) => b[k]=(row[idx]||'').toString().trim());
+      b._row = i+2; return b;
+    }).filter(b=>b.name);
+  } catch(e) { BD_ITEMS = []; }
+}
+
+function bdPriorityClass(p) { return {High:'hot',Medium:'warm',Low:'cold'}[p]||'no-rating'; }
+function bdStatusColor(s) {
+  return {Active:'var(--contacted)',Completed:'var(--accent)','In Progress':'var(--warm)','Pending Approval':'var(--pre-qual)',
+    Research:'var(--cold)',Idea:'var(--muted)','On Hold':'var(--muted)'}[s]||'var(--muted)';
+}
+function bdIsOverdue(b) {
+  if(!b.followupDate) return false;
+  const t=new Date(); t.setHours(0,0,0,0);
+  return new Date(b.followupDate)<t;
+}
+
+function parseMilestones(raw) {
+  if(!raw) return [];
+  return raw.split('|||').map(s=>s.trim()).filter(Boolean).map(m=>{
+    const done = m.startsWith('[x]');
+    return {done, text: done?m.slice(3).trim():m.startsWith('[ ]')?m.slice(3).trim():m};
+  });
+}
+function milestonesToStr(milestones) {
+  return milestones.map(m=>`${m.done?'[x]':'[ ]'} ${m.text}`).join('|||');
+}
+
+function renderBD() {
+  const container = document.getElementById('bdList');
+  if(!BD_ITEMS.length) {
+    container.innerHTML=`<div class="empty-state"><div class="big">🚀</div><p>No initiatives yet.<br>Tap + BD to add one.</p></div>`;
+    return;
+  }
+  const sorted=[...BD_ITEMS].sort((a,b)=>{
+    const po=['High','Medium','Low',''];
+    return po.indexOf(a.priority)-po.indexOf(b.priority);
+  });
+  container.innerHTML=sorted.map(b=>{
+    const pc=bdPriorityClass(b.priority);
+    const overdue=bdIsOverdue(b);
+    const milestones=parseMilestones(b.milestones);
+    const done=milestones.filter(m=>m.done).length;
+    const lastN=parseNotes(b.notes); const lastNote=lastN.length?lastN[lastN.length-1].text:'';
+    return `<div class="target-card ${pc} ${overdue?'overdue':''}" onclick="openBDDetail(${b._row})" style="${overdue?'border-color:rgba(255,92,92,.4)':''}">
+      <div class="lead-top">
+        <div style="min-width:0;flex:1">
+          <div class="target-name">${esc(b.name)}</div>
+          ${b.category?`<div class="target-industry">📁 ${esc(b.category)}</div>`:''}
+          ${b.nextAction?`<div class="next-action-bar" style="margin-top:4px">→ ${esc(b.nextAction)}</div>`:''}
+          ${lastNote?`<div style="font-size:11px;color:#4b5563;margin-top:3px;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(lastNote.slice(0,50))}${lastNote.length>50?'…':''}</div>`:''}
+          ${overdue?`<div style="font-size:10px;color:var(--overdue);margin-top:2px">⚠ Follow-up overdue: ${formatDate(b.followupDate)}</div>`:''}
+          ${b.followupDate&&!overdue?`<div style="font-size:10px;color:var(--muted);margin-top:2px">📅 Follow-up: ${formatDate(b.followupDate)}</div>`:''}
+          ${milestones.length?`<div style="font-size:10px;color:var(--muted);margin-top:3px">▣ ${done}/${milestones.length} milestones</div>`:''}
+        </div>
+        <div class="badge-wrap">
+          ${b.priority?`<span class="badge badge-priority ${pc}">${b.priority}</span>`:''}
+          ${b.status?`<span class="badge" style="background:rgba(0,0,0,.2);color:${bdStatusColor(b.status)}">${b.status}</span>`:''}
+        </div>
+      </div>
+      ${b.owner||b.revenue?`<div class="card-meta" style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px">
+        ${b.owner?`<span class="card-meta-item">👤 ${esc(b.owner)}</span>`:''}
+        ${b.revenue?`<span class="card-meta-item">💰 ${esc(b.revenue)}</span>`:''}
+        ${b.targetDate?`<span class="card-meta-item">🎯 Target: ${formatDate(b.targetDate)}</span>`:''}
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function renderBDStats() {
+  const el=document.getElementById('bdStatsBar');
+  if(!el) return;
+  const total=BD_ITEMS.length;
+  const active=BD_ITEMS.filter(b=>b.status==='Active').length;
+  const inprog=BD_ITEMS.filter(b=>b.status==='In Progress').length;
+  const overdue=BD_ITEMS.filter(b=>bdIsOverdue(b)).length;
+  const done=BD_ITEMS.filter(b=>b.status==='Completed').length;
+  el.innerHTML=[
+    ['Total',total,'var(--accent)'],
+    ['Active',active,'var(--contacted)'],
+    ['In Progress',inprog,'var(--warm)'],
+    ['Overdue',overdue,'var(--overdue)'],
+    ['Completed',done,'var(--muted)'],
+  ].map(([l,n,c])=>`<div class="stat"><div class="stat-num" style="color:${c}">${n}</div><div class="stat-label">${l}</div></div>`).join('');
+}
+
+function openBDDetail(row) {
+  const b=BD_ITEMS.find(x=>x._row===row); if(!b) return;
+  const milestones=parseMilestones(b.milestones);
+  const done=milestones.filter(m=>m.done).length;
+  const entries=parseNotes(b.notes);
+  const logHtml=entries.length
+    ?[...entries].reverse().map(e=>`<div class="log-entry"><div class="log-ts">${esc(e.ts)}</div><div class="log-text">${esc(e.text)}</div></div>`).join('')
+    :'<div class="log-empty">No activity yet.</div>';
+
+  // Linked leads
+  let linkedHtml='';
+  if(b.linkedLeads){
+    const rows=b.linkedLeads.split(',').map(r=>parseInt(r.trim())).filter(Boolean);
+    const found=rows.map(r=>LEADS.find(l=>l._row===r)).filter(Boolean);
+    if(found.length){
+      linkedHtml=`<div class="form-section" style="margin-top:12px">Linked Leads</div>`+
+        found.map(l=>`<div class="company-contact-card" onclick="closeOverlay('bdDetailOverlay');openDetail(${l._row})" style="margin-bottom:6px">
+          <div style="font-weight:700;font-size:13px">${esc(l.name)}</div>
+          <div style="font-size:12px;color:var(--muted)">${esc(l.company)}</div>
+          <div style="display:flex;gap:5px;margin-top:4px">
+            ${l.status?`<span class="badge badge-status ${statusClass(l.status)}">${l.status}</span>`:''}
+            ${l.rating?`<span class="badge badge-rating ${ratingClass(l.rating)}">${l.rating}</span>`:''}
+          </div>
+        </div>`).join('');
+    }
+  }
+
+  const pct=milestones.length?Math.round(done/milestones.length*100):0;
+  document.getElementById('bdDetailContent').innerHTML=`
+    <div class="modal-handle"></div>
+    <button class="btn-close" onclick="closeOverlay('bdDetailOverlay')">✕</button>
+    <div class="modal-title" style="color:var(--text)">${esc(b.name)}</div>
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+      ${b.category?`<span class="badge" style="background:rgba(232,255,71,.1);color:var(--accent)">${b.category}</span>`:''}
+      ${b.status?`<span class="badge" style="color:${bdStatusColor(b.status)};background:rgba(0,0,0,.2)">${b.status}</span>`:''}
+      ${b.priority?`<span class="badge badge-priority ${bdPriorityClass(b.priority)}">${b.priority}</span>`:''}
+    </div>
+    ${b.owner?`<div class="detail-field"><div class="detail-label">Owner</div><div class="detail-value">${esc(b.owner)}</div></div>`:''}
+    ${b.nextAction?`<div class="detail-field"><div class="detail-label">Next Action</div><div class="detail-value" style="color:var(--warm)">→ ${esc(b.nextAction)}</div></div>`:''}
+    ${b.targetDate?`<div class="detail-field"><div class="detail-label">Target Date</div><div class="detail-value">${formatDate(b.targetDate)}</div></div>`:''}
+    ${b.followupDate?`<div class="detail-field"><div class="detail-label">Follow-up Date</div><div class="detail-value" style="color:${bdIsOverdue(b)?'var(--overdue)':'var(--text)'}">${formatDate(b.followupDate)}${bdIsOverdue(b)?' ⚠ OVERDUE':''}</div></div>`:''}
+    ${b.revenue?`<div class="detail-field"><div class="detail-label">Revenue Potential</div><div class="detail-value">${esc(b.revenue)}</div></div>`:''}
+    ${b.links?`<div class="detail-field"><div class="detail-label">Links</div><div class="detail-value"><a href="${esc(b.links)}" target="_blank" style="color:var(--accent)">${esc(b.links.slice(0,40))}${b.links.length>40?'…':''} ↗</a></div></div>`:''}
+    ${milestones.length?`
+    <div class="form-section" style="margin-top:12px">Milestones (${done}/${milestones.length})</div>
+    <div style="background:var(--surface2);border-radius:6px;height:6px;margin-bottom:10px">
+      <div style="background:var(--accent);height:100%;width:${pct}%;border-radius:6px"></div>
+    </div>
+    ${milestones.map((m,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+      <input type="checkbox" ${m.done?'checked':''} onchange="toggleMilestone(${row},${i},this.checked)" style="accent-color:var(--accent);width:18px;height:18px;flex-shrink:0">
+      <span style="font-size:12px;color:${m.done?'var(--muted)':'var(--text)'};text-decoration:${m.done?'line-through':'none'}">${esc(m.text)}</span>
+    </div>`).join('')}`:''}
+    ${linkedHtml}
+    <div class="form-section" style="margin-top:12px">Activity Log</div>
+    <div class="log-wrap">${logHtml}</div>
+    <div class="template-chips" style="margin-top:8px">${BD_NOTE_TEMPLATES.map(t=>`<button class="template-chip" onclick="applyBDTemplate('${t}')">${t}</button>`).join('')}</div>
+    <div class="note-add-wrap">
+      <textarea id="bdNoteText" placeholder="Add activity note…"></textarea>
+      <button class="btn-log" onclick="addBDNote(${row})">+ Add<br>Note</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+      <button class="btn-edit-lead" onclick="closeOverlay('bdDetailOverlay');openBDEdit(${row})">✏ Edit</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="deleteBD(${row})">🗑 Delete</button>
+    </div>`;
+  document.getElementById('bdDetailOverlay').classList.add('open');
+}
+
+function applyBDTemplate(text){const ta=document.getElementById('bdNoteText');if(ta)ta.value=text;}
+
+async function toggleMilestone(row, idx, checked) {
+  const b=BD_ITEMS.find(x=>x._row===row); if(!b) return;
+  const milestones=parseMilestones(b.milestones);
+  if(!milestones[idx]) return;
+  milestones[idx].done=checked;
+  const now=new Date().toISOString().replace('T',' ').slice(0,19);
+  const entry=`${formatTs()}: ${checked?'✅':'↩️'} Milestone ${checked?'completed':'unchecked'}: ${milestones[idx].text}`;
+  const updatedNotes=b.notes?`${b.notes.trim()}${NOTE_SEP}${entry}`:entry;
+  const updated={...b,milestones:milestonesToStr(milestones),notes:updatedNotes};
+  try {
+    await sheetsAppend2(BD_SHEET,[bdToRow(updated,now)].map(()=>bdToRow(updated,now))[0]);
+    await sheetsUpdate(`${BD_SHEET}!A${row}:P${row}`,[bdToRow(updated,now)]);
+    await loadBD(); openBDDetail(row);
+  } catch(e){setStatus('error','✗ '+e.message);}
+}
+
+async function addBDNote(row){
+  const ta=document.getElementById('bdNoteText');
+  const text=ta?.value.trim(); if(!text) return;
+  const b=BD_ITEMS.find(x=>x._row===row); if(!b) return;
+  const now=new Date().toISOString().replace('T',' ').slice(0,19);
+  const entry=`${formatTs()}: ${text}`;
+  const updated={...b,notes:b.notes?`${b.notes.trim()}${NOTE_SEP}${entry}`:entry};
+  setStatus('loading','⟳ Saving…');
+  try {
+    await sheetsUpdate(`${BD_SHEET}!A${row}:P${row}`,[bdToRow(updated,now)]);
+    setStatus('ok','✓ Note saved'); setTimeout(()=>setStatus('',''),1500);
+    await loadBD(); openBDDetail(row);
+  } catch(e){setStatus('error','✗ '+e.message);}
+}
+
+async function saveBD(){
+  const name=document.getElementById('bd_name').value.trim();
+  if(!name){alert('Initiative name is required.');return;}
+  const rowIndex=document.getElementById('bdEditRow').value;
+  const existing=rowIndex?BD_ITEMS.find(b=>b._row==rowIndex):null;
+  const now=new Date().toISOString().replace('T',' ').slice(0,19);
+  // Milestones — parse from textarea
+  const msRaw=document.getElementById('bd_milestones').value.trim();
+  const existingMilestones=existing?parseMilestones(existing.milestones):[];
+  let milestones=existingMilestones;
+  if(msRaw){
+    const newLines=msRaw.split('\n').map(s=>s.trim()).filter(Boolean);
+    const existingTexts=existingMilestones.map(m=>m.text.toLowerCase());
+    newLines.forEach(t=>{if(!existingTexts.includes(t.toLowerCase()))milestones.push({done:false,text:t});});
+  }
+  const item={
+    id:existing?.id||'', name,
+    category: document.getElementById('bd_category').value,
+    status:   document.getElementById('bd_status').value,
+    priority: document.getElementById('bd_priority').value,
+    owner:    document.getElementById('bd_owner').value.trim(),
+    targetDate: document.getElementById('bd_targetdate').value,
+    followupDate: document.getElementById('bd_followupdate').value,
+    nextAction: document.getElementById('bd_nextaction').value.trim(),
+    links:    document.getElementById('bd_links').value.trim(),
+    revenue:  document.getElementById('bd_revenue').value.trim(),
+    milestones: milestonesToStr(milestones),
+    linkedLeads: document.getElementById('bd_linkedleads').value.trim(),
+    notes:    existing?.notes||document.getElementById('bd_notes').value.trim(),
+    created:  existing?.created||now,
+  };
+  const btn=document.getElementById('btnBDSave');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Saving…';
+  setStatus('loading','⟳ Saving…');
+  try {
+    if(rowIndex) { await sheetsUpdate(`${BD_SHEET}!A${rowIndex}:P${rowIndex}`,[bdToRow(item,now)]); }
+    else { await sheetsAppend2(BD_SHEET,[bdToRow(item,now)]); }
+    closeOverlay('bdFormOverlay');
+    setStatus('ok','✓ Saved'); setTimeout(()=>setStatus('',''),2000);
+    await loadBD(); renderBD(); renderBDStats();
+  } catch(e){setStatus('error','✗ '+e.message);}
+  finally{btn.disabled=false; btn.textContent=rowIndex?'Update Initiative':'Save Initiative';}
+}
+
+async function deleteBD(row){
+  if(!confirm('Delete this initiative?')) return;
+  setStatus('loading','⟳ Deleting…');
+  try {
+    const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(BD_SHEET+'!A'+row+':P'+row)}:clear`;
+    await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${accessToken}`,'Content-Type':'application/json'}});
+    closeOverlay('bdDetailOverlay');
+    setStatus('ok','✓ Deleted'); setTimeout(()=>setStatus('',''),2000);
+    await loadBD(); renderBD(); renderBDStats();
+  } catch(e){setStatus('error','✗ '+e.message);}
+}
+
+function clearBDForm(){
+  ['bd_name','bd_owner','bd_targetdate','bd_followupdate','bd_nextaction','bd_links','bd_revenue','bd_milestones','bd_linkedleads','bd_notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['bd_category','bd_status','bd_priority'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('bdEditRow').value='';
+}
+function openBDAdd(){
+  clearBDForm();
+  document.getElementById('bdFormTitle').textContent='New BD Initiative';
+  document.getElementById('btnBDSave').textContent='Save Initiative';
+  document.getElementById('bd_status').value='Idea';
+  document.getElementById('bdFormOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('bd_name').focus(),100);
+}
+function openBDEdit(row){
+  const b=BD_ITEMS.find(x=>x._row===row); if(!b) return;
+  clearBDForm();
+  document.getElementById('bdFormTitle').textContent='Edit Initiative';
+  document.getElementById('bdEditRow').value=row;
+  document.getElementById('bd_name').value=b.name;
+  document.getElementById('bd_category').value=b.category;
+  document.getElementById('bd_status').value=b.status;
+  document.getElementById('bd_priority').value=b.priority;
+  document.getElementById('bd_owner').value=b.owner;
+  document.getElementById('bd_targetdate').value=b.targetDate;
+  document.getElementById('bd_followupdate').value=b.followupDate;
+  document.getElementById('bd_nextaction').value=b.nextAction;
+  document.getElementById('bd_links').value=b.links;
+  document.getElementById('bd_revenue').value=b.revenue;
+  document.getElementById('bd_linkedleads').value=b.linkedLeads;
+  // Show milestones as editable list
+  const ms=parseMilestones(b.milestones);
+  document.getElementById('bd_milestones').value=ms.map(m=>m.text).join('\n');
+  document.getElementById('bdFormOverlay').classList.add('open');
 }
 
 
@@ -2489,6 +3109,10 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     }
     await loadSettings();
     refreshFormDropdowns();
+    const savedSort2=localStorage.getItem('tdot_sort');
+    const savedDir2=localStorage.getItem('tdot_sort_dir');
+    if(savedSort2){currentSort=savedSort2;const ss=document.getElementById('sortSelect');if(ss)ss.value=savedSort2;}
+    if(savedDir2){currentSortDir=savedDir2;const sd=document.getElementById('sortDirBtn');if(sd)sd.textContent=savedDir2==='asc'?'↑':'↓';}
     await loadLeads();
     return;
   }
@@ -2500,6 +3124,11 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     await refreshAccessToken();
     await loadSettings();
     refreshFormDropdowns();
+    // Restore sort preference
+    const savedSort=localStorage.getItem('tdot_sort');
+    const savedDir=localStorage.getItem('tdot_sort_dir');
+    if(savedSort){currentSort=savedSort;const ss=document.getElementById('sortSelect');if(ss)ss.value=savedSort;}
+    if(savedDir){currentSortDir=savedDir;const sd=document.getElementById('sortDirBtn');if(sd)sd.textContent=savedDir==='asc'?'↑':'↓';}
     await loadLeads();
     return;
   }
