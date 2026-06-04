@@ -2593,10 +2593,8 @@ function openWeeklySummary() {
     ``,
     `🚀 BD INITIATIVES (Active/In Progress):`,
     ...bdActive.map(b=>`  • ${b.name} — ${b.status}${b.nextAction?' → '+b.nextAction:''}`),
-    bdOverdue.length?``,
-    bdOverdue.length?`⚠ BD OVERDUE:`,
-    ...bdOverdue.map(b=>`  • ${b.name} — follow-up ${formatDate(b.followupDate)}`),
-  ].filter(l=>l!==false).join('\n');
+    ...(bdOverdue.length?[``,`⚠ BD OVERDUE:`,...bdOverdue.map(b=>`  • ${b.name} — follow-up ${formatDate(b.followupDate)}`)]:[] ),
+  ].join('\n');
 
   document.getElementById('weekSummaryContent').textContent = lines;
   document.getElementById('weekSummaryOverlay').classList.add('open');
