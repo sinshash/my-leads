@@ -1030,12 +1030,12 @@ async function saveLead(){
   const email=document.getElementById('f_email').value.trim();
   if(!name||!company){alert('Name and Company are required.');return;}
   const rowIndex=document.getElementById('editRowIndex').value;
-  // Check duplicates only on new leads
   if(!rowIndex){
-    let dupChecked=false;
-    checkDuplicates(name,company,email,()=>{dupChecked=true;proceedActualSave();});
-    if(!dupChecked) return; // waiting for user confirmation
-    return;
+    // New lead — check duplicates first
+    checkDuplicates(name,company,email,()=>proceedActualSave());
+  } else {
+    // Editing existing lead — save directly
+    proceedActualSave();
   }
 }
 async function proceedActualSave(){
