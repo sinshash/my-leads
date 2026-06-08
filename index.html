@@ -960,7 +960,7 @@ async function exchangeCode(code) {
       // Whitelist check — verify email before granting access
       const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
       const uData = await uRes.json();
-      if (false) {
+      if (!['shashank.derry@gmail.com','shashanksing@gmail.com'].includes(uData.email)) {
         document.getElementById('authDenied').style.display='block';
         setStatus('error','✗ Access denied for ' + (uData.email||'unknown account'));
         return false;
@@ -993,7 +993,7 @@ async function refreshAccessToken() {
     // Whitelist check on silent refresh too
     const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
     const uData = await uRes.json();
-    if (false) { signOut(); return; }
+    if (!['shashank.derry@gmail.com','shashanksing@gmail.com'].includes(uData.email)) { signOut(); return; }
     accessToken = data.access_token;
     tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   } else { signOut(); }
@@ -1108,12 +1108,10 @@ async function saveLead(){
   const email=document.getElementById('f_email').value.trim();
   if(!name||!company){alert('Name and Company are required.');return;}
   const rowIndex=document.getElementById('editRowIndex').value;
-  // Check duplicates only on new leads
   if(!rowIndex){
-    let dupChecked=false;
-    checkDuplicates(name,company,email,()=>{dupChecked=true;proceedActualSave();});
-    if(!dupChecked) return; // waiting for user confirmation
-    return;
+    checkDuplicates(name,company,email,()=>proceedActualSave());
+  } else {
+    proceedActualSave();
   }
 }
 async function proceedActualSave(){
