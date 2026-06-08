@@ -340,7 +340,6 @@ body{padding-bottom:env(safe-area-inset-bottom)}
       Sign in with Google
     </button>
     <div class="auth-note">First time? It'll ask for Google Sheets access.</div>
-    <div id="authDenied" style="display:none;margin-top:16px;background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.3);border-radius:8px;padding:12px;font-size:12px;color:var(--hot);line-height:1.6">⛔ Access denied. This app is private.<br>Sign in with the authorised account.</div>
   </div>
 </div>
 
@@ -880,14 +879,6 @@ async function exchangeCode(code) {
     });
     const data = await res.json();
     if (data.access_token) {
-      // Whitelist check — verify email before granting access
-      const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
-      const uData = await uRes.json();
-      if (false) {
-        document.getElementById('authDenied').style.display='block';
-        setStatus('error','✗ Access denied for ' + (uData.email||'unknown account'));
-        return false;
-      }
       accessToken = data.access_token;
       tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
       if (data.refresh_token) localStorage.setItem('pkce_r', data.refresh_token);
@@ -913,10 +904,6 @@ async function refreshAccessToken() {
   });
   const data = await res.json();
   if (data.access_token) {
-    // Whitelist check on silent refresh too
-    const uRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:`Bearer ${data.access_token}`}});
-    const uData = await uRes.json();
-    if (false) { signOut(); return; }
     accessToken = data.access_token;
     tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   } else { signOut(); }
@@ -1030,12 +1017,12 @@ async function saveLead(){
   const email=document.getElementById('f_email').value.trim();
   if(!name||!company){alert('Name and Company are required.');return;}
   const rowIndex=document.getElementById('editRowIndex').value;
-  // Check duplicates only on new leads
-  if(!rowIndex){
-    let dupChecked=false;
-    checkDuplicates(name,company,email,()=>{dupChecked=true;proceedActualSave();});
-    if(!dupChecked) return; // waiting for user confirmation
-    return;
+  if(rowIndex){
+    // Editing existing lead — skip duplicate check, save immediately
+    proceedActualSave();
+  } else {
+    // New lead — check duplicates first, then save in callback
+    checkDuplicates(name,company,email,()=>proceedActualSave());
   }
 }
 async function proceedActualSave(){
