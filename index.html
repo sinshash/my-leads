@@ -393,6 +393,59 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .email-tmpl-btn:hover{border-color:var(--accent);color:var(--accent)}
 .email-templates-panel{padding:20px}
 
+/* ── LEAD SCORE BADGE ──────────────────────────────────────── */
+.score-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:10px;font-weight:800;font-family:'Syne',sans-serif;flex-shrink:0}
+.score-5{background:#10b981;color:#fff}
+.score-4{background:#6ee7b7;color:#065f46}
+.score-3{background:#f59e0b;color:#fff}
+.score-2{background:#f97316;color:#fff}
+.score-1{background:#ef4444;color:#fff}
+
+/* ── CONTACT FREQUENCY ─────────────────────────────────────── */
+.contact-freq{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px;margin-top:2px}
+
+/* ── OUTREACH CADENCE ──────────────────────────────────────── */
+.cadence-timeline{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;padding:8px;background:var(--surface2);border-radius:6px;border:1px solid var(--border)}
+.cadence-item{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px;white-space:nowrap}
+.cadence-item.call{color:var(--contacted)}
+.cadence-item.email{color:var(--cold)}
+.cadence-item.note{color:var(--muted)}
+
+/* ── QUICK NOTE POPUP ──────────────────────────────────────── */
+#quickNotePopup{position:fixed;z-index:500;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;width:280px;box-shadow:0 8px 32px rgba(0,0,0,.15);animation:popIn .15s ease;display:none}
+.qnp-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--text);margin-bottom:8px}
+.qnp-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:8px 10px;border-radius:7px;outline:none;resize:none;height:70px;transition:border-color .2s}
+.qnp-textarea:focus{border-color:var(--accent)}
+.qnp-actions{display:flex;gap:6px;margin-top:8px}
+.qnp-save{flex:1;background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:8px;border-radius:7px;cursor:pointer}
+.qnp-cancel{background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;padding:8px}
+
+/* ── TOAST NOTIFICATION ────────────────────────────────────── */
+#toastNotif{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#1e2235;color:#fff;font-family:'DM Mono',monospace;font-size:12px;padding:10px 18px;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:600;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
+#toastNotif.show{opacity:1}
+
+/* ── NOT INTERESTED ONE-TAP ────────────────────────────────── */
+.qa-btn.ni-btn{color:var(--hot);border-color:rgba(239,68,68,.3)}
+
+/* ── INDUSTRY FILTER ───────────────────────────────────────── */
+.filter-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:6px 16px 2px;display:block}
+
+/* ── RECENTLY VIEWED ───────────────────────────────────────── */
+.recent-lead-chip{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;transition:all .15s;font-size:12px}
+.recent-lead-chip:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── KPI SKELETON ──────────────────────────────────────────── */
+.kpi-skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--border) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:8px;height:20px;margin:4px 0}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── SERVICE INTEREST TAGS ─────────────────────────────────── */
+.service-chip{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;font-family:'DM Mono',monospace;display:inline-block;margin:3px}
+.service-chip.selected{background:rgba(79,110,247,.1);border-color:var(--accent);color:var(--accent)}
+
+/* ── BD PROGRESS ON DASHBOARD ──────────────────────────────── */
+.bd-progress-bar{background:var(--surface2);border-radius:4px;height:6px;overflow:hidden;margin-top:4px}
+.bd-progress-fill{background:var(--accent);height:100%;border-radius:4px;transition:width .3s}
+
 /* Touch targets — min 44px */
 .pill{min-height:36px;display:inline-flex;align-items:center;padding:0 12px}
 .btn-add,.btn-scan,.btn-tool,.btn-save,.btn-delete,.btn-log,.btn-edit,.btn-email-draft,.btn-edit-lead,.tab-btn,.qp-btn,.qp-save,.qp-cancel{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
@@ -567,6 +620,19 @@ body{padding-bottom:env(safe-area-inset-bottom)}
       <div class="pill" onclick="setFilter('source:External Referral',this)" data-filter="source:External Referral" data-label="Referral">Referral</div>
       <div class="pill" onclick="setFilter('source:Partner',this)" data-filter="source:Partner" data-label="Partner">Partner</div>
     </div>
+    <span class="filter-label">Industry</span>
+    <div class="filter-row" id="filterRow5">
+      <div class="pill" onclick="setFilter('industry:Technology',this)" data-filter="industry:Technology" data-label="Technology">Technology</div>
+      <div class="pill" onclick="setFilter('industry:Construction',this)" data-filter="industry:Construction" data-label="Construction">Construction</div>
+      <div class="pill" onclick="setFilter('industry:Healthcare',this)" data-filter="industry:Healthcare" data-label="Healthcare">Healthcare</div>
+      <div class="pill" onclick="setFilter('industry:Digital Signage',this)" data-filter="industry:Digital Signage" data-label="Digital Signage">Digital Signage</div>
+      <div class="pill" onclick="setFilter('industry:Telecommunications & ISP',this)" data-filter="industry:Telecommunications & ISP" data-label="Telecom">Telecom</div>
+      <div class="pill" onclick="setFilter('industry:MSP (Management Service Provider)',this)" data-filter="industry:MSP (Management Service Provider)" data-label="MSP">MSP</div>
+      <div class="pill" onclick="setFilter('industry:Field Service Provider',this)" data-filter="industry:Field Service Provider" data-label="Field Service">Field Service</div>
+      <div class="pill" onclick="setFilter('industry:Telematics',this)" data-filter="industry:Telematics" data-label="Telematics">Telematics</div>
+      <div class="pill" onclick="setFilter('industry:Finance',this)" data-filter="industry:Finance" data-label="Finance">Finance</div>
+      <div class="pill" onclick="setFilter('industry:Retail',this)" data-filter="industry:Retail" data-label="Retail">Retail</div>
+    </div>
   </div>
 
   <div class="stats" id="statsBar"></div>
@@ -576,8 +642,9 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <button class="btn-tool" onclick="exportCSV()">↓ CSV</button>
     <button class="btn-tool" onclick="openWeeklySummary()">📊 Week</button>
     <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
-    <button class="btn-tool" onclick="signOut()">Sign Out</button>
+
     <button class="btn-tool" id="selectModeBtn" onclick="toggleSelectMode()">☑ Select</button>
+    <button class="btn-tool" onclick="openTagBulkAction()">🏷 Tag Select</button>
     <button class="btn-tool" onclick="openActivityFeed()">📋 Activity</button>
     <button class="btn-tool" onclick="openAnalytics()">📊 Analytics</button>
     <div class="sort-wrap">
@@ -643,6 +710,24 @@ body{padding-bottom:env(safe-area-inset-bottom)}
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;box-shadow:var(--card-shadow)">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px">📅 Due This Week</div>
         <div id="dashDueLeads" style="font-size:12px;color:var(--muted)">Loading…</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;box-shadow:var(--card-shadow)">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px">🕐 Recently Viewed</div>
+        <div id="recentlyViewedList" style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)">Loading…</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;box-shadow:var(--card-shadow)">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px">🚀 BD Progress</div>
+        <div id="dashBDProgress" style="font-size:12px;color:var(--muted)">Loading…</div>
+      </div>
+    </div>
+    <div style="padding:0 20px 20px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;box-shadow:var(--card-shadow);display:flex;align-items:center;gap:12px">
+        <div style="font-size:32px">🔥</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text)">Activity Streak</div>
+          <div id="dashStreak" style="font-size:22px;font-weight:800;font-family:'Syne',sans-serif;color:var(--accent)">—</div>
+          <div style="font-size:11px;color:var(--muted)">consecutive days with logged activity</div>
+        </div>
       </div>
     </div>
   </div>
@@ -981,7 +1066,15 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     </div>
     <div class="form-row">
       <div class="form-group"><label>Mobile</label><input type="tel" id="f_mobile"></div>
-      <div class="form-group"><label>LinkedIn</label><input type="url" id="f_linkedin" placeholder="https://linkedin.com/in/…"></div>
+      <div class="form-group"><label>LinkedIn</label>
+        <div style="display:flex;gap:6px">
+          <input type="url" id="f_linkedin" placeholder="https://linkedin.com/in/…" style="flex:1">
+          <button type="button" onclick="apolloLookupFromLinkedIn()" style="background:var(--surface2);border:1px solid var(--border);color:var(--accent);font-family:'DM Mono',monospace;font-size:10px;padding:0 10px;border-radius:8px;cursor:pointer;white-space:nowrap;min-height:44px" title="Lookup contact details via Apollo">🔍 Lookup</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Website</label><input type="url" id="f_website" placeholder="https://acme.com"></div>
     </div>
 
     <div class="form-section">Lead Details</div>
@@ -1019,6 +1112,21 @@ body{padding-bottom:env(safe-area-inset-bottom)}
       <div class="form-group"><label>Last Contacted</label><input type="date" id="f_lastcontacted"></div>
     </div>
 
+    <div class="form-section">Service Interest</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Which TDOT services might this lead need?</div>
+    <div id="serviceInterestWrap" style="display:flex;flex-wrap:wrap;gap:0">
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Structured Cabling">Structured Cabling</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Data Centre Solutions">Data Centre Solutions</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Field Services / Break Fix">Field Services / Break Fix</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Digital Media / Signage">Digital Media / Signage</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Wireless & Tower Work">Wireless & Tower Work</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Outdoor Fiber Trenching">Outdoor Fiber Trenching</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Starlink Installation">Starlink Installation</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Wireless Surveys">Wireless Surveys</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Access Control & Security">Access Control & Security</button>
+      <button type="button" class="service-chip" onclick="toggleServiceChip(this)" data-service="Staffing & Resourcing">Staffing & Resourcing</button>
+    </div>
+    <input type="hidden" id="f_services">
     <div id="customFieldsFormSection"></div>
     <div class="form-section">Notes</div>
     <div class="form-group"><label>Initial Notes</label><textarea id="f_notes" placeholder="Quick note when adding lead…" style="height:60px"></textarea></div>
@@ -1226,6 +1334,20 @@ Jane Doe||Director IT||Beta Inc||jane@beta.com||6475550200||||Trade Show||InfoCo
   </div>
 </div>
 
+<!-- TOAST NOTIFICATION -->
+<div id="toastNotif"></div>
+
+<!-- QUICK NOTE POPUP -->
+<div id="quickNotePopup">
+  <div class="qnp-title" id="qnpTitle">Quick Note</div>
+  <div class="template-chips" id="qnpTemplates" style="margin-bottom:6px"></div>
+  <textarea class="qnp-textarea" id="qnpText" placeholder="Type a note…"></textarea>
+  <div class="qnp-actions">
+    <button class="qnp-save" onclick="saveQuickNote()">+ Save Note</button>
+    <button class="qnp-cancel" onclick="closeQuickNote()">Cancel</button>
+  </div>
+</div>
+
 <!-- COMPANY VIEW -->
 <div class="company-view-overlay" id="companyOverlay" onclick="if(event.target.id==='companyOverlay')closeCompanyView()">
   <div class="company-panel">
@@ -1419,6 +1541,9 @@ async function loadLeads() {
     LEADS=(data.values||[]).map((row,i)=>{
       const l={};
       Object.entries(FM).forEach(([k,idx])=>l[k]=(row[idx]||'').toString().trim());
+      // Decode website + services from tags field
+      const decoded = decodeTagsField(l.tags||'');
+      l.tags = decoded.tags; l.website = decoded.website; l.services = decoded.services;
       // Map custom fields (W=22, X=23, ...)
       SETTINGS.customFields.forEach((f,fi)=>{ l[f.id]=(row[FIXED_COLS+fi]||'').toString().trim(); });
       l._row=i+2; return l;
@@ -1434,15 +1559,27 @@ async function loadLeads() {
 
 // ── ROW ───────────────────────────────────────────────────────
 function leadToRow(l,now){
+  // Encode website + services into tags field with markers if not using custom fields
+  let tagsVal = l.tags||'';
+  // Strip old website/services markers before re-encoding
+  tagsVal = tagsVal.replace(/\|\|WEB:[^\|]*/g,'').replace(/\|\|SVC:[^\|]*/g,'').trim();
+  if(l.website) tagsVal = tagsVal ? tagsVal+'||WEB:'+l.website : '||WEB:'+l.website;
+  if(l.services) tagsVal = tagsVal ? tagsVal+'||SVC:'+l.services : '||SVC:'+l.services;
   const base = [
     l.id||('local_'+Date.now()), l.name, l.title, l.company, l.email, l.phone,
     l.source, l.tradeShow, l.status, l.rating, l.industry, l.linkedin, l.notes,
     l.created||now, now, l.followup||'', l.mobile||'', l.nextAction||'',
-    l.competitor||'', l.lastContacted||'', l.stage||'', l.tags||''
+    l.competitor||'', l.lastContacted||'', l.stage||'', tagsVal
   ];
-  // Append custom field values in order
   SETTINGS.customFields.forEach(f => base.push(l[f.id]||''));
   return base;
+}
+function decodeTagsField(raw) {
+  // Returns {tags, website, services} from the encoded tags field
+  const website = (raw.match(/\|\|WEB:([^\|]*)/) || [])[1] || '';
+  const services = (raw.match(/\|\|SVC:([^\|]*)/) || [])[1] || '';
+  const tags = raw.replace(/\|\|WEB:[^\|]*/g,'').replace(/\|\|SVC:[^\|]*/g,'').trim();
+  return {tags, website, services};
 }
 
 // ── NOTES ─────────────────────────────────────────────────────
@@ -1505,6 +1642,8 @@ async function proceedActualSave(){
     followup: document.getElementById('f_followup').value,
     lastContacted:document.getElementById('f_lastcontacted').value,
     linkedin: document.getElementById('f_linkedin').value.trim(),
+    website:  document.getElementById('f_website')?.value.trim()||'',
+    services: document.getElementById('f_services')?.value||'',
     notes:    existing?.notes||document.getElementById('f_notes').value.trim(),
     created:  existing?.created||now,
     ...getCustomFieldValues(),
@@ -1756,6 +1895,8 @@ function applyFilter(leads){
   else if(currentFilter.startsWith('rating:')) out=out.filter(l=>l.rating===currentFilter.slice(7));
   else if(currentFilter.startsWith('stage:')) out=out.filter(l=>l.stage===currentFilter.slice(6));
   else if(currentFilter.startsWith('source:')) out=out.filter(l=>l.source===currentFilter.slice(7));
+  else if(currentFilter.startsWith('industry:')) out=out.filter(l=>(l.industry||'').toLowerCase().includes(currentFilter.slice(9).toLowerCase()));
+  else if(currentFilter.startsWith('service:')) out=out.filter(l=>(l.services||'').includes(currentFilter.slice(8)));
   else if(currentFilter.startsWith('tag:')) out=out.filter(l=>l.tags.toLowerCase().includes(currentFilter.slice(4).toLowerCase()));
   // Date range filters
   const cfrom = document.getElementById('dfCreatedFrom')?.value;
@@ -1933,6 +2074,7 @@ function renderAll(){
             ${age?`<div class="lead-age">${age}</div>`:''}
           </div>
           <div class="badge-wrap">
+            <span class="score-badge score-${leadScore(l)}" title="Lead score">${leadScore(l)}</span>
             ${l.rating?`<span class="badge badge-rating ${rc}">${l.rating}</span>`:''}
             ${l.status?`<span class="badge badge-status ${sc}">${l.status}</span>`:''}
             ${l.stage?`<span class="badge badge-stage">${l.stage}</span>`:''}
@@ -1947,17 +2089,23 @@ function renderAll(){
           ${l.email?`<span class="card-meta-item" style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();window.location.href='mailto:${l.email}'">✉ Email</span>`:''}
           ${(l.mobile||l.phone)?`<span class="card-meta-item" style="color:var(--contacted);cursor:pointer" onclick="event.stopPropagation();window.location.href='tel:${l.mobile||l.phone}'">📞 Call</span>`:''}
         </div>
+        ${contactFrequency(l)>0?`<div class="contact-freq">📊 Contacted ${contactFrequency(l)} time${contactFrequency(l)!==1?'s':''} total</div>`:''}
+        ${l.services&&l.services.split(',').filter(Boolean).length?`<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">${l.services.split(',').filter(Boolean).map(s=>`<span style="background:rgba(79,110,247,.08);border:1px solid rgba(79,110,247,.2);color:var(--accent);font-size:9px;padding:2px 6px;border-radius:4px">${esc(s.trim())}</span>`).join('')}</div>`:''}
         <div class="card-quick-actions">
           <button class="qa-btn" onclick="event.stopPropagation();quickLog(${l._row},'called')">📞 Called</button>
           <button class="qa-btn" onclick="event.stopPropagation();quickLog(${l._row},'emailed')">📧 Emailed</button>
+          <button class="qa-btn" onclick="event.stopPropagation();openQuickNote(${l._row},event)">📝 Note</button>
           <div class="snooze-wrap">
             <button class="qa-btn snooze-btn" onclick="event.stopPropagation();toggleSnooze(${l._row})">💤 Snooze</button>
             <div class="snooze-opts" id="snooze-${l._row}">
               <button class="snooze-opt" onclick="event.stopPropagation();snooze(${l._row},3)">3 days</button>
               <button class="snooze-opt" onclick="event.stopPropagation();snooze(${l._row},7)">1 week</button>
               <button class="snooze-opt" onclick="event.stopPropagation();snooze(${l._row},14)">2 weeks</button>
+              <button class="snooze-opt" onclick="event.stopPropagation();snoozeCustom(${l._row})">📅 Pick date</button>
             </div>
           </div>
+          <button class="qa-btn ni-btn" onclick="event.stopPropagation();markNotInterested(${l._row})">🚫 Not interested</button>
+          ${l.linkedin?`<button class="qa-btn" onclick="event.stopPropagation();window.open('${l.linkedin}','_blank')" title="Open LinkedIn">💼</button>`:''}
         </div>
       </div>
     </div>`;
@@ -2084,10 +2232,12 @@ function setFilter(f,el){
 // ── DETAIL ────────────────────────────────────────────────────
 function openDetail(row){
   const l=LEADS.find(x=>x._row===row); if(!l) return;
+  trackRecentlyViewed(row);
   const overdue=isOverdue(l), dueToday=isDueToday(l);
   const tags=l.tags?l.tags.split(',').map(t=>t.trim()).filter(Boolean):[];
   const fields=[
     ['Name',l.name],['Title',l.title],['Company',l.company],
+    ['Website',l.website?`<a href="${l.website}" target="_blank" style="color:var(--accent)">${l.website} ↗</a>`:''],
     ['Email',l.email?`<a href="mailto:${l.email}">${l.email}</a>`:''],
     ['Phone (Office)',l.phone?`<a href="tel:${l.phone}">${l.phone}</a>`:''],
     ['Mobile',l.mobile?`<a href="tel:${l.mobile}">${l.mobile}</a>`:''],
@@ -2121,6 +2271,9 @@ function openDetail(row){
     <div class="modal-title" style="color:var(--text)">${esc(l.name)}</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${esc(l.company)}</div>
     ${tags.length?`<div class="detail-tags">${tags.map(t=>`<span class="tag-chip">${esc(t)}</span>`).join('')}</div><div style="margin-bottom:10px"></div>`:''}
+    ${l.services?(()=>{const svcs=l.services.split(',').filter(Boolean);return svcs.length?`<div style="margin-bottom:10px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Service Interest</div><div style="display:flex;flex-wrap:wrap;gap:4px">${svcs.map(s=>`<span style="background:rgba(79,110,247,.08);border:1px solid rgba(79,110,247,.2);color:var(--accent);font-size:11px;padding:3px 8px;border-radius:5px">${esc(s.trim())}</span>`).join('')}</div></div>`:''})():''}
+    <div style="margin-bottom:10px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:4px">Score · Contact Count</div><div style="display:flex;align-items:center;gap:8px"><span class="score-badge score-${leadScore(l)}" style="width:24px;height:24px;font-size:12px">${leadScore(l)}</span><span style="font-size:12px;color:var(--muted)">Contacted ${contactFrequency(l)} time${contactFrequency(l)!==1?'s':''} total</span></div></div>
+    ${buildCadenceHtml(l)}
     ${fields.map(([label,val])=>`<div class="detail-field"><div class="detail-label">${label}</div><div class="detail-value">${val}</div></div>`).join('')}
     <div class="detail-field">
       <div class="detail-label" style="margin-bottom:8px">📋 Activity Log</div>
@@ -2131,6 +2284,9 @@ function openDetail(row){
         <button class="btn-log" id="btnAddNote" onclick="addNote(${row})">+ Add<br>Note</button>
       </div>
     </div>
+    <div style="margin-bottom:8px">
+      <input type="text" id="detailNoteSearch" placeholder="🔍 Search notes…" oninput="filterDetailNotes(${row},this.value)" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:7px 10px;border-radius:7px;outline:none">
+    </div>
     <div class="detail-actions">
       ${l.email?`<button class="detail-actions btn-email-draft" onclick="draftEmail(${row})">✉ Draft Email</button>`:''}
       <button class="btn-edit-lead" onclick="closeOverlay('detailOverlay');openEdit(${row})">✏ Edit</button>
@@ -2138,15 +2294,18 @@ function openDetail(row){
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="openCallLog(${row})">📞 Log Call</button>
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="shareLead(${row})">📤 Share</button>
-      <button class="btn-tool" style="justify-content:center;min-height:44px;grid-column:1/-1" onclick="exportToCalendar(LEADS.find(x=>x._row===${row}))">📅 Add to Calendar</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="apolloFindMoreAtCompany('${(l.company||'').replace(/'/g,"\'")}')">🔍 Find more at ${esc(l.company)}</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="exportToCalendar(LEADS.find(x=>x._row===${row}))">📅 Calendar</button>
     </div>
+
     ${renderCustomFieldsInDetail(l)}`;
   document.getElementById('detailOverlay').classList.add('open');
 }
 
 // ── FORM ──────────────────────────────────────────────────────
 function clearForm(){
-  ['f_name','f_company','f_title','f_email','f_phone','f_mobile','f_tradeShow','f_industry','f_linkedin','f_notes','f_followup','f_lastcontacted','f_nextaction','f_competitor','f_tags'].forEach(id=>document.getElementById(id).value='');
+  ['f_name','f_company','f_title','f_email','f_phone','f_mobile','f_tradeShow','f_industry','f_linkedin','f_website','f_notes','f_followup','f_lastcontacted','f_nextaction','f_competitor','f_tags','f_services'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.querySelectorAll('#serviceInterestWrap .service-chip').forEach(c=>c.classList.remove('selected'));
   ['f_source','f_status','f_rating','f_stage'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('editRowIndex').value='';
 }
@@ -2183,6 +2342,11 @@ function openEdit(row){
   document.getElementById('f_followup').value=l.followup;
   document.getElementById('f_lastcontacted').value=l.lastContacted;
   document.getElementById('f_linkedin').value=l.linkedin;
+  const wEl=document.getElementById('f_website'); if(wEl) wEl.value=l.website||'';
+  const sEl=document.getElementById('f_services'); if(sEl) sEl.value=l.services||'';
+  document.querySelectorAll('#serviceInterestWrap .service-chip').forEach(c=>{
+    c.classList.toggle('selected',(l.services||'').split(',').map(s=>s.trim()).includes(c.dataset.service));
+  });
   document.getElementById('btnDelete').style.display='block';
   document.getElementById('btnSave').textContent='Update Lead';
   refreshFormDropdowns();
@@ -2372,6 +2536,7 @@ function openTargetDetail(row) {
     <div class="modal-title" style="color:var(--text)">${esc(t.company)}</div>
     ${fields.map(([label,val])=>`<div class="detail-field"><div class="detail-label">${label}</div><div class="detail-value">${val}</div></div>`).join('')}
     <button class="btn-save" style="margin-top:12px;background:#34d399;color:#0d0f14" onclick="promoteToLead(${row})">🚀 Promote to Active Lead</button>
+    <button class="btn-save" style="margin-top:8px;background:var(--accent);color:#fff" onclick="apolloSearchFromTarget('${(t.company||'').replace(/'/g,'\\'')}')" >🔍 Find Contacts via Apollo</button>
     <div class="detail-actions" style="margin-top:8px">
       <button class="btn-email-draft detail-actions" onclick="closeOverlay('targetDetailOverlay');openTargetEdit(${row})">✏ Edit</button>
     </div>`;
@@ -3563,6 +3728,12 @@ function showLeadView(view) {
 
 // ── DASHBOARD ─────────────────────────────────────────────────
 function renderDashboard() {
+  // Show skeleton while loading
+  const grid = document.getElementById('kpiGrid');
+  if(grid && !LEADS.length) {
+    grid.innerHTML = Array(8).fill(0).map(()=>`<div class="kpi-card"><div class="kpi-skeleton" style="width:60%;margin-bottom:8px"></div><div class="kpi-skeleton" style="width:40%;height:28px;margin-bottom:6px"></div><div class="kpi-skeleton" style="width:70%;height:12px"></div></div>`).join('');
+    return;
+  }
   const now = new Date();
   const weekAgo = new Date(now - 7*24*60*60*1000);
   const monthAgo = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -3617,6 +3788,27 @@ function renderDashboard() {
         <div style="font-size:11px;color:var(--muted)">${formatDate(l.followup)}</div>
       </div>`).join('')
     : '<div style="color:var(--muted)">Nothing due this week.</div>';
+
+  // Streak
+  const streakEl = document.getElementById('dashStreak');
+  if(streakEl) { const s=followStreak(); streakEl.textContent=s>0?s+' day'+(s!==1?'s':''):'0 days'; }
+
+  // BD Progress
+  const bdProg = document.getElementById('dashBDProgress');
+  if(bdProg) {
+    const active = BD_ITEMS.filter(b=>b.status==='Active'||b.status==='In Progress');
+    if(!active.length) { bdProg.innerHTML='<div style="color:var(--muted)">No active BD initiatives.</div>'; }
+    else { bdProg.innerHTML = active.slice(0,4).map(b=>{
+      const ms=parseMilestones(b.milestones||''); const done=ms.filter(m=>m.done).length; const pct=ms.length?Math.round(done/ms.length*100):0;
+      return `<div style="margin-bottom:8px;cursor:pointer" onclick="switchTab('bd')">
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="font-weight:600">${esc(b.name)}</span><span style="color:var(--muted)">${ms.length?pct+'%':'Active'}</span></div>
+        ${ms.length?`<div class="bd-progress-bar"><div class="bd-progress-fill" style="width:${pct}%"></div></div>`:''}
+      </div>`;
+    }).join(''); }
+  }
+
+  // Recently viewed
+  renderRecentlyViewed();
 
   // Update sidebar badge
   const badge = document.getElementById('sidebarLeadCount');
@@ -3688,9 +3880,18 @@ function renderTable() {
   let leads = applyFilter(LEADS); leads = applySearch(leads); leads = applySort(leads);
   const tv = document.getElementById('tableView');
   if (!leads.length) { tv.innerHTML=`<div class="empty-state"><div class="big">🔍</div><p>No leads match.</p></div>`; return; }
+  const cols = [
+    {label:'Name',sort:'name'},{label:'Company',sort:'company'},
+    {label:'Status',sort:'status'},{label:'Rating',sort:'rating'},
+    {label:'Stage',sort:'stage'},{label:'Follow-up',sort:'followup'},
+    {label:'Last Contact',sort:'lastContacted'},{label:'Source',sort:'source'},
+  ];
+  const arrow = s => s!==currentSort ? '<span style="opacity:.3;font-size:10px"> ↕</span>'
+    : currentSortDir==='asc' ? '<span style="color:var(--accent);font-size:10px"> ↑</span>'
+    : '<span style="color:var(--accent);font-size:10px"> ↓</span>';
   tv.innerHTML = `<table class="leads-table">
     <thead><tr>
-      <th>Name</th><th>Company</th><th>Status</th><th>Rating</th><th>Stage</th><th>Follow-up</th><th>Last Contact</th><th>Source</th>
+      ${cols.map(c=>`<th onclick="tableSort('${c.sort}')" style="cursor:pointer;user-select:none">${c.label}${arrow(c.sort)}</th>`).join('')}
     </tr></thead>
     <tbody>
       ${leads.map(l=>`<tr onclick="openDetail(${l._row})">
@@ -3705,6 +3906,21 @@ function renderTable() {
       </tr>`).join('')}
     </tbody>
   </table>`;
+}
+function tableSort(field) {
+  if (currentSort===field) {
+    currentSortDir = currentSortDir==='asc'?'desc':'asc';
+  } else {
+    currentSort = field;
+    currentSortDir = 'asc';
+  }
+  localStorage.setItem('tdot_sort', currentSort);
+  localStorage.setItem('tdot_sort_dir', currentSortDir);
+  const sb = document.getElementById('sortDirBtn');
+  if(sb) sb.textContent = currentSortDir==='asc'?'↑':'↓';
+  const ss = document.getElementById('sortSelect');
+  if(ss) ss.value = currentSort;
+  renderTable();
 }
 
 // ── LINKEDIN SEARCH LAUNCHER ──────────────────────────────────
@@ -3849,7 +4065,7 @@ async function apolloSearch() {
             ${linkedin?`<span class="apollo-meta-item"><a href="${esc(linkedin)}" target="_blank" style="color:var(--accent)">LinkedIn ↗</a></span>`:''}
           </div>
         </div>
-        <button class="apollo-add-btn" onclick="apolloAddToLead(${JSON.stringify({
+        <button class="apollo-add-btn" onclick="apolloAddToLeadWithDupCheck(${JSON.stringify({
           name:(p.first_name||'')+' '+(p.last_name||''),
           title:p.title||'',
           company:org,
@@ -4019,6 +4235,331 @@ function openGmailTemplate(i) {
   const t = TDOT_EMAIL_TEMPLATES[i];
   const fill = str => str.replace(/\{\{firstName\}\}/g, firstName).replace(/\{\{company\}\}/g, company);
   window.open(`https://mail.google.com/mail/?view=cm&su=${encodeURIComponent(fill(t.subject))}&body=${encodeURIComponent(fill(t.body))}`, '_blank');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg, duration=2500) {
+  const t = document.getElementById('toastNotif');
+  if(!t) return;
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), duration);
+}
+
+// ── LEAD SCORE (1-5) ──────────────────────────────────────────
+function leadScore(l) {
+  let score = 0;
+  // Rating (0-2 pts)
+  if(l.rating==='Hot') score+=2;
+  else if(l.rating==='Warm') score+=1;
+  // Status (0-2 pts)
+  if(['Pre-Qualified','Contacted'].includes(l.status)) score+=2;
+  else if(l.status==='Attempted to Contact') score+=1;
+  else if(['Junk Lead','Lost Lead','Do Not Contact - Check Notes','Not Qualified'].includes(l.status)) return 1;
+  // Recency (0-1 pt)
+  if(l.lastContacted) {
+    const days=Math.floor((Date.now()-new Date(l.lastContacted).getTime())/(1000*60*60*24));
+    if(days<=7) score+=1;
+  }
+  return Math.min(5, Math.max(1, score+1));
+}
+
+// ── CONTACT FREQUENCY ─────────────────────────────────────────
+function contactFrequency(l) {
+  const entries = parseNotes(l.notes||'');
+  return entries.filter(e=>e.text&&(e.text.includes('Called')||e.text.includes('email')||e.text.includes('Email')||e.text.includes('📞')||e.text.includes('✉'))).length;
+}
+
+// ── OUTREACH CADENCE HTML ─────────────────────────────────────
+function buildCadenceHtml(l) {
+  const entries = parseNotes(l.notes||'');
+  const cadence = entries.filter(e=>e.ts&&e.text&&(e.text.includes('Called')||e.text.includes('email')||e.text.includes('Email')||e.text.includes('📞')||e.text.includes('✉')||e.text.includes('LinkedIn'))).slice(-8);
+  if(!cadence.length) return '';
+  const icons = e => {
+    if(e.text.includes('📞')||e.text.includes('Called')) return {icon:'📞',cls:'call'};
+    if(e.text.includes('✉')||e.text.toLowerCase().includes('email')) return {icon:'✉',cls:'email'};
+    if(e.text.includes('LinkedIn')) return {icon:'💼',cls:'note'};
+    return {icon:'📝',cls:'note'};
+  };
+  return `<div style="margin-bottom:10px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:4px">Outreach Cadence</div>
+  <div class="cadence-timeline">${cadence.map(e=>{const {icon,cls}=icons(e);return `<span class="cadence-item ${cls}">${icon} ${esc(e.ts.split(',')[0]||e.ts.slice(0,6))}</span>`;}).join('<span style="color:var(--border);font-size:10px">→</span>')}</div></div>`;
+}
+
+// ── SERVICE INTEREST CHIP TOGGLE ──────────────────────────────
+function toggleServiceChip(btn) {
+  btn.classList.toggle('selected');
+  const selected = [...document.querySelectorAll('#serviceInterestWrap .service-chip.selected')].map(c=>c.dataset.service);
+  const el = document.getElementById('f_services'); if(el) el.value = selected.join(',');
+}
+
+// ── NOTES SEARCH IN DETAIL ────────────────────────────────────
+function filterDetailNotes(row, query) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const entries = parseNotes(l.notes||'');
+  const q = query.toLowerCase().trim();
+  const logWrap = document.getElementById('activityLog'); if(!logWrap) return;
+  const filtered = q ? entries.filter(e=>e.text.toLowerCase().includes(q)||e.ts.toLowerCase().includes(q)) : entries;
+  if(!filtered.length) { logWrap.innerHTML=`<div class="log-empty">No notes match "${esc(query)}"</div>`; return; }
+  logWrap.innerHTML = [...filtered].reverse().map((e,i)=>{
+    const origIdx = entries.indexOf(e);
+    return `<div class="log-entry ${e.text.startsWith('📌 ')?'pinned':''}">
+      <div class="log-ts">${esc(e.ts)}</div>
+      <div class="log-text" style="flex:1">${esc(e.text)}</div>
+      <button class="pin-btn ${e.text.startsWith('📌 ')?'pinned':''}" onclick="event.stopPropagation();togglePinNote(${row},${origIdx})" title="Pin">📌</button>
+      <button class="pin-btn" onclick="event.stopPropagation();deleteNote(${row},${origIdx})" style="color:var(--hot);opacity:.6" title="Delete">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+// ── QUICK NOTE POPUP ──────────────────────────────────────────
+let quickNoteRow = null;
+function openQuickNote(row, event) {
+  event.stopPropagation();
+  quickNoteRow = row;
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const popup = document.getElementById('quickNotePopup');
+  document.getElementById('qnpTitle').textContent = l.name;
+  document.getElementById('qnpText').value = '';
+  document.getElementById('qnpTemplates').innerHTML = NOTE_TEMPLATES.slice(0,6).map(t=>`<button class="template-chip" onclick="document.getElementById('qnpText').value='${t}'">${t}</button>`).join('');
+  popup.style.display='block';
+  const rect = event.target.getBoundingClientRect();
+  const x = Math.min(event.clientX, window.innerWidth-300);
+  const y = Math.min(rect.bottom+6, window.innerHeight-220);
+  popup.style.left=x+'px'; popup.style.top=y+'px';
+  setTimeout(()=>document.getElementById('qnpText').focus(),100);
+}
+function closeQuickNote() {
+  document.getElementById('quickNotePopup').style.display='none';
+  quickNoteRow=null;
+}
+async function saveQuickNote() {
+  const text = document.getElementById('qnpText').value.trim();
+  if(!text||!quickNoteRow) return;
+  const l = LEADS.find(x=>x._row===quickNoteRow); if(!l) return;
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const today = new Date().toISOString().slice(0,10);
+  const entry = `${formatTs()}: ${text}`;
+  const updated = {...l, notes:l.notes?`${l.notes.trim()}|||${entry}`:entry, lastContacted:today};
+  closeQuickNote();
+  setStatus('loading','⟳ Saving…');
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${quickNoteRow||l._row}:V${l._row}`,[leadToRow(updated,now)]);
+    showToast('✓ Note saved');
+    setStatus('','');
+    await loadLeads();
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#quickNotePopup')&&!e.target.closest('.qa-btn')) closeQuickNote();
+});
+
+// ── NOT INTERESTED ONE-TAP ────────────────────────────────────
+async function markNotInterested(row) {
+  if(!confirm('Mark as Not Interested / Junk?')) return;
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const entry = `${formatTs()}: 🚫 Marked Not Interested`;
+  const updated = {...l, status:'Junk Lead', rating:'Not Interested/ Junk', notes:l.notes?`${l.notes.trim()}|||${entry}`:entry};
+  setStatus('loading','⟳ Updating…');
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow(updated,now)]);
+    showToast('🚫 Marked Not Interested');
+    setStatus('','');
+    await loadLeads();
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── SNOOZE WITH CUSTOM DATE ───────────────────────────────────
+async function snoozeCustom(row) {
+  const dateStr = prompt('Snooze until (YYYY-MM-DD):');
+  if(!dateStr||!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) { alert('Invalid date format. Use YYYY-MM-DD'); return; }
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const entry = `${formatTs()}: 💤 Snoozed follow-up to ${dateStr}`;
+  const updated = {...l, followup:dateStr, notes:l.notes?`${l.notes.trim()}|||${entry}`:entry};
+  setStatus('loading','⟳ Snoozing…');
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow(updated,now)]);
+    showToast(`💤 Snoozed to ${dateStr}`);
+    setStatus('','');
+    await loadLeads();
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── APOLLO LOOKUP FROM LINKEDIN URL ──────────────────────────
+async function apolloLookupFromLinkedIn() {
+  if(!APOLLO_API_KEY) { alert('Apollo API key not loaded. Check Settings sheet.'); return; }
+  const liUrl = document.getElementById('f_linkedin').value.trim();
+  const name = document.getElementById('f_name').value.trim();
+  const company = document.getElementById('f_company').value.trim();
+  if(!name && !liUrl) { alert('Enter a name or LinkedIn URL first.'); return; }
+  setStatus('loading','⟳ Looking up via Apollo…');
+  try {
+    const body = {per_page:1};
+    if(name) { const parts=name.split(' '); body.first_name=parts[0]; body.last_name=parts.slice(1).join(' ')||''; }
+    if(company) body.q_organization_name = company;
+    if(liUrl) body.linkedin_url = liUrl;
+    const res = await fetch('https://api.apollo.io/api/v1/mixed_people/search',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':APOLLO_API_KEY,'Cache-Control':'no-cache'},
+      body:JSON.stringify(body)
+    });
+    const data = await res.json();
+    const p = (data.people||[])[0];
+    if(!p) { setStatus('error','No match found in Apollo'); setTimeout(()=>setStatus('',''),2500); return; }
+    if(p.email) document.getElementById('f_email').value=p.email;
+    if(p.sanitized_phone||p.phone_numbers?.[0]) document.getElementById('f_phone').value=p.sanitized_phone||p.phone_numbers[0]?.sanitized_number||'';
+    if(p.title&&!document.getElementById('f_title').value) document.getElementById('f_title').value=p.title;
+    if(p.organization?.name&&!company) document.getElementById('f_company').value=p.organization.name;
+    if(p.linkedin_url) document.getElementById('f_linkedin').value=p.linkedin_url;
+    if(p.organization?.industry&&!document.getElementById('f_industry').value) document.getElementById('f_industry').value=p.organization.industry;
+    setStatus('ok','✓ Apollo data filled in'); setTimeout(()=>setStatus('',''),2000);
+    showToast('✓ Contact details filled from Apollo');
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── APOLLO FIND MORE AT COMPANY ───────────────────────────────
+function apolloFindMoreAtCompany(company) {
+  switchTab('apollo');
+  setTimeout(()=>{
+    const el=document.getElementById('apolloCompany'); if(el) el.value=company;
+    apolloSearch();
+  },200);
+}
+
+// ── TARGETS → APOLLO BRIDGE ───────────────────────────────────
+function apolloSearchFromTarget(company) {
+  switchTab('apollo');
+  setTimeout(()=>{
+    const el=document.getElementById('apolloCompany'); if(el) el.value=company;
+    apolloSearch();
+  },200);
+}
+
+// ── DUPLICATE CHECK ON APOLLO IMPORT ─────────────────────────
+function apolloAddToLeadWithDupCheck(personData) {
+  if(typeof personData==='string') personData=JSON.parse(personData.replace(/&quot;/g,'"'));
+  const name=(personData.name||'').trim();
+  const company=(personData.company||'').trim();
+  const email=(personData.email||'').trim();
+  // Check for existing lead
+  const existing = LEADS.find(l=>{
+    const sameEmail = email && l.email && l.email.toLowerCase()===email.toLowerCase();
+    const sameName = name && l.name.toLowerCase()===name.toLowerCase();
+    const sameCompany = company && l.company.toLowerCase()===company.toLowerCase();
+    return sameEmail || (sameName && sameCompany);
+  });
+  if(existing) {
+    if(confirm(`"${name}" from ${company} already exists in your pipeline.
+
+Open existing lead instead?`)) {
+      switchTab('leads'); setTimeout(()=>openDetail(existing._row),200);
+      return;
+    }
+  }
+  apolloAddToLead(personData);
+  showToast(`✓ ${name} added to pipeline`);
+}
+
+// ── RECENTLY VIEWED LEADS ─────────────────────────────────────
+const RECENTLY_VIEWED_KEY = 'tdot_recently_viewed';
+function trackRecentlyViewed(row) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  let recent = JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY)||'[]');
+  recent = recent.filter(r=>r.row!==row);
+  recent.unshift({row, name:l.name, company:l.company, status:l.status});
+  recent = recent.slice(0,5);
+  localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(recent));
+}
+function renderRecentlyViewed() {
+  const recent = JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY)||'[]');
+  const el = document.getElementById('recentlyViewedList'); if(!el) return;
+  if(!recent.length) { el.innerHTML='<div style="font-size:12px;color:var(--muted)">No recently viewed leads yet.</div>'; return; }
+  el.innerHTML = recent.map(r=>`<div class="recent-lead-chip" onclick="switchTab('leads');setTimeout(()=>openDetail(${r.row}),100)">
+    <div style="font-weight:700;font-size:12px">${esc(r.name)}</div>
+    <div style="font-size:11px;color:var(--muted)">${esc(r.company)}</div>
+  </div>`).join('');
+}
+
+// ── LEAD ANALYTICS - competitor + industry heatmap ────────────
+// Update openAnalytics to add competitor + industry heatmap
+const _origOpenAnalytics = openAnalytics;
+function openAnalytics() {
+  _origOpenAnalytics();
+  // Append competitor + industry sections
+  const content = document.getElementById('analyticsContent');
+  if(!content) return;
+  // Competitor breakdown
+  const compCounts = {};
+  LEADS.filter(l=>l.competitor).forEach(l=>{ compCounts[l.competitor]=(compCounts[l.competitor]||0)+1; });
+  const compSorted = Object.entries(compCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  // Industry heatmap
+  const indCounts = {};
+  LEADS.filter(l=>l.industry).forEach(l=>{ indCounts[l.industry]=(indCounts[l.industry]||0)+1; });
+  const indSorted = Object.entries(indCounts).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const maxInd = indSorted[0]?.[1]||1;
+  const hotByInd = {};
+  LEADS.filter(l=>l.industry&&l.rating==='Hot').forEach(l=>{ hotByInd[l.industry]=(hotByInd[l.industry]||0)+1; });
+
+  const extra = `
+    ${indSorted.length?`<div style="margin-top:20px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Industry Heatmap</div>
+      ${indSorted.map(([ind,cnt])=>`<div style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">
+          <span style="color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%">${esc(ind)}</span>
+          <span style="flex-shrink:0;color:var(--muted)">${cnt} leads ${hotByInd[ind]?`· <span style="color:var(--hot)">${hotByInd[ind]} hot</span>`:''}
+          </span>
+        </div>
+        <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+          <div style="background:var(--accent);height:100%;width:${Math.round(cnt/maxInd*100)}%;border-radius:4px;opacity:.8"></div>
+        </div>
+      </div>`).join('')}
+    </div>`:''}
+    ${compSorted.length?`<div style="margin-top:20px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Competitor Landscape</div>
+      ${compSorted.map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px"><span>${esc(c)}</span><span style="color:var(--accent);font-weight:700">${n}</span></div>`).join('')}
+    </div>`:''}`;
+  content.innerHTML += extra;
+}
+
+// ── TAG-BASED BULK ACTIONS ────────────────────────────────────
+function openTagBulkAction() {
+  const tags = new Set();
+  LEADS.forEach(l=>(l.tags||'').split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>tags.add(t)));
+  if(!tags.size) { alert('No tags found on your leads.'); return; }
+  const tag = prompt('Enter tag to bulk-select (or pick one):
+
+'+[...tags].join(', '));
+  if(!tag) return;
+  const matched = LEADS.filter(l=>(l.tags||'').toLowerCase().includes(tag.toLowerCase()));
+  if(!matched.length) { alert(`No leads found with tag "${tag}"`); return; }
+  // Enter select mode and pre-select matching leads
+  if(!selectMode) toggleSelectMode();
+  setTimeout(()=>{
+    matched.forEach(l=>{
+      const chk = document.getElementById('chk-'+l._row);
+      if(chk) { chk.checked=true; selectedRows.add(l._row); }
+    });
+    updateBulkBar();
+    showToast(`${matched.length} leads selected for tag "${tag}"`);
+  },200);
+}
+
+// ── CONTACT FREQUENCY IN ANALYTICS ───────────────────────────
+function followStreak() {
+  // Returns number of consecutive days with at least one activity
+  const allDates = new Set();
+  LEADS.forEach(l=>{
+    parseNotes(l.notes||'').forEach(e=>{
+      if(e.ts) { try { allDates.add(new Date(e.ts).toISOString().slice(0,10)); } catch(x){} }
+    });
+  });
+  let streak=0, d=new Date();
+  while(true){
+    const ds=d.toISOString().slice(0,10);
+    if(allDates.has(ds)){ streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
 }
 
 function setStatus(type,msg){const el=document.getElementById('syncStatus');el.className=type;el.textContent=msg;}
