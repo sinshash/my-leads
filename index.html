@@ -2294,7 +2294,7 @@ function openDetail(row){
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="openCallLog(${row})">📞 Log Call</button>
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="shareLead(${row})">📤 Share</button>
-      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="apolloFindMoreAtCompany('${(l.company||'').replace(/'/g,"\'")}')">🔍 Find more at ${esc(l.company)}</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="apolloFindMoreAtCompany(${row})">🔍 Find more at ${esc(l.company)}</button>
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="exportToCalendar(LEADS.find(x=>x._row===${row}))">📅 Calendar</button>
     </div>
 
@@ -2536,7 +2536,7 @@ function openTargetDetail(row) {
     <div class="modal-title" style="color:var(--text)">${esc(t.company)}</div>
     ${fields.map(([label,val])=>`<div class="detail-field"><div class="detail-label">${label}</div><div class="detail-value">${val}</div></div>`).join('')}
     <button class="btn-save" style="margin-top:12px;background:#34d399;color:#0d0f14" onclick="promoteToLead(${row})">🚀 Promote to Active Lead</button>
-    <button class="btn-save" style="margin-top:8px;background:var(--accent);color:#fff" onclick="apolloSearchFromTarget('${(t.company||'').replace(/'/g,'\\'')}')" >🔍 Find Contacts via Apollo</button>
+    <button class="btn-save" style="margin-top:8px;background:var(--accent);color:#fff" onclick="apolloSearchFromTarget(${row})">🔍 Find Contacts via Apollo</button>
     <div class="detail-actions" style="margin-top:8px">
       <button class="btn-email-draft detail-actions" onclick="closeOverlay('targetDetailOverlay');openTargetEdit(${row})">✏ Edit</button>
     </div>`;
@@ -2969,7 +2969,7 @@ draftEmail = function(row) {
   const l = LEADS.find(x=>x._row===row); if(!l) return;
   // Log email send
   const now = new Date().toISOString().replace('T',' ').slice(0,19);
-  const entry = `${formatTs()}: ✉ Draft email opened to ${l.email}`;
+  const entry = `${formatTs()}: Email draft opened to ${l.email}`;
   const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
   sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow({...l,notes:updatedNotes},now)]).catch(()=>{});
   _origDraftEmail(row);
@@ -3275,6 +3275,38 @@ function openAnalytics() {
         </div>`).join('')}
     </div>`;
   document.getElementById('analyticsContent').innerHTML = chartHtml;
+  // Industry heatmap
+  const indCounts = {};
+  LEADS.filter(function(l){return l.industry;}).forEach(function(l){ indCounts[l.industry]=(indCounts[l.industry]||0)+1; });
+  const indSorted = Object.entries(indCounts).sort(function(a,b){return b[1]-a[1];}).slice(0,10);
+  const maxInd = indSorted.length ? indSorted[0][1] : 1;
+  const hotByInd = {};
+  LEADS.filter(function(l){return l.industry&&l.rating==='Hot';}).forEach(function(l){ hotByInd[l.industry]=(hotByInd[l.industry]||0)+1; });
+  const compCounts = {};
+  LEADS.filter(function(l){return l.competitor;}).forEach(function(l){ compCounts[l.competitor]=(compCounts[l.competitor]||0)+1; });
+  const compSorted = Object.entries(compCounts).sort(function(a,b){return b[1]-a[1];}).slice(0,8);
+  let extra = '';
+  if(indSorted.length) {
+    extra += '<div style="margin-top:20px"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Industry Heatmap</div>';
+    indSorted.forEach(function(entry) {
+      var ind=entry[0], cnt=entry[1];
+      var hot = hotByInd[ind] ? ' - '+hotByInd[ind]+' hot' : '';
+      var pct = Math.round(cnt/maxInd*100);
+      extra += '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">';
+      extra += '<span style="color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%">'+esc(ind)+'</span>';
+      extra += '<span style="flex-shrink:0;color:var(--muted)">'+cnt+' leads'+hot+'</span></div>';
+      extra += '<div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden"><div style="background:var(--accent);height:100%;width:'+pct+'%;border-radius:4px;opacity:.8"></div></div></div>';
+    });
+    extra += '</div>';
+  }
+  if(compSorted.length) {
+    extra += '<div style="margin-top:20px"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Competitor Landscape</div>';
+    compSorted.forEach(function(entry) {
+      extra += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px"><span>'+esc(entry[0])+'</span><span style="color:var(--accent);font-weight:700">'+entry[1]+'</span></div>';
+    });
+    extra += '</div>';
+  }
+  document.getElementById('analyticsContent').innerHTML += extra;
   document.getElementById('analyticsOverlay').classList.add('open');
 }
 
@@ -4418,19 +4450,21 @@ async function apolloLookupFromLinkedIn() {
 }
 
 // ── APOLLO FIND MORE AT COMPANY ───────────────────────────────
-function apolloFindMoreAtCompany(company) {
+function apolloFindMoreAtCompany(row) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
   switchTab('apollo');
   setTimeout(()=>{
-    const el=document.getElementById('apolloCompany'); if(el) el.value=company;
+    const el=document.getElementById('apolloCompany'); if(el) el.value=l.company;
     apolloSearch();
   },200);
 }
 
 // ── TARGETS → APOLLO BRIDGE ───────────────────────────────────
-function apolloSearchFromTarget(company) {
+function apolloSearchFromTarget(row) {
+  const t = TARGETS.find(x=>x._row===row); if(!t) return;
   switchTab('apollo');
   setTimeout(()=>{
-    const el=document.getElementById('apolloCompany'); if(el) el.value=company;
+    const el=document.getElementById('apolloCompany'); if(el) el.value=t.company;
     apolloSearch();
   },200);
 }
@@ -4480,55 +4514,13 @@ function renderRecentlyViewed() {
   </div>`).join('');
 }
 
-// ── LEAD ANALYTICS - competitor + industry heatmap ────────────
-// Update openAnalytics to add competitor + industry heatmap
-const _origOpenAnalytics = openAnalytics;
-function openAnalytics() {
-  _origOpenAnalytics();
-  // Append competitor + industry sections
-  const content = document.getElementById('analyticsContent');
-  if(!content) return;
-  // Competitor breakdown
-  const compCounts = {};
-  LEADS.filter(l=>l.competitor).forEach(l=>{ compCounts[l.competitor]=(compCounts[l.competitor]||0)+1; });
-  const compSorted = Object.entries(compCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  // Industry heatmap
-  const indCounts = {};
-  LEADS.filter(l=>l.industry).forEach(l=>{ indCounts[l.industry]=(indCounts[l.industry]||0)+1; });
-  const indSorted = Object.entries(indCounts).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const maxInd = indSorted[0]?.[1]||1;
-  const hotByInd = {};
-  LEADS.filter(l=>l.industry&&l.rating==='Hot').forEach(l=>{ hotByInd[l.industry]=(hotByInd[l.industry]||0)+1; });
-
-  const extra = `
-    ${indSorted.length?`<div style="margin-top:20px">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Industry Heatmap</div>
-      ${indSorted.map(([ind,cnt])=>`<div style="margin-bottom:8px">
-        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">
-          <span style="color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%">${esc(ind)}</span>
-          <span style="flex-shrink:0;color:var(--muted)">${cnt} leads ${hotByInd[ind]?`· <span style="color:var(--hot)">${hotByInd[ind]} hot</span>`:''}
-          </span>
-        </div>
-        <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
-          <div style="background:var(--accent);height:100%;width:${Math.round(cnt/maxInd*100)}%;border-radius:4px;opacity:.8"></div>
-        </div>
-      </div>`).join('')}
-    </div>`:''}
-    ${compSorted.length?`<div style="margin-top:20px">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px">Competitor Landscape</div>
-      ${compSorted.map(([c,n])=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px"><span>${esc(c)}</span><span style="color:var(--accent);font-weight:700">${n}</span></div>`).join('')}
-    </div>`:''}`;
-  content.innerHTML += extra;
-}
-
 // ── TAG-BASED BULK ACTIONS ────────────────────────────────────
 function openTagBulkAction() {
   const tags = new Set();
   LEADS.forEach(l=>(l.tags||'').split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>tags.add(t)));
   if(!tags.size) { alert('No tags found on your leads.'); return; }
-  const tag = prompt('Enter tag to bulk-select (or pick one):
+  const tag = prompt('Enter tag to bulk-select: ' + [...tags].join(', '));
 
-'+[...tags].join(', '));
   if(!tag) return;
   const matched = LEADS.filter(l=>(l.tags||'').toLowerCase().includes(tag.toLowerCase()));
   if(!matched.length) { alert(`No leads found with tag "${tag}"`); return; }
