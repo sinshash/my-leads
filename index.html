@@ -1438,7 +1438,7 @@ const SETTINGS_SHEET = 'App Settings';
 const FIXED_COLS = 22; // A-V are fixed; custom fields start at W
 
 // A=0 B=1 C=2 D=3 E=4 F=5 G=6 H=7 I=8 J=9 K=10 L=11 M=12 N=13 O=14 P=15 Q=16 R=17 S=18 T=19 U=20 V=21
-const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15,mobile:16,nextAction:17,competitor:18,lastContacted:19,stage:20,tags:21};
+const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15,mobile:16,nextAction:17,competitor:18,lastContacted:19,stage:20,tags:21,zohoId:22};
 
 let LEADS=[], TARGETS=[], accessToken=null, tokenExpiry=0;
 let currentFilter='all', currentSort=localStorage.getItem('tdot_sort')||'followup';
@@ -3016,7 +3016,7 @@ function renderDetailPage(l) {
   const overdue = isOverdue(l), dueToday = isDueToday(l);
   const tags = l.tags ? l.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
   const svcs = l.services ? l.services.split(',').filter(Boolean) : [];
-  const zohoId = l._row ? (LEADS.find(x=>x._row===l._row)||l).zohoId || '' : '';
+  const zohoId = l.zohoId || '';
 
   const fields = [
     ['Email', l.email ? '<a href="mailto:' + l.email + '">' + esc(l.email) + '</a>' : ''],
