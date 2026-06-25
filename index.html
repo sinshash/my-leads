@@ -2973,23 +2973,37 @@ async function runZohoSync(silent = true) {
   if (zohoSyncRunning) return;
   if (!accessToken) return;
   zohoSyncRunning = true;
-  if (!silent) setStatus('loading', 'Syncing with Zoho...');
+  if (!silent) setStatus('loading', 'Syncing with Zoho... (batch 1)');
   try {
-    const res = await fetch(WORKER_URL + '/sync', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ googleToken: accessToken })
-    });
-    const data = await res.json();
-    if (data.success) {
-      if (!silent) {
-        setStatus('ok', 'Zoho sync complete — ' + data.results.pushed + ' pushed, ' + data.results.updated + ' updated');
-        setTimeout(() => setStatus('', ''), 4000);
+    let startRow = 0;
+    let totalPushed = 0, totalUpdated = 0, totalSaved = 0;
+    let batch = 1;
+    while (true) {
+      const res = await fetch(WORKER_URL + '/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ googleToken: accessToken, startRow })
+      });
+      const data = await res.json();
+      if (!data.success) {
+        if (!silent) setStatus('error', 'Sync error: ' + (data.error || 'unknown'));
+        break;
       }
-      await loadLeads();
-    } else {
-      if (!silent) setStatus('error', 'Sync error: ' + (data.error || 'unknown'));
+      const r = data.results;
+      totalPushed += r.pushed || 0;
+      totalUpdated += r.updated || 0;
+      totalSaved += r.zohoIdSaved || 0;
+      if (!r.hasMore) break;
+      startRow = r.nextRow;
+      batch++;
+      if (!silent) setStatus('loading', 'Syncing with Zoho... (batch ' + batch + ')');
+      await new Promise(resolve => setTimeout(resolve, 500)); // small delay between batches
     }
+    if (!silent) {
+      setStatus('ok', 'Zoho sync complete — ' + totalPushed + ' pushed, ' + totalUpdated + ' updated, ' + totalSaved + ' IDs saved');
+      setTimeout(() => setStatus('', ''), 5000);
+    }
+    await loadLeads();
   } catch(e) {
     if (!silent) setStatus('error', 'Sync failed: ' + e.message);
   } finally {
