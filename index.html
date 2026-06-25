@@ -503,6 +503,62 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
 
 
+
+/* ── FULL PAGE LEAD DETAIL ─────────────────────────────────── */
+#leadDetailPage{display:none;position:fixed;inset:0;background:var(--bg);z-index:150;overflow-y:auto;margin-left:var(--sidebar-w)}
+@media(max-width:767px){#leadDetailPage{margin-left:0}}
+.lead-detail-topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:11px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.lead-detail-back{background:none;border:none;color:var(--accent);font-family:'DM Mono',monospace;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;min-height:auto}
+.lead-detail-name{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lead-detail-company{font-size:12px;color:var(--muted)}
+.lead-detail-body{max-width:800px;margin:0 auto;padding:20px}
+.detail-tabs{display:flex;border-bottom:2px solid var(--border);background:var(--surface);position:sticky;top:55px;z-index:9}
+.detail-tab-btn{padding:12px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;background:transparent;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;min-height:44px}
+.detail-tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.detail-tab-content{display:none}
+.detail-tab-content.active{display:block}
+/* Email thread */
+.email-thread-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:var(--card-shadow)}
+.email-thread-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+.email-thread-subject{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text)}
+.email-thread-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.email-thread-dir{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:700;flex-shrink:0}
+.email-thread-dir.sent{background:rgba(79,110,247,.12);color:var(--accent)}
+.email-thread-dir.received{background:rgba(16,185,129,.12);color:var(--contacted)}
+.email-thread-body{font-size:12px;color:var(--text);line-height:1.6;border-top:1px solid var(--border);padding-top:8px;margin-top:8px;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto}
+/* Signals panel */
+#signalsOverlay{display:none;position:fixed;inset:0;z-index:499}
+#signalsOverlay.open{display:block}
+#signalsPanel{position:fixed;top:0;right:-380px;width:360px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:500;box-shadow:-4px 0 20px rgba(0,0,0,.1);transition:right .25s;overflow-y:auto;display:flex;flex-direction:column}
+#signalsPanel.open{right:0}
+@media(max-width:400px){#signalsPanel{width:100vw;right:-100vw}}
+.signals-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);flex-shrink:0}
+.signals-title{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--text)}
+.signals-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;min-height:auto;padding:4px 8px}
+.signal-item{padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;display:flex;gap:12px;align-items:flex-start}
+.signal-item:hover{background:var(--surface2)}
+.signal-avatar{width:40px;height:40px;border-radius:50%;color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.signal-info{flex:1;min-width:0}
+.signal-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text)}
+.signal-company{font-size:11px;color:var(--muted);margin-top:1px}
+.signal-subject{font-size:11px;color:var(--text);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.signal-time{font-size:11px;color:var(--muted);flex-shrink:0;text-align:right;padding-top:2px}
+.signal-new-dot{display:inline-block;width:7px;height:7px;background:var(--contacted);border-radius:50%;margin-left:5px;vertical-align:middle}
+.signal-count-badge{background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-top:4px;display:inline-block}
+/* Email compose */
+#emailComposePopup{position:fixed;bottom:20px;right:20px;width:520px;max-width:calc(100vw - 40px);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.18);z-index:600;display:none}
+.compose-header{background:var(--sidebar-bg);color:#fff;padding:12px 16px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.compose-close-btn{background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;min-height:auto;padding:0;line-height:1}
+.compose-field{display:flex;align-items:center;border-bottom:1px solid var(--border);padding:8px 14px;gap:10px}
+.compose-field-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;width:44px;flex-shrink:0}
+.compose-field input{flex:1;background:none;border:none;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;min-height:auto;padding:0}
+.compose-body-wrap{padding:12px 14px}
+.compose-body-wrap textarea{width:100%;background:none;border:none;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;resize:none;min-height:140px;line-height:1.6}
+.compose-sig{padding:0 14px 8px;font-size:11px;color:var(--muted);line-height:1.6;white-space:pre-wrap;border-top:1px solid var(--border);max-height:80px;overflow:hidden}
+.compose-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border)}
+.compose-send-btn{background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:9px 22px;border-radius:8px;cursor:pointer;min-height:auto}
+.compose-send-btn:disabled{opacity:.5;cursor:not-allowed}
+
 </style>
 </head>
 <body>
@@ -576,6 +632,9 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         </div>
         <div class="topbar-btns">
           <button class="btn-scan" id="btnScan" onclick="openScan()" title="Scan business card" style="display:none">📷</button>
+          <button id="signalsBell" onclick="toggleSignalsPanel()" title="Email Signals" style="position:relative;background:none;border:none;font-size:20px;cursor:pointer;padding:4px;display:none;min-height:auto;align-items:center">
+            🔔<span id="signalsBadge" style="display:none;position:absolute;top:0;right:0;background:var(--hot);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:10px;font-family:'DM Mono',monospace;min-width:16px;text-align:center"></span>
+          </button>
           <button class="btn-add" id="btnAdd" onclick="openAdd()" style="display:none">+ Add Lead</button>
         </div>
       </div>
@@ -639,7 +698,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
   <div class="toolbar">
     <button class="btn-tool" onclick="loadLeads()">↻ Refresh</button>
-    <button class="btn-tool" onclick="runZohoSync(false)" title="Sync leads with Zoho CRM">&#8645; Zoho Sync</button>
+    <button class="btn-tool" onclick="runZohoSync(false)" title="Sync with Zoho CRM">&#8645; Zoho Sync</button>
     <button class="btn-tool" onclick="exportCSV()">↓ CSV</button>
     <button class="btn-tool" onclick="openWeeklySummary()">📊 Week</button>
     <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
@@ -1045,6 +1104,72 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   </div>
 
   </div><!-- end mainContent -->
+
+  <!-- FULL PAGE LEAD DETAIL -->
+  <div id="leadDetailPage">
+    <div class="lead-detail-topbar">
+      <button class="lead-detail-back" onclick="closeLeadDetail()">&#8592; Back</button>
+      <div style="flex:1;min-width:0">
+        <div class="lead-detail-name" id="ldpName"></div>
+        <div class="lead-detail-company" id="ldpCompany"></div>
+      </div>
+      <button class="btn-add" style="font-size:12px;padding:7px 14px;flex-shrink:0" onclick="openEditFromDetail()">&#9998; Edit</button>
+    </div>
+    <div class="detail-tabs">
+      <button class="detail-tab-btn active" id="ldpTabBtnOverview" onclick="switchDetailTab('overview',this)">Overview</button>
+      <button class="detail-tab-btn" id="ldpTabBtnNotes" onclick="switchDetailTab('notes',this)">&#128203; Notes</button>
+      <button class="detail-tab-btn" id="ldpTabBtnEmails" onclick="switchDetailTab('emails',this)">&#9993; Emails</button>
+    </div>
+    <div class="lead-detail-body">
+      <div class="detail-tab-content active" id="ldpTabOverview"></div>
+      <div class="detail-tab-content" id="ldpTabNotes"></div>
+      <div class="detail-tab-content" id="ldpTabEmails">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-size:12px;color:var(--muted)">Email history from Zoho CRM</div>
+          <button class="btn-add" style="font-size:12px;padding:7px 14px" onclick="openEmailCompose()">&#9993; Compose</button>
+        </div>
+        <div id="ldpEmailThread"><div style="text-align:center;padding:40px;color:var(--muted)">Select the Emails tab to load history</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNALS OVERLAY + PANEL -->
+  <div id="signalsOverlay" onclick="toggleSignalsPanel()"></div>
+  <div id="signalsPanel">
+    <div class="signals-header">
+      <div class="signals-title">&#128276; Signals <span id="signalsTotalBadge" style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;font-weight:400"></span></div>
+      <button class="signals-close" onclick="toggleSignalsPanel()">&#10005;</button>
+    </div>
+    <div id="signalsList" style="flex:1;overflow-y:auto"><div style="padding:40px;text-align:center;color:var(--muted)">Loading signals...</div></div>
+    <div style="padding:12px 20px;border-top:1px solid var(--border);text-align:center">
+      <button class="btn-tool" style="width:100%;justify-content:center" onclick="loadSignals()">&#8635; Refresh Signals</button>
+    </div>
+  </div>
+
+  <!-- EMAIL COMPOSE POPUP -->
+  <div id="emailComposePopup">
+    <div class="compose-header">
+      <span id="composeTitle">New Message</span>
+      <button class="compose-close-btn" onclick="closeEmailCompose()">&#10005;</button>
+    </div>
+    <div class="compose-field">
+      <span class="compose-field-label">To</span>
+      <input type="email" id="composeTo" placeholder="recipient@email.com">
+    </div>
+    <div class="compose-field">
+      <span class="compose-field-label">Subject</span>
+      <input type="text" id="composeSubject" placeholder="Subject line">
+    </div>
+    <div class="compose-body-wrap">
+      <textarea id="composeBody" placeholder="Write your message..."></textarea>
+    </div>
+    <div class="compose-sig" id="composeSig" style="display:none"></div>
+    <div class="compose-footer">
+      <span id="composeSendStatus" style="font-size:11px;color:var(--muted)"></span>
+      <button class="compose-send-btn" id="composeSendBtn" onclick="sendEmail()">Send &#9658;</button>
+    </div>
+  </div>
+
 </div><!-- end mainApp -->
 
 <!-- FORM MODAL -->
@@ -2962,7 +3087,7 @@ async function saveCallLog() {
   } catch(e) { setStatus('error','✗ '+e.message); }
 }
 
-// ── ZOHO SYNC ─────────────────────────────────────────────────
+// ── ZOHO SYNC ──────────────────────────────────────────────────
 let zohoSyncRunning = false;
 async function runZohoSync(silent = true) {
   if (zohoSyncRunning) return;
@@ -2993,6 +3118,362 @@ async function runZohoSync(silent = true) {
     zohoSyncRunning = false;
   }
 }
+
+// ── FULL PAGE LEAD DETAIL ───────────────────────────────────────
+let currentDetailRow = null;
+let detailScrollY = 0;
+
+function openDetail(row) {
+  const l = LEADS.find(x => x._row === row); if (!l) return;
+  currentDetailRow = row;
+  detailScrollY = window.scrollY;
+  trackRecentlyViewed(row);
+  document.getElementById('ldpName').textContent = l.name;
+  document.getElementById('ldpCompany').textContent = l.company;
+  renderDetailOverview(l);
+  renderDetailNotes(l);
+  document.getElementById('ldpEmailThread').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Select the Emails tab to load history</div>';
+  // Reset tabs to Overview
+  document.querySelectorAll('.detail-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.detail-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('ldpTabBtnOverview').classList.add('active');
+  document.getElementById('ldpTabOverview').classList.add('active');
+  document.getElementById('leadDetailPage').style.display = 'block';
+  document.getElementById('leadDetailPage').scrollTop = 0;
+  const fab = document.getElementById('fabBtn');
+  if (fab) fab.style.display = 'none';
+}
+
+function closeLeadDetail() {
+  document.getElementById('leadDetailPage').style.display = 'none';
+  currentDetailRow = null;
+  if (currentTab === 'leads') {
+    const fab = document.getElementById('fabBtn');
+    if (fab) { fab.style.display = 'flex'; }
+  }
+  window.scrollTo(0, detailScrollY);
+}
+
+function openEditFromDetail() {
+  if (!currentDetailRow) return;
+  closeLeadDetail();
+  openEdit(currentDetailRow);
+}
+
+function switchDetailTab(tab, btn) {
+  document.querySelectorAll('.detail-tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.detail-tab-content').forEach(c => c.classList.remove('active'));
+  const tabEl = document.getElementById('ldpTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+  if (tabEl) tabEl.classList.add('active');
+  if (tab === 'emails' && currentDetailRow) loadLeadEmails(currentDetailRow);
+}
+
+function renderDetailOverview(l) {
+  const overdue = isOverdue(l), dueToday = isDueToday(l);
+  const tags = l.tags ? l.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
+  const svcs = l.services ? l.services.split(',').filter(Boolean) : [];
+  const fields = [
+    ['Name', l.name], ['Title', l.title], ['Company', l.company],
+    ['Website', l.website ? '<a href="' + l.website + '" target="_blank" style="color:var(--accent)">' + esc(l.website) + ' \u2197</a>' : ''],
+    ['Email', l.email ? '<a href="mailto:' + l.email + '">' + esc(l.email) + '</a>' : ''],
+    ['Phone', l.phone ? '<a href="tel:' + l.phone + '">' + esc(l.phone) + '</a>' : ''],
+    ['Mobile', l.mobile ? '<a href="tel:' + l.mobile + '">' + esc(l.mobile) + '</a>' : ''],
+    ['Status', l.status ? '<span class="badge badge-status ' + statusClass(l.status) + '">' + esc(l.status) + '</span>' : ''],
+    ['Rating', l.rating ? '<span class="badge badge-rating ' + ratingClass(l.rating) + '">' + esc(l.rating) + '</span>' : ''],
+    ['Pipeline Stage', l.stage ? '<span class="badge badge-stage">' + esc(l.stage) + '</span>' : ''],
+    ['Source', l.source], ['Trade Show', l.tradeShow], ['Industry', l.industry],
+    ['Competitor', l.competitor],
+    ['Next Action', l.nextAction ? '<span style="color:var(--warm)">\u2192 ' + esc(l.nextAction) + '</span>' : ''],
+    ['Follow-up', l.followup ? formatDate(l.followup) + (overdue ? ' \u26a0 OVERDUE' : dueToday ? ' \U0001F4C5 TODAY' : '') : ''],
+    ['Last Contacted', l.lastContacted ? formatDate(l.lastContacted) : ''],
+    ['LinkedIn', l.linkedin ? '<a href="' + l.linkedin + '" target="_blank">View Profile \u2197</a>' : ''],
+    ['Created', l.created], ['Last Activity', l.lastActivity],
+  ].filter(([, v]) => v);
+
+  document.getElementById('ldpTabOverview').innerHTML =
+    (tags.length ? '<div class="detail-tags" style="margin-bottom:12px">' + tags.map(t => '<span class="tag-chip">' + esc(t) + '</span>').join('') + '</div>' : '') +
+    (svcs.length ? '<div style="margin-bottom:12px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Service Interest</div><div style="display:flex;flex-wrap:wrap;gap:4px">' + svcs.map(s => '<span style="background:rgba(79,110,247,.08);border:1px solid rgba(79,110,247,.2);color:var(--accent);font-size:11px;padding:3px 8px;border-radius:5px">' + esc(s.trim()) + '</span>').join('') + '</div></div>' : '') +
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span class="score-badge score-' + leadScore(l) + '" style="width:24px;height:24px;font-size:12px">' + leadScore(l) + '</span><span style="font-size:12px;color:var(--muted)">Contacted ' + contactFrequency(l) + ' time' + (contactFrequency(l) !== 1 ? 's' : '') + ' total</span></div>' +
+    buildCadenceHtml(l) +
+    fields.map(([label, val]) => '<div class="detail-field"><div class="detail-label">' + label + '</div><div class="detail-value">' + val + '</div></div>').join('') +
+    renderCustomFieldsInDetail(l) +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px">' +
+    (l.email ? '<button class="btn-add" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);font-size:12px" onclick="openEmailCompose()">\u2709 Compose Email</button>' : '<div></div>') +
+    '<button class="btn-tool" style="justify-content:center;min-height:44px" onclick="openCallLog(' + l._row + ')">\uD83D\uDCDE Log Call</button>' +
+    '<button class="btn-tool" style="justify-content:center;min-height:44px" onclick="shareLead(' + l._row + ')">\uD83D\uDCE4 Share</button>' +
+    '<button class="btn-tool" style="justify-content:center;min-height:44px" onclick="apolloFindMoreAtCompany(' + l._row + ')">\uD83D\uDD0D Find more at ' + esc(l.company) + '</button>' +
+    '<button class="btn-tool" style="justify-content:center;min-height:44px;grid-column:1/-1" onclick="exportToCalendar(LEADS.find(x=>x._row===' + l._row + '))">\uD83D\uDCC5 Add to Calendar</button>' +
+    '</div>';
+}
+
+function renderDetailNotes(l) {
+  const entries = parseNotes(l.notes || '');
+  const sorted = [...entries].map((e, i) => ({...e, origIdx: i})).sort((a, b) => b.text.startsWith('\uD83D\uDCCC ') - a.text.startsWith('\uD83D\uDCCC ')).reverse();
+  const logHtml = entries.length
+    ? sorted.map(e => '<div class="log-entry ' + (e.text.startsWith('\uD83D\uDCCC ') ? 'pinned' : '') + '"><div class="log-ts">' + esc(e.ts) + '</div><div class="log-text" style="flex:1">' + esc(e.text) + '</div><button class="pin-btn ' + (e.text.startsWith('\uD83D\uDCCC ') ? 'pinned' : '') + '" onclick="togglePinNote(' + l._row + ',' + e.origIdx + ')" title="Pin">\uD83D\uDCCC</button></div>').join('')
+    : '<div class="log-empty">No activity yet. Add your first note below.</div>';
+
+  document.getElementById('ldpTabNotes').innerHTML =
+    '<div class="template-chips">' + NOTE_TEMPLATES.map(t => '<button class="template-chip" onclick="applyDetailTemplate(\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>').join('') + '</div>' +
+    '<div class="log-wrap" id="ldpActivityLog">' + logHtml + '</div>' +
+    '<div style="margin-top:12px;display:flex;gap:8px;align-items:flex-end">' +
+    '<textarea id="ldpNewNoteText" placeholder="Add a note..." style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:\'DM Mono\',monospace;font-size:12px;padding:9px 11px;border-radius:8px;outline:none;resize:none;height:70px"></textarea>' +
+    '<button class="btn-log" onclick="addNoteFromDetail()">+ Add<br>Note</button>' +
+    '</div>';
+}
+
+function applyDetailTemplate(text) {
+  const ta = document.getElementById('ldpNewNoteText');
+  if (ta) ta.value = text;
+}
+
+async function addNoteFromDetail() {
+  if (!currentDetailRow) return;
+  const ta = document.getElementById('ldpNewNoteText');
+  const text = ta ? ta.value.trim() : '';
+  if (!text) return;
+  const l = LEADS.find(x => x._row === currentDetailRow); if (!l) return;
+  const entry = formatTs() + ': ' + text;
+  const updated = l.notes ? l.notes.trim() + NOTE_SEP + entry : entry;
+  const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+  const today = new Date().toISOString().slice(0, 10);
+  setStatus('loading', '\u29f3 Saving note...');
+  try {
+    await sheetsUpdate(SHEET_NAME + '!A' + currentDetailRow + ':V' + currentDetailRow, [leadToRow({...l, notes: updated, lastContacted: today}, now)]);
+    if (ta) ta.value = '';
+    setStatus('ok', '\u2713 Note saved'); setTimeout(() => setStatus('', ''), 1500);
+    await loadLeads();
+    const updatedL = LEADS.find(x => x._row === currentDetailRow);
+    if (updatedL) renderDetailNotes(updatedL);
+  } catch(e) { setStatus('error', '\u2717 ' + e.message); }
+}
+
+// ── LOAD EMAILS FROM ZOHO ───────────────────────────────────────
+async function loadLeadEmails(row) {
+  const l = LEADS.find(x => x._row === row); if (!l) return;
+  const container = document.getElementById('ldpEmailThread');
+  if (!l.email) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">No email address on this lead.</div>';
+    return;
+  }
+  container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">\u29f3 Loading email history from Zoho...</div>';
+  try {
+    const res = await fetch(WORKER_URL + '/emails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ googleToken: accessToken, email: l.email, leadName: l.name })
+    });
+    const data = await res.json();
+    if (!data.success || !data.emails || !data.emails.length) {
+      container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">No email history found in Zoho for this lead.</div>';
+      return;
+    }
+    container.innerHTML = data.emails.map(e => {
+      const dir = e.direction === 'Sent' ? 'sent' : 'received';
+      const dirLabel = e.direction === 'Sent' ? '\u2191 Sent' : '\u2193 Received';
+      const dateStr = e.date ? new Date(e.date).toLocaleString('en-CA', {month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+      return '<div class="email-thread-item">' +
+        '<div class="email-thread-header">' +
+        '<div><div class="email-thread-subject">' + esc(e.subject || '(no subject)') + '</div>' +
+        '<div class="email-thread-meta">' + (e.fromAddress ? esc(e.fromAddress) : '') + (dateStr ? ' \u00b7 ' + dateStr : '') + '</div></div>' +
+        '<span class="email-thread-dir ' + dir + '">' + dirLabel + '</span></div>' +
+        (e.body ? '<div class="email-thread-body">' + esc(e.body.slice(0, 1000)) + (e.body.length > 1000 ? '...' : '') + '</div>' : '') +
+        '</div>';
+    }).join('');
+    // Check for new received emails → update signals badge
+    const newReceived = data.emails.filter(e => {
+      if (e.direction !== 'Received') return false;
+      return (Date.now() - new Date(e.date).getTime()) < 7 * 24 * 60 * 60 * 1000;
+    }).length;
+    if (newReceived > 0) {
+      const badge = document.getElementById('signalsBadge');
+      if (badge && badge.style.display === 'none') { badge.textContent = newReceived; badge.style.display = 'block'; }
+    }
+  } catch(e) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--hot)">Error: ' + esc(e.message) + '</div>';
+  }
+}
+
+// ── SIGNALS PANEL ───────────────────────────────────────────────
+let signalsData = [];
+let signalsLoaded = false;
+
+async function loadSignals() {
+  const list = document.getElementById('signalsList');
+  if (list) list.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted)">\u29f3 Loading...</div>';
+  try {
+    const res = await fetch(WORKER_URL + '/signals', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ googleToken: accessToken })
+    });
+    const data = await res.json();
+    if (!data.success) return;
+    signalsData = data.signals || [];
+    renderSignals();
+    const newCount = signalsData.filter(s => s.isNew).length;
+    const badge = document.getElementById('signalsBadge');
+    if (badge) { badge.textContent = newCount || ''; badge.style.display = newCount > 0 ? 'block' : 'none'; }
+    const total = document.getElementById('signalsTotalBadge');
+    if (total) total.textContent = signalsData.length ? '(' + signalsData.length + ')' : '';
+    signalsLoaded = true;
+  } catch(e) { console.log('Signals error:', e.message); }
+}
+
+function renderSignals() {
+  const list = document.getElementById('signalsList');
+  if (!list) return;
+  if (!signalsData.length) {
+    list.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted)">No recent email signals.<br><br>Signals appear when leads reply to your emails.</div>';
+    return;
+  }
+  const colors = ['#4f6ef7','#10b981','#f97316','#8b5cf6','#ef4444','#0ea5e9','#f59e0b','#ec4899'];
+  list.innerHTML = signalsData.map(s => {
+    const initial = (s.name || '?').charAt(0).toUpperCase();
+    const bg = colors[initial.charCodeAt(0) % colors.length];
+    const dateStr = s.date ? new Date(s.date).toLocaleDateString('en-CA', {month:'short', day:'numeric'}) : '';
+    return '<div class="signal-item" onclick="openLeadFromSignal(' + (s.leadRow || 0) + ')">' +
+      '<div class="signal-avatar" style="background:' + bg + '">' + initial + '</div>' +
+      '<div class="signal-info">' +
+      '<div class="signal-name">' + esc(s.name) + (s.isNew ? '<span class="signal-new-dot"></span>' : '') + '</div>' +
+      '<div class="signal-company">' + esc(s.company || '') + '</div>' +
+      '<div class="signal-subject">\u2709 ' + esc(s.subject || 'New Email') + '</div>' +
+      (s.count > 1 ? '<span class="signal-count-badge">' + s.count + ' emails</span>' : '') +
+      '</div>' +
+      '<div class="signal-time">' + dateStr + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function openLeadFromSignal(row) {
+  toggleSignalsPanel();
+  if (row) {
+    switchTab('leads');
+    setTimeout(() => openDetail(row), 200);
+  }
+}
+
+function toggleSignalsPanel() {
+  const panel = document.getElementById('signalsPanel');
+  const overlay = document.getElementById('signalsOverlay');
+  panel.classList.toggle('open');
+  overlay.classList.toggle('open');
+  if (panel.classList.contains('open') && !signalsLoaded && accessToken) loadSignals();
+}
+
+function showBell() {
+  const bell = document.getElementById('signalsBell');
+  if (bell) bell.style.display = 'flex';
+  if (!signalsLoaded && accessToken) setTimeout(loadSignals, 2000);
+}
+
+// ── EMAIL COMPOSE ───────────────────────────────────────────────
+let emailSignature = '';
+
+async function loadEmailSignature() {
+  try {
+    const data = await sheetsGet('Settings!A1:B30');
+    const rows = data.values || [];
+    rows.forEach(row => {
+      if (row[0] === 'email_signature' && row[1]) emailSignature = row[1];
+    });
+  } catch(e) {}
+}
+
+function openEmailCompose(toEmail, subject, replyBody) {
+  const l = currentDetailRow ? LEADS.find(x => x._row === currentDetailRow) : null;
+  document.getElementById('composeTo').value = toEmail || (l ? l.email : '') || '';
+  document.getElementById('composeSubject').value = subject || (l ? 'TDOT IT Solutions \u2014 ' + l.company : '') || '';
+  document.getElementById('composeBody').value = replyBody || '';
+  const sigEl = document.getElementById('composeSig');
+  if (emailSignature) { sigEl.textContent = emailSignature; sigEl.style.display = 'block'; }
+  else { sigEl.style.display = 'none'; }
+  document.getElementById('composeSendStatus').textContent = '';
+  document.getElementById('composeSendBtn').disabled = false;
+  document.getElementById('composeTitle').textContent = replyBody ? 'Reply' : 'New Message';
+  document.getElementById('emailComposePopup').style.display = 'block';
+  setTimeout(() => document.getElementById('composeBody').focus(), 100);
+}
+
+function closeEmailCompose() {
+  document.getElementById('emailComposePopup').style.display = 'none';
+}
+
+async function sendEmail() {
+  const to = document.getElementById('composeTo').value.trim();
+  const subject = document.getElementById('composeSubject').value.trim();
+  const body = document.getElementById('composeBody').value.trim();
+  if (!to || !subject) { alert('To and Subject are required.'); return; }
+  const btn = document.getElementById('composeSendBtn');
+  const status = document.getElementById('composeSendStatus');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  status.textContent = '\u29f3 Sending via Zoho...';
+  try {
+    const l = currentDetailRow ? LEADS.find(x => x._row === currentDetailRow) : null;
+    const fullBody = body + (emailSignature ? '\n\n' + emailSignature : '');
+    const res = await fetch(WORKER_URL + '/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ googleToken: accessToken, to, subject, body: fullBody, leadEmail: l ? l.email : to, leadName: l ? l.name : '' })
+    });
+    const data = await res.json();
+    if (data.success) {
+      status.textContent = '\u2713 Sent!';
+      showToast('\u2713 Email sent to ' + to);
+      if (currentDetailRow && l) {
+        const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+        const today = new Date().toISOString().slice(0, 10);
+        const entry = formatTs() + ': \u2709 Email sent \u2014 Subject: ' + subject;
+        const updatedNotes = l.notes ? l.notes.trim() + NOTE_SEP + entry : entry;
+        await sheetsUpdate(SHEET_NAME + '!A' + currentDetailRow + ':V' + currentDetailRow, [leadToRow({...l, notes: updatedNotes, lastContacted: today}, now)]);
+        await loadLeads();
+      }
+      setTimeout(() => closeEmailCompose(), 1500);
+    } else {
+      status.textContent = '\u2717 ' + (data.error || 'Send failed');
+      btn.disabled = false; btn.textContent = 'Send \u25b6';
+    }
+  } catch(e) {
+    status.textContent = '\u2717 ' + e.message;
+    btn.disabled = false; btn.textContent = 'Send \u25b6';
+  }
+}
+
+// ── EMAIL SIGNATURE IN SETTINGS ─────────────────────────────────
+function renderSignatureSetting() {
+  if (document.getElementById('signatureSettingWrap')) return;
+  const sp = document.getElementById('settingsPanel');
+  if (!sp) return;
+  const signOutDiv = sp.querySelector('div[style*="margin-top:24px"]');
+  if (!signOutDiv) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'signatureSettingWrap';
+  wrap.innerHTML = '<div class="form-section" style="margin-top:0">Email Signature</div>' +
+    '<div style="font-size:12px;color:var(--muted);margin-bottom:10px">Paste your full email signature here. Auto-appended to every outgoing email.</div>' +
+    '<textarea id="signatureTextarea" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:\'DM Mono\',monospace;font-size:12px;padding:10px;border-radius:8px;outline:none;resize:vertical;min-height:140px;margin-bottom:8px" placeholder="Thanks,\n\nShashank Singh\nAccount Executive\nTDOT IT Solutions...">' + esc(emailSignature) + '</textarea>' +
+    '<button class="btn-save" onclick="saveEmailSignature()">Save Signature</button>';
+  sp.insertBefore(wrap, signOutDiv);
+}
+
+async function saveEmailSignature() {
+  const val = document.getElementById('signatureTextarea') ? document.getElementById('signatureTextarea').value : '';
+  emailSignature = val;
+  setStatus('loading', '\u29f3 Saving signature...');
+  try {
+    const data = await sheetsGet('Settings!A1:B30');
+    const rows = data.values || [];
+    const idx = rows.findIndex(r => r[0] === 'email_signature');
+    if (idx >= 0) {
+      await sheetsUpdate('Settings!A' + (idx+1) + ':B' + (idx+1), [['email_signature', val]]);
+    } else {
+      await sheetsAppend2('Settings', [['email_signature', val]]);
+    }
+    setStatus('ok', '\u2713 Signature saved'); setTimeout(() => setStatus('', ''), 2000);
+    showToast('\u2713 Signature saved');
+  } catch(e) { setStatus('error', '\u2717 ' + e.message); }
+}
+
 
 // ── EMAIL TRACKING HINT ───────────────────────────────────────
 const _origDraftEmail = draftEmail;
@@ -3731,6 +4212,7 @@ function switchTab(tab) {
     if(btnAdd) {btnAdd.style.display='flex';btnAdd.textContent='+ Add Lead';btnAdd.onclick=openAdd;}
     if(fabBtn) {fabBtn.style.display='flex';fabBtn.onclick=openAdd;fabBtn.title='Add Lead';}
     renderAll();
+    showBell();
   } else if(tab==='targets'){
     document.getElementById('targetList').style.display='flex';
     if(btnScan) btnScan.style.display='none';
@@ -3767,6 +4249,7 @@ function switchTab(tab) {
     if(btnAdd) btnAdd.style.display='none';
     if(fabBtn) fabBtn.style.display='none';
     renderSettings();
+    renderSignatureSetting();
   }
   closeSidebar();
 }
@@ -4618,6 +5101,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     }
     await loadSettingsSheet();
     await loadSettings();
+    await loadEmailSignature();
     refreshFormDropdowns();
     const savedSort2=localStorage.getItem('tdot_sort');
     const savedDir2=localStorage.getItem('tdot_sort_dir');
@@ -4635,6 +5119,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     await refreshAccessToken();
     await loadSettingsSheet();
     await loadSettings();
+    await loadEmailSignature();
     refreshFormDropdowns();
     // Restore sort preference
     const savedSort=localStorage.getItem('tdot_sort');
