@@ -640,6 +640,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   <div class="toolbar">
     <button class="btn-tool" onclick="loadLeads()">↻ Refresh</button>
     <button class="btn-tool" onclick="exportCSV()">↓ CSV</button>
+    <button class="btn-tool" onclick="exportZohoCSV()" title="Export CSV formatted for Zoho CRM import">↓ Zoho CSV</button>
     <button class="btn-tool" onclick="openWeeklySummary()">📊 Week</button>
     <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
 
@@ -2269,6 +2270,19 @@ function openDetail(row){
     <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${esc(l.company)}</div>
     ${tags.length?`<div class="detail-tags">${tags.map(t=>`<span class="tag-chip">${esc(t)}</span>`).join('')}</div><div style="margin-bottom:10px"></div>`:''}
     ${l.services?(()=>{const svcs=l.services.split(',').filter(Boolean);return svcs.length?`<div style="margin-bottom:10px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Service Interest</div><div style="display:flex;flex-wrap:wrap;gap:4px">${svcs.map(s=>`<span style="background:rgba(79,110,247,.08);border:1px solid rgba(79,110,247,.2);color:var(--accent);font-size:11px;padding:3px 8px;border-radius:5px">${esc(s.trim())}</span>`).join('')}</div></div>`:''})():''}
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Quick Update</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <select id="quickStatusSelect_${row}" onchange="quickUpdateFromDetail(${row},'status',this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:6px 10px;border-radius:8px;outline:none;flex:1;min-width:140px">
+          <option value="">— Status —</option>
+          ${['Not Contacted','Attempted to Contact','Contacted','Pre-Qualified','Contact in Future','Not Qualified','Lost Lead','Junk Lead','Do Not Contact - Check Notes'].map(s=>`<option value="${s}" ${l.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <select id="quickRatingSelect_${row}" onchange="quickUpdateFromDetail(${row},'rating',this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:6px 10px;border-radius:8px;outline:none;flex:1;min-width:120px">
+          <option value="">— Rating —</option>
+          ${['Hot','Warm','Cold','Not Yet Determined'].map(r=>`<option value="${r}" ${l.rating===r?'selected':''}>${r}</option>`).join('')}
+        </select>
+      </div>
+    </div>
     <div style="margin-bottom:10px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:4px">Score · Contact Count</div><div style="display:flex;align-items:center;gap:8px"><span class="score-badge score-${leadScore(l)}" style="width:24px;height:24px;font-size:12px">${leadScore(l)}</span><span style="font-size:12px;color:var(--muted)">Contacted ${contactFrequency(l)} time${contactFrequency(l)!==1?'s':''} total</span></div></div>
     ${buildCadenceHtml(l)}
     ${fields.map(([label,val])=>`<div class="detail-field"><div class="detail-label">${label}</div><div class="detail-value">${val}</div></div>`).join('')}
@@ -2364,10 +2378,75 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeOverlay('formO
 
 // ── EXPORT ────────────────────────────────────────────────────
 function exportCSV(){
+  // Standard export (internal field names)
   const cols=['name','company','title','email','phone','mobile','source','tradeShow','status','rating','stage','industry','competitor','tags','nextAction','followup','lastContacted','linkedin','notes','created','lastActivity'];
   const csv=[cols.join(','),...LEADS.map(l=>cols.map(c=>`"${(l[c]||'').replace(/"/g,'""')}"`).join(','))].join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download=`leads_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+}
+
+function exportZohoCSV(){
+  // Zoho CRM import format — headers match Zoho field names exactly
+  // Zoho deduplicates by email on import
+  const zohoHeaders = [
+    'First Name','Last Name','Company','Title','Email','Phone','Mobile',
+    'Lead Source','Lead Status','Rating','Industry','LinkedIn',
+    'Description','Last Activity Time','Follow Up Date','Last Contacted',
+    'Website','Next Action','Competitor','Tags','Pipeline Stage'
+  ];
+
+  const rows = LEADS.map(l => {
+    // Split full name into first/last
+    const parts = (l.name || '').trim().split(' ');
+    const firstName = parts[0] || '';
+    const lastName = parts.slice(1).join(' ') || parts[0] || '';
+
+    // Map status to Zoho Lead Status values
+    const statusMap = {
+      'Not Contacted': 'Not Contacted',
+      'Attempted to Contact': 'Attempted to Contact',
+      'Contacted': 'Contacted',
+      'Pre-Qualified': 'Pre-Qualified',
+      'Contact in Future': 'Contact in Future',
+      'Not Qualified': 'Not Qualified',
+      'Lost Lead': 'Lost Lead',
+      'Junk Lead': 'Junk Lead',
+      'Do Not Contact - Check Notes': 'Do Not Contact - Check Notes',
+    };
+
+    const cell = v => '"' + (v||'').toString().replace(/"/g,'""') + '"';
+
+    return [
+      cell(firstName),
+      cell(lastName),
+      cell(l.company),
+      cell(l.title),
+      cell(l.email),
+      cell(l.phone),
+      cell(l.mobile),
+      cell(l.tradeShow || l.source),
+      cell(statusMap[l.status] || l.status),
+      cell(l.rating),
+      cell(l.industry),
+      cell(l.linkedin),
+      cell(l.notes ? l.notes.slice(0,2000) : ''),
+      cell(l.lastActivity ? l.lastActivity.slice(0,10) : ''),
+      cell(l.followup),
+      cell(l.lastContacted),
+      cell(l.website || ''),
+      cell(l.nextAction),
+      cell(l.competitor),
+      cell(l.tags),
+      cell(l.stage),
+    ].join(',');
+  });
+
+  const csv = [zohoHeaders.map(h => '"'+h+'"').join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = 'zoho_import_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  showToast('✓ Zoho import CSV downloaded — import into Zoho CRM → Leads → Import');
 }
 
 // switchTab — see new sidebar version above
@@ -2958,6 +3037,22 @@ async function saveCallLog() {
     setStatus('ok','✓ Call logged'); setTimeout(()=>setStatus('',''),2000);
     await loadLeads();
   } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── QUICK UPDATE FROM DETAIL MODAL ────────────────────────────
+async function quickUpdateFromDetail(row, field, value) {
+  if (!value) return;
+  const l = LEADS.find(x => x._row === row); if (!l) return;
+  const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+  const updated = {...l, [field]: value};
+  setStatus('loading', '⟳ Updating…');
+  try {
+    await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`, [leadToRow(updated, now)]);
+    setStatus('ok', '✓ ' + field.charAt(0).toUpperCase() + field.slice(1) + ' updated');
+    setTimeout(() => setStatus('', ''), 1500);
+    await loadLeads();
+    openDetail(row);
+  } catch(e) { setStatus('error', '✗ ' + e.message); }
 }
 
 // ── EMAIL TRACKING HINT ───────────────────────────────────────
