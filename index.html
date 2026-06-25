@@ -8,7 +8,7 @@
 <style>
 :root{--bg:#f0f2f5;--surface:#ffffff;--surface2:#f8f9fb;--border:#e5e7eb;--accent:#4f6ef7;--accent2:#6366f1;--text:#111827;--muted:#6b7280;--hot:#ef4444;--warm:#f97316;--cold:#3b82f6;--not-yet:#8b5cf6;--contacted:#10b981;--not-contacted:#94a3b8;--junk:#9ca3af;--pre-qual:#0ea5e9;--lost:#f87171;--dnc:#fb923c;--attempt:#f59e0b;--overdue:#ef4444;--sidebar-w:220px;--sidebar-bg:#1e2235;--sidebar-text:#c9cfe0;--sidebar-active:#4f6ef7;--card-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-height:100vh;-webkit-font-smoothing:antialiased;display:flex}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;-webkit-font-smoothing:antialiased;display:flex}
 
 /* ── SIDEBAR ─────────────────────────────────────────────── */
 #sidebar{width:var(--sidebar-w);background:var(--sidebar-bg);min-height:100vh;display:flex;flex-direction:column;flex-shrink:0;position:fixed;left:0;top:0;bottom:0;z-index:200;transition:transform .25s}
@@ -17,14 +17,14 @@ body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-he
 .sidebar-logo span{color:var(--accent)}
 .sidebar-nav{flex:1;padding:12px 0;overflow-y:auto}
 .nav-section{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.3);padding:12px 16px 4px;margin-top:4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--sidebar-text);cursor:pointer;border-radius:0;transition:all .15s;font-size:13px;border:none;background:none;width:100%;text-align:left;font-family:DM Mono,monospace}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--sidebar-text);cursor:pointer;border-radius:0;transition:all .15s;font-size:13px;border:none;background:none;width:100%;text-align:left;font-family:'DM Mono',monospace}
 .nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
 .nav-item.active{background:rgba(79,110,247,.2);color:#fff;border-right:3px solid var(--accent)}
 .nav-item .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
 .nav-item .nav-badge{margin-left:auto;background:var(--hot);color:#fff;font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700}
 .sidebar-bottom{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08)}
 .sidebar-user{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:8px}
-.sidebar-signout{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--sidebar-text);font-family:DM Mono,monospace;font-size:11px;padding:8px;border-radius:6px;cursor:pointer;text-align:center}
+.sidebar-signout{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--sidebar-text);font-family:'DM Mono',monospace;font-size:11px;padding:8px;border-radius:6px;cursor:pointer;text-align:center}
 .sidebar-signout:hover{background:rgba(255,255,255,.1);color:#fff}
 
 /* ── MAIN CONTENT ────────────────────────────────────────── */
@@ -36,7 +36,7 @@ body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-he
 .topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--accent);flex-shrink:0}
 #topbarCount{font-size:11px;color:var(--muted);flex-shrink:0}
 .search-wrap{flex:1;position:relative}
-.search-wrap input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:8px 12px 8px 30px;border-radius:8px;outline:none;transition:border-color .2s}
+.search-wrap input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:8px 12px 8px 30px;border-radius:8px;outline:none;transition:border-color .2s}
 .search-wrap input:focus{border-color:var(--accent)}
 .si{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
 .topbar-btns{display:flex;gap:6px;flex-shrink:0}
@@ -60,21 +60,21 @@ body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-he
 
 /* ── VIEW SWITCHER ───────────────────────────────────────── */
 .view-switcher{display:flex;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px}
-.view-btn{background:none;border:none;color:var(--muted);font-size:14px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:DM Mono,monospace;font-size:11px}
+.view-btn{background:none;border:none;color:var(--muted);font-size:14px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:11px}
 .view-btn.active{background:var(--surface);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 
 #authScreen{position:fixed;inset:0;background:linear-gradient(135deg,#1e2235 0%,#2d3561 100%);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
 .auth-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:420px;width:100%;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)}
 .auth-logo{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--accent);margin-bottom:8px}
 .auth-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
-.auth-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#1f2937;border:1px solid var(--border);font-family:DM Mono,monospace;font-size:14px;font-weight:500;padding:13px 24px;border-radius:10px;cursor:pointer;width:100%;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.auth-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#1f2937;border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:14px;font-weight:500;padding:13px 24px;border-radius:10px;cursor:pointer;width:100%;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .auth-note{font-size:11px;color:var(--muted);margin-top:16px;line-height:1.5}
 
 .topbar{border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:10px}
 .topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--accent);flex-shrink:0}
 #topbarCount{font-size:11px;color:var(--muted);flex-shrink:0}
 .search-wrap{flex:1;position:relative}
-.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:8px 12px 8px 30px;border-radius:8px;outline:none;transition:border-color .2s}
+.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:8px 12px 8px 30px;border-radius:8px;outline:none;transition:border-color .2s}
 .search-wrap input:focus{border-color:var(--accent)}
 .si{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
 .topbar-btns{display:flex;gap:6px;flex-shrink:0}
@@ -91,7 +91,7 @@ body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-he
 .filter-row{padding:6px 16px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}
 .filter-row::-webkit-scrollbar{display:none}
 .filter-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:6px 16px 2px;display:block}
-.pill{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:DM Mono,monospace;font-size:11px;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
+.pill{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
 .pill.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
 .pill.overdue-pill{border-color:var(--overdue);color:var(--overdue)}
 .pill.overdue-pill.active{background:var(--overdue);color:#fff;border-color:var(--overdue)}
@@ -103,11 +103,11 @@ body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-he
 .stat-label{font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
 
 .toolbar{padding:7px 20px;display:flex;gap:6px;border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap;background:var(--surface)}
-.btn-tool{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:DM Mono,monospace;font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-tool{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s}
 .btn-tool:hover{border-color:var(--accent);color:var(--accent)}
 .sort-wrap{margin-left:auto;display:flex;align-items:center;gap:6px}
 .sort-wrap label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
-.sort-wrap select{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:11px;padding:4px 8px;border-radius:6px;outline:none;-webkit-appearance:none}
+.sort-wrap select{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:4px 8px;border-radius:6px;outline:none;-webkit-appearance:none}
 
 /* LEAD CARDS */
 .lead-list{padding:10px 20px;display:flex;flex-direction:column;gap:8px}
@@ -159,14 +159,14 @@ body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-he
 .modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:14px;color:var(--text)}
 .form-group{margin-bottom:10px}
 .form-group label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:4px}
-.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 11px;border-radius:8px;outline:none;-webkit-appearance:none;transition:border-color .2s;box-shadow:inset 0 1px 2px rgba(0,0,0,.04)}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 11px;border-radius:8px;outline:none;-webkit-appearance:none;transition:border-color .2s;box-shadow:inset 0 1px 2px rgba(0,0,0,.04)}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
 .form-group textarea{resize:vertical;min-height:70px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .form-section{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);margin:14px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .btn-save{width:100%;background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;padding:13px;border-radius:10px;cursor:pointer;margin-top:6px}
 .btn-save:disabled{opacity:.5;cursor:not-allowed}
-.btn-delete{width:100%;background:transparent;color:var(--hot);border:1px solid rgba(255,92,92,.3);font-family:DM Mono,monospace;font-size:12px;padding:9px;border-radius:8px;cursor:pointer;margin-top:7px}
+.btn-delete{width:100%;background:transparent;color:var(--hot);border:1px solid rgba(255,92,92,.3);font-family:'DM Mono',monospace;font-size:12px;padding:9px;border-radius:8px;cursor:pointer;margin-top:7px}
 .btn-close{position:absolute;top:14px;right:14px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
 
 /* DETAIL */
@@ -190,7 +190,7 @@ body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-he
 .log-text{font-size:12px;color:var(--text);line-height:1.5;word-break:break-word}
 .log-empty{font-size:12px;color:var(--muted);padding:8px 0;font-style:italic}
 .note-add-wrap{margin-top:10px;display:flex;gap:8px;align-items:flex-end}
-.note-add-wrap textarea{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:12px;padding:9px 11px;border-radius:8px;outline:none;resize:none;height:70px;transition:border-color .2s}
+.note-add-wrap textarea{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:9px 11px;border-radius:8px;outline:none;resize:none;height:70px;transition:border-color .2s}
 .note-add-wrap textarea:focus{border-color:var(--accent)}
 .btn-log{background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:9px 14px;border-radius:8px;cursor:pointer;flex-shrink:0;height:70px;line-height:1.3}
 .btn-log:disabled{opacity:.5;cursor:not-allowed}
@@ -201,10 +201,10 @@ body{background:var(--bg);color:var(--text);font-family:DM Mono,monospace;min-he
 .qp-title{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:var(--text);margin-bottom:10px}
 .qp-section{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;margin-top:10px}
 .qp-options{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px}
-.qp-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .1s}
+.qp-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .1s}
 .qp-btn.selected{background:var(--accent);border-color:var(--accent);color:#0d0f14;font-weight:700}
 .qp-save{width:100%;background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;padding:10px;border-radius:8px;cursor:pointer;margin-top:10px}
-.qp-cancel{width:100%;background:transparent;border:none;color:var(--muted);font-family:DM Mono,monospace;font-size:11px;padding:6px;cursor:pointer;margin-top:4px}
+.qp-cancel{width:100%;background:transparent;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:6px;cursor:pointer;margin-top:4px}
 
 .scan-area{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;margin-bottom:12px}
 .empty-state{text-align:center;padding:50px 20px;color:var(--muted)}
@@ -236,7 +236,7 @@ input[type="date"]{color-scheme:dark}
 .stale-badge{font-size:10px;color:var(--muted);background:rgba(107,114,128,.12);border-radius:4px;padding:2px 6px;display:inline-block;margin-top:3px}
 /* AGED LEAD — 60+ days */
 .lead-card.aged{border-color:rgba(167,139,250,.25)}
-.lead-card.aged::after{content:'60d+';position:absolute;top:6px;right:6px;font-size:9px;color:rgba(167,139,250,.5);font-family:DM Mono,monospace}
+.lead-card.aged::after{content:'60d+';position:absolute;top:6px;right:6px;font-size:9px;color:rgba(167,139,250,.5);font-family:'DM Mono',monospace}
 
 /* LAST CONTACTED ON CARD */
 .card-last-contact{font-size:10px;color:var(--muted);margin-top:3px}
@@ -246,12 +246,12 @@ input[type="date"]{color-scheme:dark}
 
 /* QUICK ACTIONS ROW */
 .card-quick-actions{display:flex;gap:5px;margin-top:7px;padding-top:7px;border-top:1px solid var(--border);flex-wrap:wrap}
-.qa-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:DM Mono,monospace;font-size:10px;padding:4px 9px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s;min-height:28px;display:inline-flex;align-items:center}
+.qa-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;padding:4px 9px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s;min-height:28px;display:inline-flex;align-items:center}
 .qa-btn:active{background:var(--accent);color:#0d0f14;border-color:var(--accent)}
 .qa-btn.snooze-btn{color:var(--warm);border-color:rgba(255,159,64,.3)}
 .snooze-opts{display:none;position:absolute;z-index:400;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px;box-shadow:0 10px 40px rgba(0,0,0,.5);bottom:calc(100% + 4px);left:0}
 .snooze-opts.open{display:block}
-.snooze-opt{display:block;width:100%;background:none;border:none;color:var(--text);font-family:DM Mono,monospace;font-size:12px;padding:8px 14px;border-radius:6px;cursor:pointer;text-align:left;white-space:nowrap}
+.snooze-opt{display:block;width:100%;background:none;border:none;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:8px 14px;border-radius:6px;cursor:pointer;text-align:left;white-space:nowrap}
 .snooze-opt:hover{background:var(--surface2)}
 .snooze-wrap{position:relative}
 
@@ -262,9 +262,9 @@ input[type="date"]{color-scheme:dark}
 .bulk-bar{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:300;background:var(--surface);border:1px solid var(--accent);border-radius:14px;padding:12px 16px;display:none;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.6);white-space:nowrap}
 .bulk-bar.open{display:flex}
 .bulk-bar-label{font-size:12px;color:var(--accent);font-family:'Syne',sans-serif;font-weight:700}
-.bulk-bar select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:11px;padding:5px 8px;border-radius:6px;outline:none}
+.bulk-bar select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 8px;border-radius:6px;outline:none}
 .bulk-bar-apply{background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:7px 14px;border-radius:8px;cursor:pointer}
-.bulk-bar-cancel{background:none;border:none;color:var(--muted);font-family:DM Mono,monospace;font-size:11px;cursor:pointer;padding:4px 8px}
+.bulk-bar-cancel{background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;padding:4px 8px}
 
 /* LEAD AGE */
 .lead-age{font-size:10px;color:var(--muted);margin-top:2px}
@@ -284,7 +284,7 @@ input[type="date"]{color-scheme:dark}
 
 /* CALL LOG MODAL */
 .call-outcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
-.call-outcome-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:12px;padding:12px;border-radius:8px;cursor:pointer;text-align:center;transition:all .15s;min-height:44px}
+.call-outcome-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:12px;border-radius:8px;cursor:pointer;text-align:center;transition:all .15s;min-height:44px}
 .call-outcome-btn.selected{background:var(--accent);border-color:var(--accent);color:#0d0f14;font-weight:700}
 
 /* NOTE TEMPLATES */
@@ -307,12 +307,12 @@ input[type="date"]{color-scheme:dark}
 /* SETTINGS */
 .dropdown-editor{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
 .dropdown-editor-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.dropdown-editor-title span{font-size:11px;color:var(--muted);font-family:DM Mono,monospace;font-weight:400}
+.dropdown-editor-title span{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;font-weight:400}
 .dropdown-items{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .dropdown-item{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px}
 .dropdown-item-del{background:none;border:none;color:var(--hot);cursor:pointer;font-size:14px;padding:0;line-height:1;min-height:auto}
 .dropdown-add-row{display:flex;gap:6px}
-.dropdown-add-row input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:14px;padding:8px 10px;border-radius:6px;outline:none}
+.dropdown-add-row input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:8px 10px;border-radius:6px;outline:none}
 .dropdown-add-row input:focus{border-color:var(--accent)}
 .dropdown-add-btn{background:var(--accent);color:#0d0f14;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;min-height:auto}
 .custom-field-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
@@ -354,20 +354,20 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 /* Table view */
 .table-view{padding:0 20px 20px;overflow-x:auto}
 .leads-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:10px;overflow:hidden;box-shadow:var(--card-shadow)}
-.leads-table th{background:var(--surface2);padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border);font-family:DM Mono,monospace;white-space:nowrap}
+.leads-table th{background:var(--surface2);padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;white-space:nowrap}
 .leads-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text);cursor:pointer}
 .leads-table tr:hover td{background:var(--surface2)}
 .leads-table tr:last-child td{border-bottom:none}
 /* LinkedIn launcher */
 .linkedin-panel{padding:20px}
 .linkedin-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;box-shadow:var(--card-shadow)}
-.linkedin-section-title{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px;font-family:DM Mono,monospace}
+.linkedin-section-title{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px;font-family:'DM Mono',monospace}
 .chip-grid{display:flex;flex-wrap:wrap;gap:6px}
-.chip{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;transition:all .15s;font-family:DM Mono,monospace}
+.chip{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;transition:all .15s;font-family:'DM Mono',monospace}
 .chip.selected{background:var(--accent);border-color:var(--accent);color:#fff}
 .linkedin-launch-btn{width:100%;background:#0a66c2;color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;padding:14px;border-radius:10px;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
 .linkedin-launch-btn:hover{background:#004182}
-.saved-search-chip{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:DM Mono,monospace}
+.saved-search-chip{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace}
 .saved-search-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0;min-height:auto}
 /* Apollo panel */
 .apollo-panel{padding:20px}
@@ -380,7 +380,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .apollo-meta-item{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:3px}
 .apollo-add-btn{background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;padding:7px 12px;border-radius:7px;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .apollo-search-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.apollo-search-bar input,.apollo-search-bar select{flex:1;min-width:120px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none}
+.apollo-search-bar input,.apollo-search-bar select{flex:1;min-width:120px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none}
 .apollo-search-bar input:focus{border-color:var(--accent)}
 .apollo-search-btn{background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:9px 18px;border-radius:8px;cursor:pointer;white-space:nowrap}
 /* Email templates */
@@ -389,7 +389,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .email-template-subject{font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px}
 .email-template-body{font-size:11px;color:var(--muted);line-height:1.5;white-space:pre-wrap;max-height:80px;overflow:hidden}
 .email-template-actions{display:flex;gap:6px;margin-top:10px}
-.email-tmpl-btn{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:11px;padding:7px;border-radius:6px;cursor:pointer;text-align:center}
+.email-tmpl-btn{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:7px;border-radius:6px;cursor:pointer;text-align:center}
 .email-tmpl-btn:hover{border-color:var(--accent);color:var(--accent)}
 .email-templates-panel{padding:20px}
 
@@ -414,14 +414,14 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 /* ── QUICK NOTE POPUP ──────────────────────────────────────── */
 #quickNotePopup{position:fixed;z-index:500;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;width:280px;box-shadow:0 8px 32px rgba(0,0,0,.15);animation:popIn .15s ease;display:none}
 .qnp-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--text);margin-bottom:8px}
-.qnp-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:12px;padding:8px 10px;border-radius:7px;outline:none;resize:none;height:70px;transition:border-color .2s}
+.qnp-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:8px 10px;border-radius:7px;outline:none;resize:none;height:70px;transition:border-color .2s}
 .qnp-textarea:focus{border-color:var(--accent)}
 .qnp-actions{display:flex;gap:6px;margin-top:8px}
 .qnp-save{flex:1;background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:8px;border-radius:7px;cursor:pointer}
-.qnp-cancel{background:none;border:none;color:var(--muted);font-family:DM Mono,monospace;font-size:11px;cursor:pointer;padding:8px}
+.qnp-cancel{background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;padding:8px}
 
 /* ── TOAST NOTIFICATION ────────────────────────────────────── */
-#toastNotif{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#1e2235;color:#fff;font-family:DM Mono,monospace;font-size:12px;padding:10px 18px;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:600;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
+#toastNotif{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#1e2235;color:#fff;font-family:'DM Mono',monospace;font-size:12px;padding:10px 18px;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:600;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
 #toastNotif.show{opacity:1}
 
 /* ── NOT INTERESTED ONE-TAP ────────────────────────────────── */
@@ -439,7 +439,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 /* ── SERVICE INTEREST TAGS ─────────────────────────────────── */
-.service-chip{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;font-family:DM Mono,monospace;display:inline-block;margin:3px}
+.service-chip{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;font-family:'DM Mono',monospace;display:inline-block;margin:3px}
 .service-chip.selected{background:rgba(79,110,247,.1);border-color:var(--accent);color:var(--accent)}
 
 /* ── BD PROGRESS ON DASHBOARD ──────────────────────────────── */
@@ -502,42 +502,6 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .badge-tstatus{background:rgba(167,139,250,.12);color:var(--not-yet)}
 
 
-
-
-/* ── FULL PAGE LEAD DETAIL ─────────────────────────────────── */
-#leadDetailPage{display:none;position:fixed;inset:0;background:var(--bg);z-index:150;overflow-y:auto;margin-left:var(--sidebar-w)}
-@media(max-width:767px){#leadDetailPage{margin-left:0}}
-.lead-detail-topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:11px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.lead-detail-back{background:none;border:none;color:var(--accent);font-family:DM Mono,monospace;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;min-height:auto}
-.lead-detail-name{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lead-detail-company{font-size:12px;color:var(--muted)}
-.lead-detail-body{max-width:800px;margin:0 auto;padding:20px}
-.detail-tabs{display:flex;border-bottom:2px solid var(--border);background:var(--surface);position:sticky;top:55px;z-index:9}
-.detail-tab-btn{padding:12px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;background:transparent;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;min-height:44px}
-.detail-tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
-.detail-tab-content{display:none}
-.detail-tab-content.active{display:block}
-/* Email thread */
-.email-thread-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:var(--card-shadow)}
-.email-thread-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:6px}
-.email-thread-subject{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text)}
-.email-thread-meta{font-size:11px;color:var(--muted);margin-top:2px}
-.email-thread-dir{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:700;flex-shrink:0}
-.email-thread-dir.sent{background:rgba(79,110,247,.12);color:var(--accent)}
-.email-thread-dir.received{background:rgba(16,185,129,.12);color:var(--contacted)}
-.email-thread-body{font-size:12px;color:var(--text);line-height:1.6;border-top:1px solid var(--border);padding-top:8px;margin-top:8px;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto}
-/* Signals panel */
-.signal-item{padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;display:flex;gap:12px;align-items:flex-start}
-.signal-item:hover{background:var(--surface2)}
-.signal-avatar{width:40px;height:40px;border-radius:50%;color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.signal-info{flex:1;min-width:0}
-.signal-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text)}
-.signal-company{font-size:11px;color:var(--muted);margin-top:1px}
-.signal-subject{font-size:11px;color:var(--text);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.signal-time{font-size:11px;color:var(--muted);flex-shrink:0;text-align:right;padding-top:2px}
-.signal-new-dot{display:inline-block;width:7px;height:7px;background:var(--contacted);border-radius:50%;margin-left:5px;vertical-align:middle}
-.signal-count-badge{background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-top:4px;display:inline-block}
-/* Email compose */
 
 </style>
 </head>
@@ -612,7 +576,6 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         </div>
         <div class="topbar-btns">
           <button class="btn-scan" id="btnScan" onclick="openScan()" title="Scan business card" style="display:none">📷</button>
-
           <button class="btn-add" id="btnAdd" onclick="openAdd()" style="display:none">+ Add Lead</button>
         </div>
       </div>
@@ -676,7 +639,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
   <div class="toolbar">
     <button class="btn-tool" onclick="loadLeads()">↻ Refresh</button>
-    <button class="btn-tool" onclick="runZohoSync(false)" title="Sync with Zoho CRM">&#8645; Zoho Sync</button>
+    <button class="btn-tool" onclick="runZohoSync(false)" title="Sync leads to Zoho CRM">&#8645; Zoho Sync</button>
     <button class="btn-tool" onclick="exportCSV()">↓ CSV</button>
     <button class="btn-tool" onclick="openWeeklySummary()">📊 Week</button>
     <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
@@ -711,15 +674,15 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     <span style="font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);flex-shrink:0">Date Filters</span>
     <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
       <span style="font-size:10px;color:var(--muted)">Created</span>
-      <input type="date" id="dfCreatedFrom" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()" color-scheme="dark">
+      <input type="date" id="dfCreatedFrom" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()" color-scheme="dark">
       <span style="font-size:10px;color:var(--muted)">→</span>
-      <input type="date" id="dfCreatedTo" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
+      <input type="date" id="dfCreatedTo" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
     </div>
     <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
       <span style="font-size:10px;color:var(--muted)">Last Activity</span>
-      <input type="date" id="dfActivityFrom" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
+      <input type="date" id="dfActivityFrom" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
       <span style="font-size:10px;color:var(--muted)">→</span>
-      <input type="date" id="dfActivityTo" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
+      <input type="date" id="dfActivityTo" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
     </div>
     <button class="btn-tool" style="font-size:10px;padding:3px 9px;min-height:28px" onclick="clearDateFilters()">✕ Clear</button>
   </div>
@@ -807,7 +770,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         <input type="text" id="apolloLocation" placeholder="Location (e.g. Toronto, Ontario)">
       </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-        <select id="apolloIndustry" style="flex:1;min-width:140px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
+        <select id="apolloIndustry" style="flex:1;min-width:140px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
           <option value="">All Industries</option>
           <option>Information Technology</option>
           <option>Construction</option>
@@ -820,7 +783,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
           <option>Government</option>
           <option>Real Estate</option>
         </select>
-        <select id="apolloSize" style="flex:1;min-width:140px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
+        <select id="apolloSize" style="flex:1;min-width:140px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
           <option value="">Any Company Size</option>
           <option value="1,10">1-10 employees</option>
           <option value="11,50">11-50 employees</option>
@@ -854,7 +817,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         <div class="linkedin-section-title">JOB TITLES <span style="color:var(--muted);font-size:9px">Add one or more</span></div>
         <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap" id="liTitleTags"></div>
         <div style="display:flex;gap:6px">
-          <input type="text" id="liTitleInput" placeholder="e.g. IT Manager, Director of IT…" style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none" onkeydown="if(event.key==='Enter')liAddTitle()">
+          <input type="text" id="liTitleInput" placeholder="e.g. IT Manager, Director of IT…" style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none" onkeydown="if(event.key==='Enter')liAddTitle()">
           <button class="btn-tool" onclick="liAddTitle()" style="min-height:44px">+ Add</button>
         </div>
         <!-- Quick title suggestions -->
@@ -922,11 +885,11 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div>
             <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Location</div>
-            <input type="text" id="liLocation" placeholder="e.g. Toronto, Ontario" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
+            <input type="text" id="liLocation" placeholder="e.g. Toronto, Ontario" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
           </div>
           <div>
             <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Extra keywords</div>
-            <input type="text" id="liKeywords" placeholder="e.g. construction, government" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
+            <input type="text" id="liKeywords" placeholder="e.g. construction, government" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
           </div>
         </div>
       </div>
@@ -949,8 +912,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
     </div>
     <div class="email-templates-panel">
       <div style="display:flex;gap:8px;margin-bottom:12px">
-        <input type="text" id="emailTmplFirst" placeholder="First name" style="flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
-        <input type="text" id="emailTmplCompany" placeholder="Company name" style="flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
+        <input type="text" id="emailTmplFirst" placeholder="First name" style="flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
+        <input type="text" id="emailTmplCompany" placeholder="Company name" style="flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 12px;border-radius:8px;outline:none">
       </div>
       <div id="emailTemplateList"></div>
     </div>
@@ -1082,24 +1045,6 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   </div>
 
   </div><!-- end mainContent -->
-
-  <!-- FULL PAGE LEAD DETAIL -->
-  <div id="leadDetailPage">
-    <div class="lead-detail-topbar">
-      <button class="lead-detail-back" onclick="closeLeadDetail()">&#8592; Back</button>
-      <div style="flex:1;min-width:0">
-        <div class="lead-detail-name" id="ldpName"></div>
-        <div class="lead-detail-company" id="ldpCompany"></div>
-      </div>
-      <button class="btn-add" style="font-size:12px;padding:7px 14px;flex-shrink:0" onclick="openEditFromDetail()">&#9998; Edit</button>
-    </div>
-    <div id="ldpScrollBody" class="lead-detail-body"></div>
-  </div>
-
-
-
-
-
 </div><!-- end mainApp -->
 
 <!-- FORM MODAL -->
@@ -1125,7 +1070,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
       <div class="form-group"><label>LinkedIn</label>
         <div style="display:flex;gap:6px">
           <input type="url" id="f_linkedin" placeholder="https://linkedin.com/in/…" style="flex:1">
-          <button type="button" onclick="apolloLookupFromLinkedIn()" style="background:var(--surface2);border:1px solid var(--border);color:var(--accent);font-family:DM Mono,monospace;font-size:10px;padding:0 10px;border-radius:8px;cursor:pointer;white-space:nowrap;min-height:44px" title="Lookup contact details via Apollo">🔍 Lookup</button>
+          <button type="button" onclick="apolloLookupFromLinkedIn()" style="background:var(--surface2);border:1px solid var(--border);color:var(--accent);font-family:'DM Mono',monospace;font-size:10px;padding:0 10px;border-radius:8px;cursor:pointer;white-space:nowrap;min-height:44px" title="Lookup contact details via Apollo">🔍 Lookup</button>
         </div>
       </div>
     </div>
@@ -2283,6 +2228,84 @@ function setFilter(f,el){
   renderAll();
 }
 
+// ── DETAIL ────────────────────────────────────────────────────
+function openDetail(row){
+  const l=LEADS.find(x=>x._row===row); if(!l) return;
+  trackRecentlyViewed(row);
+  const overdue=isOverdue(l), dueToday=isDueToday(l);
+  const tags=l.tags?l.tags.split(',').map(t=>t.trim()).filter(Boolean):[];
+  const fields=[
+    ['Name',l.name],['Title',l.title],['Company',l.company],
+    ['Website',l.website?`<a href="${l.website}" target="_blank" style="color:var(--accent)">${l.website} ↗</a>`:''],
+    ['Email',l.email?`<a href="mailto:${l.email}">${l.email}</a>`:''],
+    ['Phone (Office)',l.phone?`<a href="tel:${l.phone}">${l.phone}</a>`:''],
+    ['Mobile',l.mobile?`<a href="tel:${l.mobile}">${l.mobile}</a>`:''],
+    ['Status',l.status?`<span class="badge badge-status ${statusClass(l.status)}" style="font-size:11px">${l.status}</span>`:''],
+    ['Rating',l.rating?`<span class="badge badge-rating ${ratingClass(l.rating)}" style="font-size:11px">${l.rating}</span>`:''],
+    ['Pipeline Stage',l.stage?`<span class="badge badge-stage" style="font-size:11px">${l.stage}</span>`:''],
+    ['Source',l.source],['Trade Show',l.tradeShow],['Industry',l.industry],
+    ['Competitor',l.competitor],
+    ['Next Action',l.nextAction?`<span style="color:var(--warm)">→ ${esc(l.nextAction)}</span>`:''],
+    ['Follow-up',l.followup?`${formatDate(l.followup)}${overdue?' ⚠ OVERDUE':dueToday?' 📅 TODAY':''}`: ''],
+    ['Last Contacted',l.lastContacted?formatDate(l.lastContacted):''],
+    ['LinkedIn',l.linkedin?`<a href="${l.linkedin}" target="_blank">View Profile ↗</a>`:''],
+    ['Created',l.created],['Last Activity',l.lastActivity],
+  ].filter(([,v])=>v);
+
+  const entries=parseNotes(l.notes);
+  const sortedEntries=[...entries].map((e,i)=>({...e,origIdx:i})).sort((a,b)=>{
+    const ap=a.text.startsWith('📌 '), bp=b.text.startsWith('📌 '); return bp-ap;
+  }).reverse();
+  const logHtml=entries.length
+    ?sortedEntries.map(e=>`<div class="log-entry ${e.text.startsWith('📌 ')?'pinned':''}">
+        <div class="log-ts">${esc(e.ts)}</div>
+        <div class="log-text" style="flex:1">${esc(e.text)}</div>
+        <button class="pin-btn ${e.text.startsWith('📌 ')?'pinned':''}" onclick="event.stopPropagation();togglePinNote(${row},${e.origIdx})" title="Pin note">📌</button>
+      </div>`).join('')
+    :'<div class="log-empty">No activity yet. Add your first note below.</div>';
+
+  document.getElementById('detailContent').innerHTML=`
+    <div class="modal-handle"></div>
+    <button class="btn-close" onclick="closeOverlay('detailOverlay')">✕</button>
+    <div class="modal-title" style="color:var(--text)">${esc(l.name)}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${esc(l.company)}</div>
+    ${tags.length?`<div class="detail-tags">${tags.map(t=>`<span class="tag-chip">${esc(t)}</span>`).join('')}</div><div style="margin-bottom:10px"></div>`:''}
+    ${l.services?(()=>{const svcs=l.services.split(',').filter(Boolean);return svcs.length?`<div style="margin-bottom:10px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Service Interest</div><div style="display:flex;flex-wrap:wrap;gap:4px">${svcs.map(s=>`<span style="background:rgba(79,110,247,.08);border:1px solid rgba(79,110,247,.2);color:var(--accent);font-size:11px;padding:3px 8px;border-radius:5px">${esc(s.trim())}</span>`).join('')}</div></div>`:''})():''}
+    <div style="margin-bottom:10px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:4px">Score · Contact Count</div><div style="display:flex;align-items:center;gap:8px"><span class="score-badge score-${leadScore(l)}" style="width:24px;height:24px;font-size:12px">${leadScore(l)}</span><span style="font-size:12px;color:var(--muted)">Contacted ${contactFrequency(l)} time${contactFrequency(l)!==1?'s':''} total</span></div></div>
+    ${buildCadenceHtml(l)}
+    ${fields.map(([label,val])=>`<div class="detail-field"><div class="detail-label">${label}</div><div class="detail-value">${val}</div></div>`).join('')}
+    <div class="detail-field">
+      <div class="detail-label" style="margin-bottom:8px">📋 Activity Log</div>
+      <div class="log-wrap" id="activityLog">${logHtml}</div>
+      <div class="template-chips">${NOTE_TEMPLATES.map(t=>`<button class="template-chip" onclick="applyTemplate('${t}')">${t}</button>`).join('')}</div>
+      <div class="note-add-wrap">
+        <textarea id="newNoteText" placeholder="Called today, left VM. Spoke about break/fix for western Canada…"></textarea>
+        <button class="btn-log" id="btnAddNote" onclick="addNote(${row})">+ Add<br>Note</button>
+      </div>
+    </div>
+    <div style="margin-bottom:8px">
+      <input type="text" id="detailNoteSearch" placeholder="🔍 Search notes…" oninput="filterDetailNotes(${row},this.value)" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:7px 10px;border-radius:7px;outline:none">
+    </div>
+    <div style="margin-bottom:10px">
+      ${l.zohoId
+        ? '<span style="background:rgba(16,185,129,.12);color:var(--contacted);font-size:11px;padding:4px 10px;border-radius:10px;font-weight:700">✓ Zoho Synced</span>'
+        : '<span style="background:rgba(245,158,11,.1);color:var(--warm);font-size:11px;padding:4px 10px;border-radius:10px;font-weight:700">⚠ Not in Zoho yet</span>'}
+    </div>
+    <div class="detail-actions">
+      ${l.email?`<button class="detail-actions btn-email-draft" onclick="draftEmail(${row})">✉ Draft Email</button>`:''}
+      <button class="btn-edit-lead" onclick="closeOverlay('detailOverlay');openEdit(${row})">✏ Edit</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="openCallLog(${row})">📞 Log Call</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="shareLead(${row})">📤 Share</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="apolloFindMoreAtCompany(${row})">🔍 Find more at ${esc(l.company)}</button>
+      <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="exportToCalendar(LEADS.find(x=>x._row===${row}))">📅 Calendar</button>
+    </div>
+
+    ${renderCustomFieldsInDetail(l)}`;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
 // ── FORM ──────────────────────────────────────────────────────
 function clearForm(){
   ['f_name','f_company','f_title','f_email','f_phone','f_mobile','f_tradeShow','f_industry','f_linkedin','f_website','f_notes','f_followup','f_lastcontacted','f_nextaction','f_competitor','f_tags','f_services'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -2959,183 +2982,20 @@ async function runZohoSync(silent = true) {
     });
     const data = await res.json();
     if (data.success) {
-      const r = data.results;
       if (!silent) {
-        setStatus('ok', 'Zoho sync complete - ' + r.pushed + ' pushed, ' + r.updated + ' updated');
+        setStatus('ok', 'Zoho sync complete — ' + data.results.pushed + ' pushed, ' + data.results.updated + ' updated');
         setTimeout(() => setStatus('', ''), 4000);
       }
-      console.log('Zoho sync:', r);
+      await loadLeads();
     } else {
       if (!silent) setStatus('error', 'Sync error: ' + (data.error || 'unknown'));
     }
   } catch(e) {
     if (!silent) setStatus('error', 'Sync failed: ' + e.message);
-    console.error('Zoho sync error:', e);
   } finally {
     zohoSyncRunning = false;
   }
 }
-
-// ── FULL PAGE LEAD DETAIL ───────────────────────────────────────
-let currentDetailRow = null;
-let detailScrollY = 0;
-
-function openDetail(row) {
-  const l = LEADS.find(x => x._row === row); if (!l) return;
-  currentDetailRow = row;
-  detailScrollY = window.scrollY;
-  trackRecentlyViewed(row);
-  document.getElementById('ldpName').textContent = l.name;
-  document.getElementById('ldpCompany').textContent = l.company;
-  renderDetailPage(l);
-  document.getElementById('leadDetailPage').style.display = 'block';
-  document.getElementById('leadDetailPage').scrollTop = 0;
-  const fab = document.getElementById('fabBtn');
-  if (fab) fab.style.display = 'none';
-}
-
-function closeLeadDetail() {
-  document.getElementById('leadDetailPage').style.display = 'none';
-  currentDetailRow = null;
-  if (currentTab === 'leads') {
-    const fab = document.getElementById('fabBtn');
-    if (fab) { fab.style.display = 'flex'; }
-  }
-  window.scrollTo(0, detailScrollY);
-}
-
-function openEditFromDetail() {
-  if (!currentDetailRow) return;
-  closeLeadDetail();
-  openEdit(currentDetailRow);
-}
-
-// switchDetailTab removed — no tabs in new layout
-
-function renderDetailPage(l) {
-  const overdue = isOverdue(l), dueToday = isDueToday(l);
-  const tags = l.tags ? l.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
-  const svcs = l.services ? l.services.split(',').filter(Boolean) : [];
-  const zohoId = l.zohoId || '';
-
-  const fields = [
-    ['Email', l.email ? '<a href="mailto:' + l.email + '">' + esc(l.email) + '</a>' : ''],
-    ['Phone', l.phone ? '<a href="tel:' + l.phone + '">' + esc(l.phone) + '</a>' : ''],
-    ['Mobile', l.mobile ? '<a href="tel:' + l.mobile + '">' + esc(l.mobile) + '</a>' : ''],
-    ['Title', l.title],
-    ['Website', l.website ? '<a href="' + l.website + '" target="_blank" style="color:var(--accent)">' + esc(l.website) + ' ↗</a>' : ''],
-    ['Status', l.status ? '<span class="badge badge-status ' + statusClass(l.status) + '">' + esc(l.status) + '</span>' : ''],
-    ['Rating', l.rating ? '<span class="badge badge-rating ' + ratingClass(l.rating) + '">' + esc(l.rating) + '</span>' : ''],
-    ['Pipeline Stage', l.stage ? '<span class="badge badge-stage">' + esc(l.stage) + '</span>' : ''],
-    ['Industry', l.industry],
-    ['Source', l.tradeShow || l.source],
-    ['Competitor', l.competitor],
-    ['Next Action', l.nextAction ? '<span style="color:var(--warm)">→ ' + esc(l.nextAction) + '</span>' : ''],
-    ['Follow-up', l.followup ? formatDate(l.followup) + (overdue ? ' ⚠ OVERDUE' : dueToday ? ' 📅 TODAY' : '') : ''],
-    ['Last Contacted', l.lastContacted ? formatDate(l.lastContacted) : ''],
-    ['LinkedIn', l.linkedin ? '<a href="' + l.linkedin + '" target="_blank">View Profile ↗</a>' : ''],
-    ['Created', l.created ? l.created.slice(0,10) : ''],
-  ].filter(([, v]) => v);
-
-  const entries = parseNotes(l.notes || '');
-  const sorted = [...entries].map((e, i) => ({...e, origIdx: i}))
-    .sort((a, b) => b.text.startsWith('📌 ') - a.text.startsWith('📌 ')).reverse();
-  const logHtml = entries.length
-    ? sorted.map(e => '<div class="log-entry ' + (e.text.startsWith('📌 ') ? 'pinned' : '') + '"><div class="log-ts">' + esc(e.ts) + '</div><div class="log-text" style="flex:1">' + esc(e.text) + '</div><button class="pin-btn ' + (e.text.startsWith('📌 ') ? 'pinned' : '') + '" onclick="togglePinNote(' + l._row + ',' + e.origIdx + ')" title="Pin">📌</button></div>').join('')
-    : '<div class="log-empty">No activity yet. Add your first note below.</div>';
-
-  const wrap = document.getElementById('ldpScrollBody');
-  wrap.innerHTML =
-
-    // ── Zoho sync badge ──
-    '<div style="display:flex;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:16px">' +
-    (zohoId
-      ? '<span style="background:rgba(16,185,129,.12);color:var(--contacted);font-size:11px;padding:4px 10px;border-radius:10px;font-weight:700">✓ Zoho Synced</span>'
-      : '<span style="background:rgba(245,158,11,.1);color:var(--warm);font-size:11px;padding:4px 10px;border-radius:10px;font-weight:700">⚠ Not in Zoho yet</span><button class="btn-tool" style="font-size:10px;padding:3px 9px;min-height:28px" onclick="runZohoSync(false)">Sync Now</button>') +
-    '<span class="score-badge score-' + leadScore(l) + '" style="width:22px;height:22px;font-size:11px;margin-left:auto">' + leadScore(l) + '</span>' +
-    '<span style="font-size:11px;color:var(--muted)">Contacted ' + contactFrequency(l) + 'x</span>' +
-    '</div>' +
-
-    // ── Tags ──
-    (tags.length ? '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px">' + tags.map(t => '<span class="tag-chip">' + esc(t) + '</span>').join('') + '</div>' : '') +
-
-    // ── Service interest ──
-    (svcs.length ? '<div style="margin-bottom:16px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px">Service Interest</div><div style="display:flex;flex-wrap:wrap;gap:4px">' + svcs.map(s => '<span style="background:rgba(79,110,247,.08);border:1px solid rgba(79,110,247,.2);color:var(--accent);font-size:11px;padding:3px 8px;border-radius:5px">' + esc(s.trim()) + '</span>').join('') + '</div></div>' : '') +
-
-    // ── Contact fields ──
-    '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;box-shadow:var(--card-shadow)">' +
-    fields.map(([label, val]) => '<div class="detail-field" style="padding:10px 14px"><div class="detail-label">' + label + '</div><div class="detail-value">' + val + '</div></div>').join('') +
-    '</div>' +
-
-    // ── Cadence ──
-    buildCadenceHtml(l) +
-
-    // ── Custom fields ──
-    renderCustomFieldsInDetail(l) +
-
-    // ── Quick actions ──
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">' +
-    (l.email ? '<a href="mailto:' + l.email + '" class="btn-tool" style="justify-content:center;min-height:44px;text-decoration:none;display:inline-flex;align-items:center">✉ Email</a>' : '') +
-    '<button class="btn-tool" style="justify-content:center;min-height:44px" onclick="openCallLog(' + l._row + ')">📞 Log Call</button>' +
-    '<button class="btn-tool" style="justify-content:center;min-height:44px" onclick="shareLead(' + l._row + ')">📤 Share</button>' +
-    '<button class="btn-tool" style="justify-content:center;min-height:44px" onclick="apolloFindMoreAtCompany(' + l._row + ')">🔍 Find more at ' + esc(l.company) + '</button>' +
-    '<button class="btn-tool" style="justify-content:center;min-height:44px;grid-column:1/-1" onclick="exportToCalendar(LEADS.find(x=>x._row===' + l._row + '))">📅 Add to Calendar</button>' +
-    '</div>' +
-
-    // ── Notes section ──
-    '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:var(--text);margin-bottom:12px">📋 Activity Notes</div>' +
-    '<div class="template-chips" style="margin-bottom:8px">' + NOTE_TEMPLATES.map(function(t){ return '<button class="template-chip" onclick="applyDetailTemplate(this.dataset.t)" data-t="' + t.replace(/"/g,'&quot;') + '">' + t + '</button>'; }).join('') + '</div>' +
-    '<div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:16px">' +
-    '<textarea id="ldpNewNoteText" placeholder="Add a note..." style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:DM Mono,monospace;font-size:12px;padding:9px 11px;border-radius:8px;outline:none;resize:none;height:70px"></textarea>' +
-    '<button class="btn-log" onclick="addNoteFromDetail()">+ Add<br>Note</button>' +
-    '</div>' +
-    '<div class="log-wrap">' + logHtml + '</div>';
-}
-
-
-
-function applyDetailTemplate(text) {
-  const ta = document.getElementById('ldpNewNoteText');
-  if (ta) { ta.value = text; ta.focus(); }
-}
-
-async function addNoteFromDetail() {
-  if (!currentDetailRow) return;
-  const ta = document.getElementById('ldpNewNoteText');
-  const text = ta ? ta.value.trim() : '';
-  if (!text) return;
-  const l = LEADS.find(x => x._row === currentDetailRow); if (!l) return;
-  const entry = formatTs() + ': ' + text;
-  const updated = l.notes ? l.notes.trim() + NOTE_SEP + entry : entry;
-  const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
-  const today = new Date().toISOString().slice(0, 10);
-  setStatus('loading', '\u29f3 Saving note...');
-  try {
-    await sheetsUpdate(SHEET_NAME + '!A' + currentDetailRow + ':V' + currentDetailRow, [leadToRow({...l, notes: updated, lastContacted: today}, now)]);
-    if (ta) ta.value = '';
-    setStatus('ok', '\u2713 Note saved'); setTimeout(() => setStatus('', ''), 1500);
-    await loadLeads();
-    const updatedL = LEADS.find(x => x._row === currentDetailRow);
-    if (updatedL) renderDetailPage(updatedL);
-  } catch(e) { setStatus('error', '\u2717 ' + e.message); }
-}
-
-
-// ── SIGNALS PANEL ───────────────────────────────────────────────
-
-
-
-
-
-
-// ── EMAIL COMPOSE ───────────────────────────────────────────────
-
-
-
-
-
-
-
 
 // ── EMAIL TRACKING HINT ───────────────────────────────────────
 const _origDraftEmail = draftEmail;
