@@ -639,7 +639,6 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
   <div class="toolbar">
     <button class="btn-tool" onclick="loadLeads()">↻ Refresh</button>
-    <button class="btn-tool" onclick="runZohoSync(false)" title="Sync leads to Zoho CRM">&#8645; Zoho Sync</button>
     <button class="btn-tool" onclick="exportCSV()">↓ CSV</button>
     <button class="btn-tool" onclick="openWeeklySummary()">📊 Week</button>
     <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
@@ -1383,7 +1382,7 @@ const SETTINGS_SHEET = 'App Settings';
 const FIXED_COLS = 22; // A-V are fixed; custom fields start at W
 
 // A=0 B=1 C=2 D=3 E=4 F=5 G=6 H=7 I=8 J=9 K=10 L=11 M=12 N=13 O=14 P=15 Q=16 R=17 S=18 T=19 U=20 V=21
-const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15,mobile:16,nextAction:17,competitor:18,lastContacted:19,stage:20,tags:21,zohoId:22};
+const FM = {id:0,name:1,title:2,company:3,email:4,phone:5,source:6,tradeShow:7,status:8,rating:9,industry:10,linkedin:11,notes:12,created:13,lastActivity:14,followup:15,mobile:16,nextAction:17,competitor:18,lastContacted:19,stage:20,tags:21};
 
 let LEADS=[], TARGETS=[], accessToken=null, tokenExpiry=0;
 let currentFilter='all', currentSort=localStorage.getItem('tdot_sort')||'followup';
@@ -1497,7 +1496,6 @@ function signOut() {
 function showApp() {
   document.getElementById('authScreen').style.display='none';
   document.getElementById('mainApp').style.display='block';
-  setTimeout(() => runZohoSync(true), 3000);
 }
 // Silent refresh every 45 mins — no popup ever
 setInterval(async()=>{ if(localStorage.getItem('pkce_r')) await refreshAccessToken(); }, 45*60*1000);
@@ -2286,11 +2284,6 @@ function openDetail(row){
     <div style="margin-bottom:8px">
       <input type="text" id="detailNoteSearch" placeholder="🔍 Search notes…" oninput="filterDetailNotes(${row},this.value)" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:7px 10px;border-radius:7px;outline:none">
     </div>
-    <div style="margin-bottom:10px">
-      ${l.zohoId
-        ? '<span style="background:rgba(16,185,129,.12);color:var(--contacted);font-size:11px;padding:4px 10px;border-radius:10px;font-weight:700">✓ Zoho Synced</span>'
-        : '<span style="background:rgba(245,158,11,.1);color:var(--warm);font-size:11px;padding:4px 10px;border-radius:10px;font-weight:700">⚠ Not in Zoho yet</span>'}
-    </div>
     <div class="detail-actions">
       ${l.email?`<button class="detail-actions btn-email-draft" onclick="draftEmail(${row})">✉ Draft Email</button>`:''}
       <button class="btn-edit-lead" onclick="closeOverlay('detailOverlay');openEdit(${row})">✏ Edit</button>
@@ -2965,50 +2958,6 @@ async function saveCallLog() {
     setStatus('ok','✓ Call logged'); setTimeout(()=>setStatus('',''),2000);
     await loadLeads();
   } catch(e) { setStatus('error','✗ '+e.message); }
-}
-
-// ── ZOHO SYNC ──────────────────────────────────────────────────
-let zohoSyncRunning = false;
-async function runZohoSync(silent = true) {
-  if (zohoSyncRunning) return;
-  if (!accessToken) return;
-  zohoSyncRunning = true;
-  if (!silent) setStatus('loading', 'Syncing with Zoho... (batch 1)');
-  try {
-    let startRow = 0;
-    let totalPushed = 0, totalUpdated = 0, totalSaved = 0;
-    let batch = 1;
-    while (true) {
-      const res = await fetch(WORKER_URL + '/sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ googleToken: accessToken, startRow })
-      });
-      const data = await res.json();
-      if (!data.success) {
-        if (!silent) setStatus('error', 'Sync error: ' + (data.error || 'unknown'));
-        break;
-      }
-      const r = data.results;
-      totalPushed += r.pushed || 0;
-      totalUpdated += r.updated || 0;
-      totalSaved += r.zohoIdSaved || 0;
-      if (!r.hasMore) break;
-      startRow = r.nextRow;
-      batch++;
-      if (!silent) setStatus('loading', 'Syncing with Zoho... (batch ' + batch + ')');
-      await new Promise(resolve => setTimeout(resolve, 500)); // small delay between batches
-    }
-    if (!silent) {
-      setStatus('ok', 'Zoho sync complete — ' + totalPushed + ' pushed, ' + totalUpdated + ' updated, ' + totalSaved + ' IDs saved');
-      setTimeout(() => setStatus('', ''), 5000);
-    }
-    await loadLeads();
-  } catch(e) {
-    if (!silent) setStatus('error', 'Sync failed: ' + e.message);
-  } finally {
-    zohoSyncRunning = false;
-  }
 }
 
 // ── EMAIL TRACKING HINT ───────────────────────────────────────
