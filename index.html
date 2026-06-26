@@ -4179,7 +4179,6 @@ async function apolloSearch() {
     const data = await res.json();
     if (!res.ok) { statusEl.textContent='✗ Apollo error: '+(data.message||data.error||'Unknown error'); return; }
     const people = data.people || [];
-    if (people.length) console.log('Apollo first person raw:', JSON.stringify(people[0]));
     if (!people.length) { statusEl.textContent='No results found. Try broader search terms.'; return; }
     statusEl.textContent=`Found ${data.pagination?.total_entries||people.length} contacts — showing ${people.length}`;
     resultsEl.innerHTML = people.map(p=>{
@@ -4199,8 +4198,8 @@ async function apolloSearch() {
             ${linkedin?`<span class="apollo-meta-item"><a href="${esc(linkedin)}" target="_blank" style="color:var(--accent)">LinkedIn ↗</a></span>`:''}
           </div>
         </div>
-        <button class="apollo-add-btn" onclick="apolloAddToLeadWithDupCheck(${JSON.stringify({
-          name:(p.name||((p.first_name||'')+' '+(p.last_name||'')).trim()),
+        <button class="apollo-add-btn" onclick="apolloEnrichAndAdd('${p.id}',${JSON.stringify({
+          name:((p.first_name||'')+' '+(p.last_name_obfuscated||'')).trim(),
           title:p.title||'',
           company:org,
           email:email,
@@ -4572,6 +4571,38 @@ function apolloSearchFromTarget(row) {
 }
 
 // ── DUPLICATE CHECK ON APOLLO IMPORT ─────────────────────────
+// ── APOLLO ENRICH ON ADD (calls people/match to get full last name, costs 1 credit) ──
+async function apolloEnrichAndAdd(apolloId, fallbackData) {
+  if(typeof fallbackData==='string') fallbackData=JSON.parse(fallbackData.replace(/&quot;/g,'"'));
+  if(!APOLLO_API_KEY) { apolloAddToLeadWithDupCheck(fallbackData); return; }
+  const btn = event.currentTarget;
+  const orig = btn.textContent;
+  btn.textContent = '⟳ Loading…';
+  btn.disabled = true;
+  try {
+    const res = await fetch(WORKER_URL + '/apollo-enrich', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({apiKey: APOLLO_API_KEY, apolloId})
+    });
+    const data = await res.json();
+    const p = data.person;
+    if(p && (p.first_name || p.last_name)) {
+      fallbackData.name = ((p.first_name||'')+' '+(p.last_name||'')).trim();
+      if(p.title && !fallbackData.title) fallbackData.title = p.title;
+      if(p.email && !fallbackData.email) fallbackData.email = p.email;
+      if(p.organization?.name && !fallbackData.company) fallbackData.company = p.organization.name;
+      if(p.linkedin_url && !fallbackData.linkedin) fallbackData.linkedin = p.linkedin_url;
+    }
+  } catch(e) {
+    console.warn('Apollo enrich failed, using fallback:', e.message);
+  } finally {
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
+  apolloAddToLeadWithDupCheck(fallbackData);
+}
+
 function apolloAddToLeadWithDupCheck(personData) {
   if(typeof personData==='string') personData=JSON.parse(personData.replace(/&quot;/g,'"'));
   const name=(personData.name||'').trim();
