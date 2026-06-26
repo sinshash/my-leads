@@ -321,6 +321,41 @@ input[type="date"]{color-scheme:dark}
 .custom-field-type{font-size:11px;color:var(--muted);margin-top:2px}
 .custom-field-del{background:none;border:1px solid rgba(255,92,92,.3);color:var(--hot);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:11px;min-height:auto}
 
+/* ── FILTER PANEL (slide-in) ──────────────────────────────── */
+.filter-panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;display:none;backdrop-filter:blur(2px)}
+.filter-panel-overlay.open{display:block}
+.filter-panel{position:fixed;top:0;right:0;bottom:0;width:320px;max-width:95vw;background:var(--surface);z-index:401;transform:translateX(100%);transition:transform .25s;overflow-y:auto;display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.15)}
+.filter-panel.open{transform:translateX(0)}
+.filter-panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;background:var(--surface);z-index:1}
+.filter-panel-title{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--text)}
+.filter-panel-body{padding:16px 20px;flex:1}
+.filter-panel-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;position:sticky;bottom:0;background:var(--surface)}
+.fp-group{margin-bottom:16px}
+.fp-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px;display:block}
+.fp-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 11px;border-radius:8px;outline:none;transition:border-color .2s}
+.fp-input:focus{border-color:var(--accent)}
+.fp-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fp-apply{flex:1;background:var(--accent);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;padding:12px;border-radius:8px;cursor:pointer}
+.fp-clear{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;padding:12px 16px;border-radius:8px;cursor:pointer}
+/* Active filter chips bar */
+.active-filters-bar{padding:6px 16px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--border);background:var(--bg);display:none}
+.active-filters-bar.has-filters{display:flex}
+.filter-chip{background:rgba(79,110,247,.1);border:1px solid rgba(79,110,247,.3);color:var(--accent);font-size:11px;padding:3px 8px 3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace}
+.filter-chip-x{background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px;padding:0;line-height:1;min-height:auto;opacity:.7}
+.filter-chip-x:hover{opacity:1}
+.filter-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent)}
+.filter-btn.active{background:rgba(79,110,247,.08)}
+/* Targets & BD table */
+.module-toolbar{padding:8px 20px;display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap}
+.module-table-wrap{padding:0 20px 20px;overflow-x:auto}
+.module-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:10px;overflow:hidden;box-shadow:var(--card-shadow)}
+.module-table th{background:var(--surface2);padding:9px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;white-space:nowrap;cursor:pointer;user-select:none}
+.module-table th:hover{color:var(--accent)}
+.module-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text);cursor:pointer;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.module-table tr:hover td{background:var(--surface2)}
+.module-table tr:last-child td{border-bottom:none}
+
 /* ── MOBILE OPTIMIZATIONS ─────────────────────────────────── */
 /* Prevent Firefox iOS zoom on input focus */
 input,select,textarea{font-size:16px!important;touch-action:manipulation}
@@ -583,67 +618,17 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 
   <div id="syncStatus"></div>
 
-  <div class="filter-section">
-    <span class="filter-label">Rating & Special</span>
-    <div class="filter-row" id="filterRow1">
-      <div class="pill active" onclick="setFilter('all',this)" data-filter="all" data-label="All">All</div>
-      <div class="pill overdue-pill" onclick="setFilter('overdue',this)" data-filter="overdue" data-label="🔴 Overdue">🔴 Overdue</div>
-      <div class="pill" onclick="setFilter('rating:Hot',this)" data-filter="rating:Hot" data-label="🔥 Hot">🔥 Hot</div>
-      <div class="pill" onclick="setFilter('rating:Warm',this)" data-filter="rating:Warm" data-label="☀️ Warm">☀️ Warm</div>
-      <div class="pill" onclick="setFilter('rating:Cold',this)" data-filter="rating:Cold" data-label="❄️ Cold">❄️ Cold</div>
-    </div>
-    <span class="filter-label">Status</span>
-    <div class="filter-row" id="filterRow2">
-      <div class="pill" onclick="setFilter('status:Not Contacted',this)" data-filter="status:Not Contacted" data-label="Not Contacted">Not Contacted</div>
-      <div class="pill" onclick="setFilter('status:Attempted to Contact',this)" data-filter="status:Attempted to Contact" data-label="Attempted">Attempted</div>
-      <div class="pill" onclick="setFilter('status:Contacted',this)" data-filter="status:Contacted" data-label="Contacted">Contacted</div>
-      <div class="pill" onclick="setFilter('status:Pre-Qualified',this)" data-filter="status:Pre-Qualified" data-label="Pre-Qualified">Pre-Qualified</div>
-      <div class="pill" onclick="setFilter('status:Contact in Future',this)" data-filter="status:Contact in Future" data-label="Future">Future</div>
-      <div class="pill" onclick="setFilter('status:Not Qualified',this)" data-filter="status:Not Qualified" data-label="Not Qualified">Not Qualified</div>
-      <div class="pill" onclick="setFilter('status:Lost Lead',this)" data-filter="status:Lost Lead" data-label="Lost">Lost</div>
-      <div class="pill" onclick="setFilter('status:Junk Lead',this)" data-filter="status:Junk Lead" data-label="Junk">Junk</div>
-      <div class="pill" onclick="setFilter('status:Do Not Contact - Check Notes',this)" data-filter="status:Do Not Contact - Check Notes" data-label="DNC">DNC</div>
-    </div>
-    <span class="filter-label">Pipeline Stage</span>
-    <div class="filter-row" id="filterRow3">
-      <div class="pill" onclick="setFilter('stage:Prospecting',this)" data-filter="stage:Prospecting" data-label="Prospecting">Prospecting</div>
-      <div class="pill" onclick="setFilter('stage:Qualifying',this)" data-filter="stage:Qualifying" data-label="Qualifying">Qualifying</div>
-      <div class="pill" onclick="setFilter('stage:Proposal Sent',this)" data-filter="stage:Proposal Sent" data-label="Proposal Sent">Proposal Sent</div>
-      <div class="pill" onclick="setFilter('stage:Negotiation',this)" data-filter="stage:Negotiation" data-label="Negotiation">Negotiation</div>
-      <div class="pill" onclick="setFilter('stage:Closed Won',this)" data-filter="stage:Closed Won" data-label="✅ Closed Won">✅ Closed Won</div>
-      <div class="pill" onclick="setFilter('stage:Closed Lost',this)" data-filter="stage:Closed Lost" data-label="❌ Closed Lost">❌ Closed Lost</div>
-    </div>
-    <span class="filter-label">Source</span>
-    <div class="filter-row" id="filterRow4">
-      <div class="pill" onclick="setFilter('source:Trade Show',this)" data-filter="source:Trade Show" data-label="Trade Show">Trade Show</div>
-      <div class="pill" onclick="setFilter('source:Cold Call',this)" data-filter="source:Cold Call" data-label="Cold Call">Cold Call</div>
-      <div class="pill" onclick="setFilter('source:External Referral',this)" data-filter="source:External Referral" data-label="Referral">Referral</div>
-      <div class="pill" onclick="setFilter('source:Partner',this)" data-filter="source:Partner" data-label="Partner">Partner</div>
-    </div>
-    <span class="filter-label">Industry</span>
-    <div class="filter-row" id="filterRow5">
-      <div class="pill" onclick="setFilter('industry:Technology',this)" data-filter="industry:Technology" data-label="Technology">Technology</div>
-      <div class="pill" onclick="setFilter('industry:Construction',this)" data-filter="industry:Construction" data-label="Construction">Construction</div>
-      <div class="pill" onclick="setFilter('industry:Healthcare',this)" data-filter="industry:Healthcare" data-label="Healthcare">Healthcare</div>
-      <div class="pill" onclick="setFilter('industry:Digital Signage',this)" data-filter="industry:Digital Signage" data-label="Digital Signage">Digital Signage</div>
-      <div class="pill" onclick="setFilter('industry:Telecommunications & ISP',this)" data-filter="industry:Telecommunications & ISP" data-label="Telecom">Telecom</div>
-      <div class="pill" onclick="setFilter('industry:MSP (Management Service Provider)',this)" data-filter="industry:MSP (Management Service Provider)" data-label="MSP">MSP</div>
-      <div class="pill" onclick="setFilter('industry:Field Service Provider',this)" data-filter="industry:Field Service Provider" data-label="Field Service">Field Service</div>
-      <div class="pill" onclick="setFilter('industry:Telematics',this)" data-filter="industry:Telematics" data-label="Telematics">Telematics</div>
-      <div class="pill" onclick="setFilter('industry:Finance',this)" data-filter="industry:Finance" data-label="Finance">Finance</div>
-      <div class="pill" onclick="setFilter('industry:Retail',this)" data-filter="industry:Retail" data-label="Retail">Retail</div>
-    </div>
-  </div>
+  <!-- LEADS ACTIVE FILTER CHIPS -->
+  <div class="active-filters-bar" id="leadsActiveFilters"></div>
 
-  <div class="stats" id="statsBar"></div>
-
-  <div class="toolbar">
+  <!-- LEADS TOOLBAR -->
+  <div class="toolbar" id="leadsToolbar">
+    <button class="filter-btn" id="leadsFilterBtn" onclick="openFilterPanel('leads')">🔽 Filter</button>
     <button class="btn-tool" onclick="loadLeads()">↻ Refresh</button>
     <button class="btn-tool" onclick="exportCSV()">↓ CSV</button>
     <button class="btn-tool" onclick="exportZohoCSV()" title="Export CSV formatted for Zoho CRM import">↓ Zoho CSV</button>
     <button class="btn-tool" onclick="openWeeklySummary()">📊 Week</button>
     <button class="btn-tool" onclick="exportFilteredCSV()">↓ Filtered CSV</button>
-
     <button class="btn-tool" id="selectModeBtn" onclick="toggleSelectMode()">☑ Select</button>
     <button class="btn-tool" onclick="openTagBulkAction()">🏷 Tag Select</button>
     <button class="btn-tool" onclick="openActivityFeed()">📋 Activity</button>
@@ -668,24 +653,12 @@ body{padding-bottom:env(safe-area-inset-bottom)}
       <button id="sortDirBtn" class="btn-tool" style="padding:5px 10px;font-size:13px;min-width:36px" onclick="toggleSortDir()" title="Toggle sort direction">↑</button>
     </div>
   </div>
-
-  <!-- DATE RANGE FILTER -->
-  <div id="dateFilterBar" style="border-bottom:1px solid var(--border);padding:6px 16px;background:var(--bg);display:flex;flex-wrap:wrap;gap:10px;align-items:center">
-    <span style="font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);flex-shrink:0">Date Filters</span>
-    <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
-      <span style="font-size:10px;color:var(--muted)">Created</span>
-      <input type="date" id="dfCreatedFrom" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()" color-scheme="dark">
-      <span style="font-size:10px;color:var(--muted)">→</span>
-      <input type="date" id="dfCreatedTo" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
-    </div>
-    <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
-      <span style="font-size:10px;color:var(--muted)">Last Activity</span>
-      <input type="date" id="dfActivityFrom" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
-      <span style="font-size:10px;color:var(--muted)">→</span>
-      <input type="date" id="dfActivityTo" style="background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 7px;border-radius:6px;outline:none" oninput="renderAll()">
-    </div>
-    <button class="btn-tool" style="font-size:10px;padding:3px 9px;min-height:28px" onclick="clearDateFilters()">✕ Clear</button>
-  </div>
+  <div class="stats" id="statsBar"></div>
+  <!-- hidden date inputs still used internally -->
+  <input type="hidden" id="dfCreatedFrom">
+  <input type="hidden" id="dfCreatedTo">
+  <input type="hidden" id="dfActivityFrom">
+  <input type="hidden" id="dfActivityTo">
 
   <!-- DASHBOARD PANEL -->
   <div id="dashboardPanel" style="display:none">
@@ -751,9 +724,29 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   <div class="lead-list" id="leadList"></div>
   <div id="kanbanBoard" class="kanban-board" style="display:none"></div>
   <div id="tableView" class="table-view" style="display:none"></div>
+  <!-- TARGETS -->
+  <div class="module-toolbar" id="targetToolbar" style="display:none">
+    <div class="view-switcher">
+      <button class="view-btn active" id="targetViewCard" onclick="setTargetView('card')">⊟ Cards</button>
+      <button class="view-btn" id="targetViewTable" onclick="setTargetView('table')">⊞ Table</button>
+    </div>
+    <button class="filter-btn" id="targetFilterBtn" onclick="openFilterPanel('targets')">🔽 Filter</button>
+  </div>
+  <div class="active-filters-bar" id="targetsActiveFilters"></div>
   <div class="lead-list" id="targetList" style="display:none"></div>
+  <div class="module-table-wrap" id="targetTableView" style="display:none"></div>
+  <!-- BD -->
+  <div class="module-toolbar" id="bdToolbar" style="display:none">
+    <div class="view-switcher">
+      <button class="view-btn active" id="bdViewCard" onclick="setBDView('card')">⊟ Cards</button>
+      <button class="view-btn" id="bdViewTable" onclick="setBDView('table')">⊞ Table</button>
+    </div>
+    <button class="filter-btn" id="bdFilterBtn" onclick="openFilterPanel('bd')">🔽 Filter</button>
+  </div>
+  <div class="active-filters-bar" id="bdActiveFilters"></div>
   <div class="stats" id="bdStatsBar" style="display:none"></div>
   <div class="lead-list" id="bdList" style="display:none"></div>
+  <div class="module-table-wrap" id="bdTableView" style="display:none"></div>
   <button class="fab" id="fabBtn" onclick="openAdd()" title="Add Lead">+</button>
 
   <!-- APOLLO PANEL -->
@@ -1055,6 +1048,20 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   </div><!-- end mainContent -->
 </div><!-- end mainApp -->
 
+<!-- FILTER PANEL OVERLAY -->
+<div class="filter-panel-overlay" id="filterPanelOverlay" onclick="closeFilterPanel()"></div>
+<div class="filter-panel" id="filterPanel">
+  <div class="filter-panel-header">
+    <div class="filter-panel-title" id="filterPanelTitle">🔽 Filter</div>
+    <button class="btn-close" style="position:relative;top:auto;right:auto" onclick="closeFilterPanel()">✕</button>
+  </div>
+  <div class="filter-panel-body" id="filterPanelBody"></div>
+  <div class="filter-panel-footer">
+    <button class="fp-clear" onclick="clearFilterPanel()">✕ Clear All</button>
+    <button class="fp-apply" onclick="applyFilterPanel()">Apply Filters</button>
+  </div>
+</div>
+
 <!-- FORM MODAL -->
 <div class="overlay" id="formOverlay" onclick="if(event.target.id==='formOverlay')confirmCloseForm()">
   <div class="modal">
@@ -1242,7 +1249,10 @@ Jane Doe||Director IT||Beta Inc||jane@beta.com||6475550200||||Trade Show||InfoCo
       <div class="form-group"><label>Industry</label><input type="text" id="t_industry" placeholder="Digital Signage"></div>
     </div>
     <div class="form-row">
+      <div class="form-group"><label>Company Website</label><input type="url" id="t_website" placeholder="https://acme.com"></div>
       <div class="form-group"><label>Company LinkedIn</label><input type="url" id="t_linkedin" placeholder="https://linkedin.com/company/…"></div>
+    </div>
+    <div class="form-row">
       <div class="form-group"><label>Priority</label>
         <select id="t_priority"><option value="">— Select —</option><option>High</option><option>Medium</option><option>Low</option></select>
       </div>
@@ -1386,7 +1396,7 @@ const SCOPES     = 'https://www.googleapis.com/auth/spreadsheets https://www.goo
 const SHEET_NAME = 'My Leads - TDOT';
 const RANGE_READ = `${SHEET_NAME}!A2:AZ`; // extend to AZ to capture custom fields
 const TARGET_SHEET = 'Target Accounts';
-const TARGET_RANGE = `${TARGET_SHEET}!A2:K`;
+const TARGET_RANGE = `${TARGET_SHEET}!A2:L`;
 const SETTINGS_SHEET = 'App Settings';
 const FIXED_COLS = 22; // A-V are fixed; custom fields start at W
 
@@ -1894,33 +1904,28 @@ function ratingClass(r){return {Hot:'hot',Warm:'warm',Cold:'cold','Not Yet Deter
 function statusClass(s){return {Contacted:'contacted','Not Contacted':'not-contacted','Attempted to Contact':'attempted','Pre-Qualified':'pre-qual','Junk Lead':'junk','Lost Lead':'lost','Do Not Contact - Check Notes':'dnc','Contact in Future':'future','Not Qualified':'not-qual'}[s]||'';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+// ── LEADS FILTERS STATE ──────────────────────────────────────
+let leadsFilters = {};
 function applyFilter(leads){
   let out = leads;
-  if(currentFilter==='overdue') out=out.filter(l=>isOverdue(l));
-  else if(currentFilter.startsWith('status:')) out=out.filter(l=>l.status===currentFilter.slice(7));
-  else if(currentFilter.startsWith('rating:')) out=out.filter(l=>l.rating===currentFilter.slice(7));
-  else if(currentFilter.startsWith('stage:')) out=out.filter(l=>l.stage===currentFilter.slice(6));
-  else if(currentFilter.startsWith('source:')) out=out.filter(l=>l.source===currentFilter.slice(7));
-  else if(currentFilter.startsWith('industry:')) out=out.filter(l=>(l.industry||'').toLowerCase().includes(currentFilter.slice(9).toLowerCase()));
-  else if(currentFilter.startsWith('service:')) out=out.filter(l=>(l.services||'').includes(currentFilter.slice(8)));
-  else if(currentFilter.startsWith('tag:')) out=out.filter(l=>l.tags.toLowerCase().includes(currentFilter.slice(4).toLowerCase()));
-  // Date range filters
-  const cfrom = document.getElementById('dfCreatedFrom')?.value;
-  const cto   = document.getElementById('dfCreatedTo')?.value;
-  const afrom = document.getElementById('dfActivityFrom')?.value;
-  const ato   = document.getElementById('dfActivityTo')?.value;
-  if(cfrom) out=out.filter(l=>l.created&&l.created.slice(0,10)>=cfrom);
-  if(cto)   out=out.filter(l=>l.created&&l.created.slice(0,10)<=cto);
-  if(afrom) out=out.filter(l=>l.lastActivity&&l.lastActivity.slice(0,10)>=afrom);
-  if(ato)   out=out.filter(l=>l.lastActivity&&l.lastActivity.slice(0,10)<=ato);
+  const f = leadsFilters;
+  if(f.overdue) out=out.filter(l=>isOverdue(l));
+  if(f.rating) out=out.filter(l=>l.rating===f.rating);
+  if(f.status) out=out.filter(l=>l.status===f.status);
+  if(f.stage) out=out.filter(l=>l.stage===f.stage);
+  if(f.source) out=out.filter(l=>l.source===f.source);
+  if(f.industry) out=out.filter(l=>(l.industry||'').toLowerCase().includes(f.industry.toLowerCase()));
+  if(f.tag) out=out.filter(l=>(l.tags||'').toLowerCase().includes(f.tag.toLowerCase()));
+  if(f.competitor) out=out.filter(l=>(l.competitor||'').toLowerCase().includes(f.competitor.toLowerCase()));
+  if(f.createdFrom) out=out.filter(l=>l.created&&l.created.slice(0,10)>=f.createdFrom);
+  if(f.createdTo)   out=out.filter(l=>l.created&&l.created.slice(0,10)<=f.createdTo);
+  if(f.lastContactedFrom) out=out.filter(l=>l.lastContacted&&l.lastContacted>=f.lastContactedFrom);
+  if(f.lastContactedTo)   out=out.filter(l=>l.lastContacted&&l.lastContacted<=f.lastContactedTo);
   return out;
 }
-function clearDateFilters(){
-  ['dfCreatedFrom','dfCreatedTo','dfActivityFrom','dfActivityTo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  renderAll();
-}
+function clearDateFilters(){ leadsFilters={}; renderAll(); renderLeadsActiveFilters(); }
 function applySearch(leads){
-  const q=(document.getElementById('searchInput')?.value||'').toLowerCase().trim();
+  const q=(document.getElementById('searchInput')?.value||'').toLowerCase().trim()||((leadsFilters.search||'').toLowerCase().trim());
   if(!q) return leads;
   return leads.filter(l=>['name','company','email','title','industry','notes','tags','nextAction','competitor'].some(k=>(l[k]||'').toLowerCase().includes(q)));
 }
@@ -2012,29 +2017,12 @@ function renderStats(){
     'source:External Referral': LEADS.filter(l=>l.source==='External Referral').length,
     'source:Partner': LEADS.filter(l=>l.source==='Partner').length,
   };
-  document.querySelectorAll('.pill[data-filter]').forEach(pill=>{
-    const f=pill.getAttribute('data-filter');
-    const cnt=pillCounts[f]??'';
-    const base=pill.getAttribute('data-label')||pill.textContent.replace(/\s*\(\d+\)$/,'');
-    pill.setAttribute('data-label',base);
-    pill.textContent=cnt!==''?`${base} (${cnt})`:base;
-  });
+  // Pills removed — filter panel used instead
 }
 function statBarFilter(filter){
-  currentFilter=filter;
-  // Sync pill UI
-  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-  if(filter==='all'){
-    const allPill=document.querySelector('.pill');if(allPill)allPill.classList.add('active');
-  } else if(filter==='overdue'){
-    const op=document.querySelector('.overdue-pill');if(op)op.classList.add('active');
-  } else {
-    document.querySelectorAll('.pill').forEach(p=>{
-      if(p.getAttribute('onclick')&&p.getAttribute('onclick').includes(`'${filter}'`))p.classList.add('active');
-    });
-  }
-  renderAll();
-  document.getElementById('leadList').scrollIntoView({behavior:'smooth'});
+  setFilter(filter, null);
+  const el=document.getElementById('leadList');
+  if(el) el.scrollIntoView({behavior:'smooth'});
 }
 
 function renderAll(){
@@ -2229,10 +2217,17 @@ async function applyBulkUpdate() {
 }
 
 function setFilter(f,el){
-  currentFilter=f;
-  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-  if(el) el.classList.add('active');
+  // Legacy compat — convert old pill filter format to new leadsFilters
+  leadsFilters = {};
+  if(f==='overdue') leadsFilters.overdue=true;
+  else if(f.startsWith('rating:')) leadsFilters.rating=f.slice(7);
+  else if(f.startsWith('status:')) leadsFilters.status=f.slice(7);
+  else if(f.startsWith('stage:'))  leadsFilters.stage=f.slice(6);
+  else if(f.startsWith('source:')) leadsFilters.source=f.slice(7);
+  else if(f.startsWith('industry:')) leadsFilters.industry=f.slice(9);
+  else if(f.startsWith('tag:'))    leadsFilters.tag=f.slice(4);
   renderAll();
+  renderLeadsActiveFilters();
 }
 
 // ── DETAIL ────────────────────────────────────────────────────
@@ -2488,8 +2483,8 @@ function exportZohoCSV(){
 // switchTab — see new sidebar version above
 
 // ── TARGET DATA ───────────────────────────────────────────────
-// Cols: A=company B=industry C=linkedin D=priority E=status F=dateadded G=why H=contactname I=contactphone J=contactlinkedin K=notes
-const TFM = {company:0,industry:1,linkedin:2,priority:3,status:4,dateadded:5,why:6,contactName:7,contactPhone:8,contactLinkedin:9,notes:10};
+// Cols: A=company B=industry C=linkedin D=priority E=status F=dateadded G=why H=contactname I=contactphone J=contactlinkedin K=notes L=website
+const TFM = {company:0,industry:1,linkedin:2,priority:3,status:4,dateadded:5,why:6,contactName:7,contactPhone:8,contactLinkedin:9,notes:10,website:11};
 
 async function loadTargets() {
   try {
@@ -2506,7 +2501,7 @@ async function loadTargets() {
 }
 
 function targetToRow(t) {
-  return [t.company,t.industry,t.linkedin,t.priority,t.status,t.dateadded,t.why,t.contactName,t.contactPhone,t.contactLinkedin,t.notes];
+  return [t.company,t.industry,t.linkedin,t.priority,t.status,t.dateadded,t.why,t.contactName,t.contactPhone,t.contactLinkedin,t.notes,t.website||''];
 }
 
 async function saveTarget() {
@@ -2519,6 +2514,7 @@ async function saveTarget() {
     company,
     industry:       document.getElementById('t_industry').value.trim(),
     linkedin:       document.getElementById('t_linkedin').value.trim(),
+    website:        document.getElementById('t_website')?.value.trim()||'',
     priority:       document.getElementById('t_priority').value,
     status:         document.getElementById('t_status').value,
     dateadded:      document.getElementById('t_dateadded').value || today,
@@ -2596,15 +2592,15 @@ async function promoteToLead(row) {
 
 // ── RENDER TARGETS ────────────────────────────────────────────
 function renderTargets() {
+  if(currentTargetView==='table') { renderTargetTable(); return; }
+  renderModuleActiveFilters('targets');
   const container = document.getElementById('targetList');
-  if (!TARGETS.length) {
-    container.innerHTML=`<div class="empty-state"><div class="big">🎯</div><p>No target accounts yet.<br>Tap + Target to add one.</p></div>`;
+  const filtered = applyTargetFilters(TARGETS);
+  if (!filtered.length) {
+    container.innerHTML=`<div class="empty-state"><div class="big">🎯</div><p>No targets match.</p></div>`;
     return;
   }
-  const sorted = [...TARGETS].sort((a,b)=>{
-    const po=['High','Medium','Low',''];
-    return po.indexOf(a.priority)-po.indexOf(b.priority);
-  });
+  const sorted = sortTargets(filtered);
   container.innerHTML = sorted.map(t => {
     const pc = t.priority.toLowerCase()||'low';
     return `<div class="target-card ${pc}" onclick="openTargetDetail(${t._row})">
@@ -2634,6 +2630,7 @@ function openTargetDetail(row) {
   const t = TARGETS.find(x=>x._row===row); if(!t) return;
   const fields = [
     ['Company',t.company],['Industry',t.industry],
+    ['Website',t.website?`<a href="${t.website}" target="_blank" style="color:var(--accent)">${t.website} ↗</a>`:''],
     ['Company LinkedIn',t.linkedin?`<a href="${t.linkedin}" target="_blank">View ↗</a>`:''],
     ['Priority',t.priority],['Status',t.status],['Date Added',t.dateadded?formatDate(t.dateadded):''],
     ['Why Interested',t.why],
@@ -2657,7 +2654,7 @@ function openTargetDetail(row) {
 
 // ── TARGET FORM ───────────────────────────────────────────────
 function clearTargetForm() {
-  ['t_company','t_industry','t_linkedin','t_dateadded','t_why','t_contactname','t_contactphone','t_contactlinkedin','t_notes'].forEach(id=>document.getElementById(id).value='');
+  ['t_company','t_industry','t_website','t_linkedin','t_dateadded','t_why','t_contactname','t_contactphone','t_contactlinkedin','t_notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   ['t_priority','t_status'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('targetEditRow').value='';
 }
@@ -2678,6 +2675,7 @@ function openTargetEdit(row) {
   document.getElementById('t_company').value=t.company;
   document.getElementById('t_industry').value=t.industry;
   document.getElementById('t_linkedin').value=t.linkedin;
+  const twEl=document.getElementById('t_website'); if(twEl) twEl.value=t.website||'';
   document.getElementById('t_priority').value=t.priority;
   document.getElementById('t_status').value=t.status;
   document.getElementById('t_dateadded').value=t.dateadded;
@@ -3502,15 +3500,15 @@ function milestonesToStr(milestones) {
 }
 
 function renderBD() {
+  if(currentBDView==='table') { renderBDTable(); return; }
+  renderModuleActiveFilters('bd');
   const container = document.getElementById('bdList');
-  if(!BD_ITEMS.length) {
-    container.innerHTML=`<div class="empty-state"><div class="big">🚀</div><p>No initiatives yet.<br>Tap + BD to add one.</p></div>`;
+  const filtered = applyBDFilters(BD_ITEMS);
+  if(!filtered.length) {
+    container.innerHTML=`<div class="empty-state"><div class="big">🚀</div><p>No initiatives match.</p></div>`;
     return;
   }
-  const sorted=[...BD_ITEMS].sort((a,b)=>{
-    const po=['High','Medium','Low',''];
-    return po.indexOf(a.priority)-po.indexOf(b.priority);
-  });
+  const sorted=sortBD(filtered);
   container.innerHTML=sorted.map(b=>{
     const pc=bdPriorityClass(b.priority);
     const overdue=bdIsOverdue(b);
@@ -3795,7 +3793,8 @@ function switchTab(tab) {
   };
   // Hide all panels
   ['dashboardPanel','apolloPanel','linkedinPanel','emailsPanel','leadsPanel',
-   'targetList','bdList','bdStatsBar','settingsPanel'].forEach(id=>{
+   'targetToolbar','targetList','targetTableView','bdToolbar','bdList','bdStatsBar','bdTableView','settingsPanel',
+   'leadsToolbar','leadsActiveFilters','targetsActiveFilters','bdActiveFilters'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.style.display='none';
   });
   // Hide lead views
@@ -3804,14 +3803,12 @@ function switchTab(tab) {
   });
   // Filter/toolbar visibility
   const showLeadChrome = tab==='leads';
-  const filterSection = document.querySelector('.filter-section');
-  const statsEl = document.querySelector('.stats');
-  const toolbarEl = document.querySelector('.toolbar');
-  const dateBar = document.getElementById('dateFilterBar');
-  if(filterSection) filterSection.style.display = showLeadChrome?'block':'none';
+  const statsEl = document.getElementById('statsBar');
   if(statsEl) statsEl.style.display = showLeadChrome?'flex':'none';
-  if(toolbarEl) toolbarEl.style.display = showLeadChrome?'flex':'none';
-  if(dateBar) dateBar.style.display = showLeadChrome?'flex':'none';
+  if(showLeadChrome) {
+    document.getElementById('leadsToolbar').style.display='flex';
+    renderLeadsActiveFilters();
+  }
   const topbarSearch = document.getElementById('topbarSearch');
   if(topbarSearch) topbarSearch.style.display = showLeadChrome?'flex':'none';
   const btnScan = document.getElementById('btnScan');
@@ -3839,12 +3836,14 @@ function switchTab(tab) {
     if(fabBtn) {fabBtn.style.display='flex';fabBtn.onclick=openAdd;fabBtn.title='Add Lead';}
     renderAll();
   } else if(tab==='targets'){
+    document.getElementById('targetToolbar').style.display='flex';
     document.getElementById('targetList').style.display='flex';
     if(btnScan) btnScan.style.display='none';
     if(btnAdd) {btnAdd.style.display='flex';btnAdd.textContent='+ Target';btnAdd.onclick=openTargetAdd;}
     if(fabBtn) {fabBtn.style.display='flex';fabBtn.onclick=openTargetAdd;fabBtn.title='Add Target';}
     renderTargets();
   } else if(tab==='bd'){
+    document.getElementById('bdToolbar').style.display='flex';
     document.getElementById('bdList').style.display='flex';
     document.getElementById('bdStatsBar').style.display='flex';
     if(btnScan) btnScan.style.display='none';
@@ -4845,6 +4844,355 @@ Click OK to start.`);
   setStatus('ok',`✓ Bulk enrich done: ${found} emails found, ${notFound} not found${errors?' '+errors+' errors':''}`);
   setTimeout(()=>setStatus('',''),5000);
   showToast(`✓ ${found} emails found`);
+}
+
+// ── FILTER PANEL SYSTEM ──────────────────────────────────────
+let currentFilterModule = 'leads';
+let pendingFilters = {};
+let targetsFilters = {};
+let bdFilters = {};
+
+function openFilterPanel(module) {
+  currentFilterModule = module;
+  pendingFilters = Object.assign({}, module==='leads'?leadsFilters:module==='targets'?targetsFilters:bdFilters);
+  const panel = document.getElementById('filterPanel');
+  const overlay = document.getElementById('filterPanelOverlay');
+  const title = document.getElementById('filterPanelTitle');
+  const body = document.getElementById('filterPanelBody');
+  title.textContent = module==='leads'?'🔽 Filter Leads':module==='targets'?'🔽 Filter Targets':'🔽 Filter BD';
+  body.innerHTML = buildFilterPanelHTML(module);
+  // Restore pending values
+  Object.entries(pendingFilters).forEach(([k,v])=>{
+    const el = document.getElementById('fp_'+k);
+    if(el) { if(el.type==='checkbox') el.checked=!!v; else el.value=v||''; }
+  });
+  panel.classList.add('open');
+  overlay.classList.add('open');
+  // Update btn
+  const btn = document.getElementById(module+'FilterBtn');
+  if(btn) btn.classList.add('active');
+}
+
+function buildFilterPanelHTML(module) {
+  if(module==='leads') return `
+    <div class="fp-group"><label class="fp-label">Search</label><input class="fp-input" id="fp_search" placeholder="Name, company, email…" oninput="fpUpdate('search',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Rating</label>
+      <select class="fp-input" id="fp_rating" onchange="fpUpdate('rating',this.value)">
+        <option value="">All Ratings</option>
+        <option>Hot</option><option>Warm</option><option>Cold</option><option>Not Yet Determined</option><option>Not Interested/ Junk</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Status</label>
+      <select class="fp-input" id="fp_status" onchange="fpUpdate('status',this.value)">
+        <option value="">All Statuses</option>
+        <option>Not Contacted</option><option>Attempted to Contact</option><option>Contacted</option>
+        <option>Pre-Qualified</option><option>Contact in Future</option><option>Not Qualified</option>
+        <option>Lost Lead</option><option>Junk Lead</option><option>Do Not Contact - Check Notes</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Pipeline Stage</label>
+      <select class="fp-input" id="fp_stage" onchange="fpUpdate('stage',this.value)">
+        <option value="">All Stages</option>
+        <option>Prospecting</option><option>Qualifying</option><option>Proposal Sent</option>
+        <option>Negotiation</option><option>Closed Won</option><option>Closed Lost</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Source</label>
+      <select class="fp-input" id="fp_source" onchange="fpUpdate('source',this.value)">
+        <option value="">All Sources</option>
+        <option>Trade Show</option><option>Cold Call</option><option>Seamless.AI</option>
+        <option>Web Research</option><option>Employee Referral</option><option>External Referral</option>
+        <option>Partner</option><option>Chat</option><option>Sales Email Alias</option><option>Other</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Industry</label><input class="fp-input" id="fp_industry" placeholder="e.g. Technology" oninput="fpUpdate('industry',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Competitor</label><input class="fp-input" id="fp_competitor" placeholder="e.g. Bell" oninput="fpUpdate('competitor',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Tag</label><input class="fp-input" id="fp_tag" placeholder="e.g. InfoComm" oninput="fpUpdate('tag',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Special</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+        <input type="checkbox" id="fp_overdue" onchange="fpUpdate('overdue',this.checked)" style="accent-color:var(--accent);width:18px;height:18px"> Show overdue only
+      </label></div>
+    <div class="fp-group"><label class="fp-label">Created Date</label>
+      <div class="fp-row">
+        <input class="fp-input" type="date" id="fp_createdFrom" onchange="fpUpdate('createdFrom',this.value)">
+        <input class="fp-input" type="date" id="fp_createdTo" onchange="fpUpdate('createdTo',this.value)">
+      </div></div>
+    <div class="fp-group"><label class="fp-label">Last Contacted</label>
+      <div class="fp-row">
+        <input class="fp-input" type="date" id="fp_lastContactedFrom" onchange="fpUpdate('lastContactedFrom',this.value)">
+        <input class="fp-input" type="date" id="fp_lastContactedTo" onchange="fpUpdate('lastContactedTo',this.value)">
+      </div></div>`;
+  if(module==='targets') return `
+    <div class="fp-group"><label class="fp-label">Company</label><input class="fp-input" id="fp_company" placeholder="Company name…" oninput="fpUpdate('company',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Industry</label><input class="fp-input" id="fp_industry" placeholder="e.g. Technology" oninput="fpUpdate('industry',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Priority</label>
+      <select class="fp-input" id="fp_priority" onchange="fpUpdate('priority',this.value)">
+        <option value="">All Priorities</option><option>High</option><option>Medium</option><option>Low</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Status</label>
+      <select class="fp-input" id="fp_status" onchange="fpUpdate('status',this.value)">
+        <option value="">All Statuses</option><option>Watching</option><option>Researching</option><option>Ready to Reach Out</option><option>Passed</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Contact Name</label><input class="fp-input" id="fp_contactName" placeholder="Contact name…" oninput="fpUpdate('contactName',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Date Added</label>
+      <div class="fp-row">
+        <input class="fp-input" type="date" id="fp_dateFrom" onchange="fpUpdate('dateFrom',this.value)">
+        <input class="fp-input" type="date" id="fp_dateTo" onchange="fpUpdate('dateTo',this.value)">
+      </div></div>`;
+  // BD
+  return `
+    <div class="fp-group"><label class="fp-label">Name</label><input class="fp-input" id="fp_name" placeholder="Initiative name…" oninput="fpUpdate('name',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Category</label>
+      <select class="fp-input" id="fp_category" onchange="fpUpdate('category',this.value)">
+        <option value="">All Categories</option><option>Certification</option><option>Partnership</option>
+        <option>New Service Line</option><option>Event</option><option>Internal Ops</option><option>BD Campaign</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Status</label>
+      <select class="fp-input" id="fp_status" onchange="fpUpdate('status',this.value)">
+        <option value="">All Statuses</option><option>Idea</option><option>Research</option><option>In Progress</option>
+        <option>Pending Approval</option><option>Active</option><option>On Hold</option><option>Completed</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Priority</label>
+      <select class="fp-input" id="fp_priority" onchange="fpUpdate('priority',this.value)">
+        <option value="">All Priorities</option><option>High</option><option>Medium</option><option>Low</option>
+      </select></div>
+    <div class="fp-group"><label class="fp-label">Owner</label><input class="fp-input" id="fp_owner" placeholder="e.g. Shashank" oninput="fpUpdate('owner',this.value)"></div>
+    <div class="fp-group"><label class="fp-label">Overdue Only</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+        <input type="checkbox" id="fp_overdue" onchange="fpUpdate('overdue',this.checked)" style="accent-color:var(--accent);width:18px;height:18px"> Show overdue only
+      </label></div>
+    <div class="fp-group"><label class="fp-label">Target Date</label>
+      <div class="fp-row">
+        <input class="fp-input" type="date" id="fp_dateFrom" onchange="fpUpdate('dateFrom',this.value)">
+        <input class="fp-input" type="date" id="fp_dateTo" onchange="fpUpdate('dateTo',this.value)">
+      </div></div>`;
+}
+
+function fpUpdate(key, val) {
+  if(val===false||val===''||val===null||val===undefined) delete pendingFilters[key];
+  else pendingFilters[key] = val;
+}
+
+function applyFilterPanel() {
+  if(currentFilterModule==='leads') {
+    leadsFilters = Object.assign({}, pendingFilters);
+    renderAll();
+    renderLeadsActiveFilters();
+  } else if(currentFilterModule==='targets') {
+    targetsFilters = Object.assign({}, pendingFilters);
+    renderTargets();
+    renderModuleActiveFilters('targets');
+  } else {
+    bdFilters = Object.assign({}, pendingFilters);
+    renderBD();
+    renderModuleActiveFilters('bd');
+  }
+  closeFilterPanel();
+}
+
+function clearFilterPanel() {
+  pendingFilters = {};
+  document.querySelectorAll('#filterPanelBody input, #filterPanelBody select').forEach(el=>{
+    if(el.type==='checkbox') el.checked=false; else el.value='';
+  });
+}
+
+function closeFilterPanel() {
+  document.getElementById('filterPanel').classList.remove('open');
+  document.getElementById('filterPanelOverlay').classList.remove('open');
+}
+
+function renderLeadsActiveFilters() {
+  const bar = document.getElementById('leadsActiveFilters'); if(!bar) return;
+  const chips = buildFilterChips(leadsFilters, 'leads');
+  bar.innerHTML = chips;
+  bar.classList.toggle('has-filters', Object.keys(leadsFilters).length > 0);
+  const btn = document.getElementById('leadsFilterBtn');
+  if(btn) btn.classList.toggle('active', Object.keys(leadsFilters).length > 0);
+}
+
+function renderModuleActiveFilters(module) {
+  const bar = document.getElementById(module+'ActiveFilters'); if(!bar) return;
+  const f = module==='targets'?targetsFilters:bdFilters;
+  const chips = buildFilterChips(f, module);
+  bar.innerHTML = chips;
+  bar.classList.toggle('has-filters', Object.keys(f).length > 0);
+  const btn = document.getElementById(module+'FilterBtn');
+  if(btn) btn.classList.toggle('active', Object.keys(f).length > 0);
+}
+
+function buildFilterChips(filters, module) {
+  const labels = {
+    rating:'Rating',status:'Status',stage:'Stage',source:'Source',industry:'Industry',
+    competitor:'Competitor',tag:'Tag',overdue:'Overdue',search:'Search',
+    createdFrom:'Created From',createdTo:'Created To',lastContactedFrom:'Last Contact From',lastContactedTo:'Last Contact To',
+    company:'Company',priority:'Priority',contactName:'Contact',dateFrom:'Date From',dateTo:'Date To',
+    name:'Name',category:'Category',owner:'Owner'
+  };
+  let html = '';
+  Object.entries(filters).forEach(([k,v])=>{
+    if(!v && v!==true) return;
+    const label = labels[k]||k;
+    const display = v===true?label:label+': '+v;
+    html += `<span class="filter-chip">${esc(display)}<button class="filter-chip-x" onclick="removeFilter('${module}','${k}')">×</button></span>`;
+  });
+  if(html) html += `<button class="filter-chip-x" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:3px 10px;font-size:11px;cursor:pointer" onclick="clearAllFilters('${module}')">Clear all</button>`;
+  return html;
+}
+
+function removeFilter(module, key) {
+  if(module==='leads') { delete leadsFilters[key]; renderAll(); renderLeadsActiveFilters(); }
+  else if(module==='targets') { delete targetsFilters[key]; renderTargets(); renderModuleActiveFilters('targets'); }
+  else { delete bdFilters[key]; renderBD(); renderModuleActiveFilters('bd'); }
+}
+function clearAllFilters(module) {
+  if(module==='leads') { leadsFilters={}; renderAll(); renderLeadsActiveFilters(); }
+  else if(module==='targets') { targetsFilters={}; renderTargets(); renderModuleActiveFilters('targets'); }
+  else { bdFilters={}; renderBD(); renderModuleActiveFilters('bd'); }
+}
+
+// ── TARGET TABLE VIEW ─────────────────────────────────────────
+let targetSort = {field:'priority', dir:'asc'};
+let currentTargetView = 'card';
+
+function setTargetView(view) {
+  currentTargetView = view;
+  ['card','table'].forEach(v=>{
+    const btn = document.getElementById('targetView'+v.charAt(0).toUpperCase()+v.slice(1));
+    if(btn) btn.classList.toggle('active', v===view);
+  });
+  document.getElementById('targetList').style.display = view==='card'?'flex':'none';
+  document.getElementById('targetTableView').style.display = view==='table'?'block':'none';
+  if(view==='table') renderTargetTable();
+  else renderTargets();
+}
+
+function applyTargetFilters(targets) {
+  let out = targets;
+  const f = targetsFilters;
+  if(f.company) out=out.filter(t=>t.company.toLowerCase().includes(f.company.toLowerCase()));
+  if(f.industry) out=out.filter(t=>(t.industry||'').toLowerCase().includes(f.industry.toLowerCase()));
+  if(f.priority) out=out.filter(t=>t.priority===f.priority);
+  if(f.status) out=out.filter(t=>t.status===f.status);
+  if(f.contactName) out=out.filter(t=>(t.contactName||'').toLowerCase().includes(f.contactName.toLowerCase()));
+  if(f.dateFrom) out=out.filter(t=>t.dateadded&&t.dateadded>=f.dateFrom);
+  if(f.dateTo) out=out.filter(t=>t.dateadded&&t.dateadded<=f.dateTo);
+  return out;
+}
+
+function sortTargets(targets) {
+  const {field, dir} = targetSort;
+  const d = dir==='asc'?1:-1;
+  const po=['High','Medium','Low',''];
+  return [...targets].sort((a,b)=>{
+    if(field==='priority') return d*(po.indexOf(a.priority)-po.indexOf(b.priority));
+    if(field==='dateadded') return d*((a.dateadded||'').localeCompare(b.dateadded||''));
+    return d*((a[field]||'').localeCompare(b[field]||''));
+  });
+}
+
+function targetTableSort(field) {
+  if(targetSort.field===field) targetSort.dir=targetSort.dir==='asc'?'desc':'asc';
+  else { targetSort.field=field; targetSort.dir='asc'; }
+  renderTargetTable();
+}
+
+function renderTargetTable() {
+  const tv = document.getElementById('targetTableView');
+  let targets = applyTargetFilters(TARGETS);
+  targets = sortTargets(targets);
+  if(!targets.length) { tv.innerHTML='<div class="empty-state"><div class="big">🎯</div><p>No targets match.</p></div>'; return; }
+  const cols = [
+    {label:'Company',field:'company'},{label:'Website',field:'website'},
+    {label:'Industry',field:'industry'},{label:'Priority',field:'priority'},
+    {label:'Status',field:'status'},{label:'Contact',field:'contactName'},
+    {label:'Date Added',field:'dateadded'},{label:'Why',field:'why'}
+  ];
+  const arr = s => targetSort.field!==s?'<span style="opacity:.3;font-size:10px"> ↕</span>':targetSort.dir==='asc'?'<span style="color:var(--accent);font-size:10px"> ↑</span>':'<span style="color:var(--accent);font-size:10px"> ↓</span>';
+  tv.innerHTML = `<table class="module-table">
+    <thead><tr>${cols.map(c=>`<th onclick="targetTableSort('${c.field}')">${c.label}${arr(c.field)}</th>`).join('')}</tr></thead>
+    <tbody>${targets.map(t=>`<tr onclick="openTargetDetail(${t._row})">
+      <td><strong>${esc(t.company)}</strong></td>
+      <td>${t.website?`<a href="${esc(t.website)}" target="_blank" onclick="event.stopPropagation()" style="color:var(--accent)">↗</a>`:''}</td>
+      <td>${esc(t.industry||'')}</td>
+      <td>${t.priority?`<span class="badge badge-priority ${t.priority.toLowerCase()}">${t.priority}</span>`:''}</td>
+      <td>${t.status?`<span class="badge badge-tstatus">${t.status}</span>`:''}</td>
+      <td>${esc(t.contactName||'')}</td>
+      <td>${t.dateadded?formatDate(t.dateadded):''}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">${esc((t.why||'').slice(0,60))}${t.why&&t.why.length>60?'…':''}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ── BD TABLE VIEW ─────────────────────────────────────────────
+let bdSort = {field:'priority', dir:'asc'};
+let currentBDView = 'card';
+
+function setBDView(view) {
+  currentBDView = view;
+  ['card','table'].forEach(v=>{
+    const btn = document.getElementById('bdView'+v.charAt(0).toUpperCase()+v.slice(1));
+    if(btn) btn.classList.toggle('active', v===view);
+  });
+  document.getElementById('bdList').style.display = view==='card'?'flex':'none';
+  document.getElementById('bdStatsBar').style.display = view==='card'?'flex':'none';
+  document.getElementById('bdTableView').style.display = view==='table'?'block':'none';
+  if(view==='table') renderBDTable();
+  else { renderBD(); renderBDStats(); }
+}
+
+function applyBDFilters(items) {
+  let out = items;
+  const f = bdFilters;
+  if(f.name) out=out.filter(b=>b.name.toLowerCase().includes(f.name.toLowerCase()));
+  if(f.category) out=out.filter(b=>b.category===f.category);
+  if(f.status) out=out.filter(b=>b.status===f.status);
+  if(f.priority) out=out.filter(b=>b.priority===f.priority);
+  if(f.owner) out=out.filter(b=>(b.owner||'').toLowerCase().includes(f.owner.toLowerCase()));
+  if(f.overdue) out=out.filter(b=>bdIsOverdue(b));
+  if(f.dateFrom) out=out.filter(b=>b.targetDate&&b.targetDate>=f.dateFrom);
+  if(f.dateTo) out=out.filter(b=>b.targetDate&&b.targetDate<=f.dateTo);
+  return out;
+}
+
+function sortBD(items) {
+  const {field, dir} = bdSort;
+  const d = dir==='asc'?1:-1;
+  const po=['High','Medium','Low',''];
+  return [...items].sort((a,b)=>{
+    if(field==='priority') return d*(po.indexOf(a.priority)-po.indexOf(b.priority));
+    return d*((a[field]||'').localeCompare(b[field]||''));
+  });
+}
+
+function bdTableSort(field) {
+  if(bdSort.field===field) bdSort.dir=bdSort.dir==='asc'?'desc':'asc';
+  else { bdSort.field=field; bdSort.dir='asc'; }
+  renderBDTable();
+}
+
+function renderBDTable() {
+  const tv = document.getElementById('bdTableView');
+  let items = applyBDFilters(BD_ITEMS);
+  items = sortBD(items);
+  if(!items.length) { tv.innerHTML='<div class="empty-state"><div class="big">🚀</div><p>No initiatives match.</p></div>'; return; }
+  const cols = [
+    {label:'Name',field:'name'},{label:'Category',field:'category'},
+    {label:'Status',field:'status'},{label:'Priority',field:'priority'},
+    {label:'Owner',field:'owner'},{label:'Target Date',field:'targetDate'},
+    {label:'Follow-up',field:'followupDate'},{label:'Revenue',field:'revenue'},{label:'Next Action',field:'nextAction'}
+  ];
+  const arr = s => bdSort.field!==s?'<span style="opacity:.3;font-size:10px"> ↕</span>':bdSort.dir==='asc'?'<span style="color:var(--accent);font-size:10px"> ↑</span>':'<span style="color:var(--accent);font-size:10px"> ↓</span>';
+  tv.innerHTML = `<table class="module-table">
+    <thead><tr>${cols.map(c=>`<th onclick="bdTableSort('${c.field}')">${c.label}${arr(c.field)}</th>`).join('')}</tr></thead>
+    <tbody>${items.map(b=>`<tr onclick="openBDDetail(${b._row})">
+      <td><strong>${esc(b.name)}</strong></td>
+      <td>${esc(b.category||'')}</td>
+      <td>${b.status?`<span class="badge" style="color:${bdStatusColor(b.status)};background:rgba(0,0,0,.08)">${b.status}</span>`:''}</td>
+      <td>${b.priority?`<span class="badge badge-priority ${bdPriorityClass(b.priority)}">${b.priority}</span>`:''}</td>
+      <td>${esc(b.owner||'')}</td>
+      <td style="color:${bdIsOverdue(b)?'var(--overdue)':'var(--text)'}">${b.targetDate?formatDate(b.targetDate):''}</td>
+      <td style="color:${bdIsOverdue(b)?'var(--overdue)':'var(--text)'}">${b.followupDate?formatDate(b.followupDate):''}</td>
+      <td>${esc(b.revenue||'')}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">${esc(b.nextAction||'')}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
 }
 
 function setStatus(type,msg){const el=document.getElementById('syncStatus');el.className=type;el.textContent=msg;}
