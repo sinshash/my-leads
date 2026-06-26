@@ -4088,7 +4088,16 @@ function launchLinkedIn() {
   if(sizes.length) params.set('headCountInclude', sizes.join(','));
   if(location) params.set('geoInclude', location);
   if(keywords) params.set('keywords', keywords);
-  const url = `https://www.linkedin.com/sales/search/people?${params.toString()}`;
+  const allTerms = [];
+  if(liTitles.length) allTerms.push(...liTitles);
+  if(location) allTerms.push(location);
+  if(keywords) allTerms.push(...keywords.split(',').map(k=>k.trim()).filter(Boolean));
+  if(industries.length) allTerms.push(...industries);
+  if(seniorities.length) allTerms.push(...seniorities);
+  const kwString = allTerms.join(' ');
+  const navParams = new URLSearchParams();
+  if(kwString) navParams.set('keywords', kwString);
+  const url = 'https://www.linkedin.com/sales/search/people' + (kwString ? '?' + navParams.toString() : '');
   window.open(url, '_blank');
 }
 function saveLinkedInSearch() {
@@ -4162,10 +4171,10 @@ async function apolloSearch() {
     if(location) body.person_locations = [location];
     if(industry) body.organization_industry_tag_ids = [industry];
     if(size) { const [min,max]=size.split(','); body.organization_num_employees_ranges = [`${min},${max}`]; }
-    const res = await fetch('https://api.apollo.io/api/v1/mixed_people/search', {
+    const res = await fetch(WORKER_URL + '/apollo-search', {
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':APOLLO_API_KEY,'Cache-Control':'no-cache'},
-      body: JSON.stringify(body)
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({apiKey: APOLLO_API_KEY, payload: body})
     });
     const data = await res.json();
     if (!res.ok) { statusEl.textContent='✗ Apollo error: '+(data.message||data.error||'Unknown error'); return; }
@@ -4522,10 +4531,10 @@ async function apolloLookupFromLinkedIn() {
     if(name) { const parts=name.split(' '); body.first_name=parts[0]; body.last_name=parts.slice(1).join(' ')||''; }
     if(company) body.q_organization_name = company;
     if(liUrl) body.linkedin_url = liUrl;
-    const res = await fetch('https://api.apollo.io/api/v1/mixed_people/search',{
+    const res = await fetch(WORKER_URL + '/apollo-search', {
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':APOLLO_API_KEY,'Cache-Control':'no-cache'},
-      body:JSON.stringify(body)
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({apiKey: APOLLO_API_KEY, payload: body})
     });
     const data = await res.json();
     const p = (data.people||[])[0];
