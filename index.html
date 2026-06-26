@@ -759,8 +759,13 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   <!-- APOLLO PANEL -->
   <div id="apolloPanel" style="display:none">
     <div class="page-header" style="margin-bottom:16px">
-      <div class="page-title">🔍 Apollo Prospect Search</div>
-      <div class="page-sub">Search 220M+ contacts — add directly to your pipeline</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div>
+          <div class="page-title">🔍 Apollo Prospect Search</div>
+          <div class="page-sub">Search 220M+ contacts — add directly to your pipeline</div>
+        </div>
+        <div id="apolloCreditBalance" style="font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer" onclick="fetchApolloCredits()" title="Click to refresh">💳 Credits: —</div>
+      </div>
     </div>
     <div class="apollo-panel">
       <div class="apollo-search-bar">
@@ -795,7 +800,10 @@ body{padding-bottom:env(safe-area-inset-bottom)}
         </select>
         <button class="apollo-search-btn" onclick="apolloSearch()">🔍 Search</button>
       </div>
-      <div id="apolloStatus" style="font-size:12px;color:var(--muted);margin-bottom:10px;display:none"></div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+        <div id="apolloStatus" style="font-size:12px;color:var(--muted);flex:1;display:none"></div>
+        <button class="btn-tool" onclick="openBulkEnrich()" style="font-size:11px;white-space:nowrap">⚡ Bulk Find Emails</button>
+      </div>
       <div id="apolloResults"></div>
     </div>
   </div>
@@ -2231,6 +2239,33 @@ function setFilter(f,el){
 function openDetail(row){
   const l=LEADS.find(x=>x._row===row); if(!l) return;
   trackRecentlyViewed(row);
+  // Overdue nudge — if overdue 7+ days with no activity in that time, prompt status check
+  if(isOverdue(l) && l.followup) {
+    const daysPast = Math.floor((Date.now()-new Date(l.followup).getTime())/(1000*60*60*24));
+    const lastActivity = l.lastActivity ? new Date(l.lastActivity) : null;
+    const lastNote = parseNotes(l.notes||'').slice(-1)[0];
+    const lastNoteDate = lastNote?.ts ? new Date(lastNote.ts) : null;
+    const mostRecent = [lastActivity, lastNoteDate].filter(Boolean).sort((a,b)=>b-a)[0];
+    const daysSinceActivity = mostRecent ? Math.floor((Date.now()-mostRecent.getTime())/(1000*60*60*24)) : 999;
+    if(daysPast >= 7 && daysSinceActivity >= 7) {
+      setTimeout(()=>{
+        const action = confirm(`⚠️ ${l.name} has been overdue for ${daysPast} days with no activity.
+
+Mark as "Attempted to Contact" and snooze 3 days?
+
+Click Cancel to just open the lead.`);
+        if(action) {
+          const now = new Date().toISOString().replace('T',' ').slice(0,19);
+          const snoozeDate = new Date(); snoozeDate.setDate(snoozeDate.getDate()+3);
+          const snoozeDateStr = snoozeDate.toISOString().slice(0,10);
+          const entry = formatTs()+': ⚠️ Overdue nudge — marked Attempted to Contact, snoozed to '+formatDate(snoozeDateStr);
+          const updatedNotes = l.notes ? l.notes.trim()+'|||'+entry : entry;
+          sheetsUpdate(SHEET_NAME+'!A'+row+':V'+row,[leadToRow({...l,status:'Attempted to Contact',followup:snoozeDateStr,notes:updatedNotes},now)])
+            .then(()=>loadLeads()).catch(()=>{});
+        }
+      }, 300);
+    }
+  }
   const overdue=isOverdue(l), dueToday=isDueToday(l);
   const tags=l.tags?l.tags.split(',').map(t=>t.trim()).filter(Boolean):[];
   const fields=[
@@ -2306,6 +2341,7 @@ function openDetail(row){
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="openCallLog(${row})">📞 Log Call</button>
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="shareLead(${row})">📤 Share</button>
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="apolloFindMoreAtCompany(${row})">🔍 Find more at ${esc(l.company)}</button>
+      ${!l.email?`<button class="btn-tool" style="justify-content:center;min-height:44px;color:var(--accent);border-color:var(--accent)" onclick="apolloFindEmail(${row})">✉ Find Email</button>`:''}
       <button class="btn-tool" style="justify-content:center;min-height:44px" onclick="exportToCalendar(LEADS.find(x=>x._row===${row}))">📅 Calendar</button>
     </div>
 
@@ -3028,8 +3064,18 @@ async function saveCallLog() {
   const today = new Date().toISOString().slice(0,10);
   const entry = `${formatTs()}: 📞 ${selectedCallOutcome}${notes?' — '+notes:''}`;
   const updatedNotes = l.notes ? `${l.notes.trim()}${NOTE_SEP}${entry}` : entry;
+  // Auto-set follow-up date based on call outcome if user didn't pick one
+  let autoFollowup = followup;
+  if (!autoFollowup) {
+    const d = new Date();
+    if(selectedCallOutcome==='Left Voicemail') d.setDate(d.getDate()+3);
+    else if(selectedCallOutcome==='No Answer') d.setDate(d.getDate()+2);
+    else if(selectedCallOutcome==='Call Back Later') d.setDate(d.getDate()+5);
+    else if(selectedCallOutcome==='Spoke with Contact') d.setDate(d.getDate()+7);
+    if(selectedCallOutcome!=='') autoFollowup = d.toISOString().slice(0,10);
+  }
   const updated = {...l, notes:updatedNotes, lastContacted:today,
-    status:newStatus||l.status, followup:followup||l.followup};
+    status:newStatus||l.status, followup:autoFollowup||l.followup};
   setStatus('loading','⟳ Saving call log…');
   try {
     await sheetsUpdate(`${SHEET_NAME}!A${row}:V${row}`,[leadToRow(updated,now)]);
@@ -3810,6 +3856,7 @@ function switchTab(tab) {
     if(btnScan) btnScan.style.display='none';
     if(btnAdd) btnAdd.style.display='none';
     if(fabBtn) fabBtn.style.display='none';
+    fetchApolloCredits();
   } else if(tab==='linkedin'){
     document.getElementById('linkedinPanel').style.display='block';
     if(btnScan) btnScan.style.display='none';
@@ -4198,7 +4245,7 @@ async function apolloSearch() {
             ${linkedin?`<span class="apollo-meta-item"><a href="${esc(linkedin)}" target="_blank" style="color:var(--accent)">LinkedIn ↗</a></span>`:''}
           </div>
         </div>
-        <button class="apollo-add-btn" onclick="apolloEnrichAndAdd('${p.id}',${JSON.stringify({
+        <button class="apollo-add-btn" title="Uses 1 Apollo credit to fetch full name" onclick="apolloEnrichAndAdd('${p.id}',${JSON.stringify({
           name:((p.first_name||'')+' '+(p.last_name_obfuscated||'')).trim(),
           title:p.title||'',
           company:org,
@@ -4624,7 +4671,6 @@ Open existing lead instead?`)) {
     }
   }
   apolloAddToLead(personData);
-  showToast(`✓ ${name} added to pipeline`);
 }
 
 // ── RECENTLY VIEWED LEADS ─────────────────────────────────────
@@ -4685,6 +4731,120 @@ function followStreak() {
     else break;
   }
   return streak;
+}
+
+// ── APOLLO FIND EMAIL (single lead) ──────────────────────────
+async function apolloFindEmail(row) {
+  const l = LEADS.find(x=>x._row===row); if(!l) return;
+  if(!APOLLO_API_KEY) { alert('Apollo API key not loaded.'); return; }
+  setStatus('loading','⟳ Looking up email via Apollo…');
+  try {
+    const body = {per_page:1};
+    const parts = l.name.split(' ');
+    body.first_name = parts[0]; body.last_name = parts.slice(1).join(' ')||'';
+    if(l.company) body.q_organization_name = l.company;
+    if(l.linkedin) body.linkedin_url = l.linkedin;
+    const res = await fetch(WORKER_URL+'/apollo-search', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({apiKey: APOLLO_API_KEY, payload: body})
+    });
+    const data = await res.json();
+    const p = (data.people||[])[0];
+    if(!p) { setStatus('error','No match found in Apollo'); setTimeout(()=>setStatus('',''),2500); return; }
+    // Now enrich to get email
+    const enrichRes = await fetch(WORKER_URL+'/apollo-enrich', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({apiKey: APOLLO_API_KEY, apolloId: p.id})
+    });
+    const enrichData = await enrichRes.json();
+    const ep = enrichData.person;
+    if(!ep?.email) { setStatus('error','No email found in Apollo'); setTimeout(()=>setStatus('',''),2500); return; }
+    const now = new Date().toISOString().replace('T',' ').slice(0,19);
+    const entry = formatTs()+': ✉ Email found via Apollo: '+ep.email;
+    const updatedNotes = l.notes ? l.notes.trim()+'|||'+entry : entry;
+    await sheetsUpdate(SHEET_NAME+'!A'+row+':V'+row,[leadToRow({...l,email:ep.email,notes:updatedNotes},now)]);
+    setStatus('ok','✓ Email found: '+ep.email); setTimeout(()=>setStatus('',''),3000);
+    showToast('✉ '+ep.email+' added');
+    await loadLeads(); openDetail(row);
+  } catch(e) { setStatus('error','✗ '+e.message); }
+}
+
+// ── APOLLO CREDIT BALANCE ─────────────────────────────────────
+async function fetchApolloCredits() {
+  if(!APOLLO_API_KEY) return;
+  const el = document.getElementById('apolloCreditBalance'); if(!el) return;
+  el.textContent = '💳 Loading…';
+  try {
+    const res = await fetch(WORKER_URL+'/apollo-credits', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({apiKey: APOLLO_API_KEY})
+    });
+    const data = await res.json();
+    const used = data.usage?.api_credits_used ?? data.api_credits_used ?? null;
+    const limit = data.usage?.api_credits_limit ?? data.api_credits_limit ?? null;
+    if(used !== null && limit !== null) {
+      el.textContent = '💳 Credits: '+(limit-used)+' left';
+    } else if(data.credits_remaining !== undefined) {
+      el.textContent = '💳 Credits: '+data.credits_remaining+' left';
+    } else {
+      el.textContent = '💳 Credits: see Apollo dashboard';
+    }
+  } catch(e) { el.textContent = '💳 Credits: —'; }
+}
+
+// ── BULK APOLLO ENRICH (leads missing email) ──────────────────
+let bulkEnrichRunning = false;
+async function openBulkEnrich() {
+  if(!APOLLO_API_KEY) { alert('Apollo API key not loaded.'); return; }
+  const missing = LEADS.filter(l=>!l.email && l.name && l.company);
+  if(!missing.length) { alert('All your leads already have emails!'); return; }
+  const go = confirm(`Found ${missing.length} lead${missing.length>1?'s':''} without an email.
+
+Enrich with Apollo? This uses 1 credit per lead found.
+
+Click OK to start.`);
+  if(!go) return;
+  bulkEnrichRunning = true;
+  let found=0, notFound=0, errors=0;
+  setStatus('loading',`⟳ Enriching 0/${missing.length}…`);
+  for(let i=0; i<missing.length; i++) {
+    if(!bulkEnrichRunning) break;
+    const l = missing[i];
+    setStatus('loading',`⟳ Enriching ${i+1}/${missing.length}: ${l.name}…`);
+    try {
+      const body = {per_page:1};
+      const parts = l.name.split(' ');
+      body.first_name = parts[0]; body.last_name = parts.slice(1).join(' ')||'';
+      if(l.company) body.q_organization_name = l.company;
+      if(l.linkedin) body.linkedin_url = l.linkedin;
+      const searchRes = await fetch(WORKER_URL+'/apollo-search', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({apiKey: APOLLO_API_KEY, payload: body})
+      });
+      const searchData = await searchRes.json();
+      const p = (searchData.people||[])[0];
+      if(!p) { notFound++; continue; }
+      const enrichRes = await fetch(WORKER_URL+'/apollo-enrich', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({apiKey: APOLLO_API_KEY, apolloId: p.id})
+      });
+      const enrichData = await enrichRes.json();
+      const ep = enrichData.person;
+      if(!ep?.email) { notFound++; continue; }
+      const now = new Date().toISOString().replace('T',' ').slice(0,19);
+      const entry = formatTs()+': ✉ Email found via Apollo bulk enrich: '+ep.email;
+      const updatedNotes = l.notes ? l.notes.trim()+'|||'+entry : entry;
+      await sheetsUpdate(SHEET_NAME+'!A'+l._row+':V'+l._row,[leadToRow({...l,email:ep.email,notes:updatedNotes},now)]);
+      found++;
+    } catch(e) { errors++; }
+    // Small delay to avoid rate limiting
+    await new Promise(r=>setTimeout(r,500));
+  }
+  bulkEnrichRunning = false;
+  await loadLeads();
+  setStatus('ok',`✓ Bulk enrich done: ${found} emails found, ${notFound} not found${errors?' '+errors+' errors':''}`);
+  setTimeout(()=>setStatus('',''),5000);
+  showToast(`✓ ${found} emails found`);
 }
 
 function setStatus(type,msg){const el=document.getElementById('syncStatus');el.className=type;el.textContent=msg;}
