@@ -4188,7 +4188,7 @@ async function apolloSearch() {
       const org = p.organization?.name || p.account?.name || '';
       return `<div class="apollo-result-card">
         <div class="apollo-result-info">
-          <div class="apollo-result-name">${esc(p.name||(p.first_name||'')+' '+(p.last_name||''))}</div>
+          <div class="apollo-result-name">${esc(((p.first_name||'')+' '+(p.last_name||'')).trim()||p.name||'Unknown')}</div>
           <div class="apollo-result-title">${esc(p.title||'')}</div>
           <div class="apollo-result-company">${esc(org)}</div>
           <div class="apollo-result-meta">
@@ -4199,7 +4199,7 @@ async function apolloSearch() {
           </div>
         </div>
         <button class="apollo-add-btn" onclick="apolloAddToLeadWithDupCheck(${JSON.stringify({
-          name:(p.name||((p.first_name||'')+' '+(p.last_name||'')).trim()),
+          name:((p.first_name||'')+' '+(p.last_name||'')).trim()||p.name||'',
           title:p.title||'',
           company:org,
           email:email,
